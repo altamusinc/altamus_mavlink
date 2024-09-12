@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<mavlink>
+    <include>common_minimal.xml</include>
+    <version>1</version>
+    <dialect>8</dialect>
+    <enums>
+        <enum name="EOS_COMPONENT" bitmask="true">
+            <description> Components within the EOS scanner </description>
+            <entry value="1" name="EOS_COMPONENT_LIDAR"></entry>
+            <entry value="2" name="EOS_COMPONENT_YAW_MOTOR"></entry>
+            <entry value="4" name="EOS_COMPONENT_PITCH_MOTOR"></entry>
+            <entry value="8" name="EOS_COMPONENT_GPS"></entry>
+            <entry value="16" name="EOS_COMPONENT_COMPASS"></entry>
+            <entry value="32" name="EOS_COMPONENT_MCU"></entry>
+            <entry value="64" name="EOS_COMPONENT_LED"></entry>
+            <entry value="128" name="EOS_COMPONENT_ACCEL"></entry>
+            <entry value="256" name="EOS_COMPONENT_POWER_SENSOR"></entry>
+            <entry value="512" name="EOS_COMPONENT_SERIAL_BRIDGE"></entry>
+            <entry value="1024" name="EOS_COMPONENT_PORT_EXPANDER"></entry>
+            <entry value="2048" name="EOS_COMPONENT_FLASH"></entry>
+            <entry value="4096" name="EOS_COMPONENT_ALL"></entry>
+        </enum>
+        <enum name="EOS_STATE">
+            <description> State of the device </description>
+            <entry name="EOS_STATE_IDLE"></entry>
+            <entry name="EOS_STATE_UPLOADING"></entry>
+            <entry name="EOS_STATE_SCANNING"></entry>
+            <entry name="EOS_STATE_INIT"></entry>
+            <entry name="EOS_STATE_ERROR"></entry>
+        </enum>
+        <enum name="MOTOR_BEHAVIOR">
+            <description> Behaviors a motor can execute </description>
+            <entry name="MOTOR_BEHAVIOR_MOTOR_ENABLE"></entry>
+            <entry name="MOTOR_BEHAVIOR_MOTOR_DISABLE"></entry>
+            <entry name="MOTOR_BEHAVIOR_MOTOR_RPM"></entry>
+            <entry name="MOTOR_BEHAVIOR_DEVICE_RPM"></entry>
+            <entry name="MOTOR_BEHAVIOR_VACTUAL"></entry>
+            <entry name="MOTOR_BEHAVIOR_GOTO_ANGLE"></entry>
+            <entry name="MOTOR_BEHAVIOR_STEP"></entry>
+            <entry name="MOTOR_BEHAVIOR_HOME"></entry>
+        </enum>
+        <enum name="EOS_COMPONENT_POWER_BEHAVIOR">
+            <description> Power behavior to execute </description>
+            <entry name="EOS_COMPONENT_POWER_BEHAVIOR_ENABLE"></entry>
+            <entry name="EOS_COMPONENT_POWER_BEHAVIOR_DISABLE"></entry>
+            <entry name="EOS_COMPONENT_POWER_BEHAVIOR_REBOOT"></entry>
+        </enum>
+    </enums>
+    <messages>
+        <message name="LIDAR_READING" id="1">
+            <description> Readings from the lidar </description>
+            <field name="readings" type="uint32_t[10]" units="foo" ></field>
+        </message>
+        <message name="COMPONENT_POWER_CONTROL" id="2">
+            <description> Message that will component devices on or off in the EOS scanner </description>
+            <field name="device" type="uint16_t" enum="EOS_COMPONENT"> Device to target </field>
+            <field name="behavior" type="uint8_t" enum="EOS_COMPONENT_POWER_BEHAVIOR"> Behavior to execute </field>
+        </message>
+        <message name="SYSTEM_STATUS" id = "3">
+            <description> Overall System Status Message </description>
+            <field name="state" type="uint8_t" enum="EOS_STATE"> Current State of the Device </field>
+            <field name="power_status_bitmask" type="uint16_t" enum="EOS_COMPONENT"> Bitmask of devices and their power status: 1 = on 0 = off </field>
+            <field name="health_status_bitmask" type="uint16_t" enum="EOS_COMPONENT"> Bitmask of health of devices: 1 = healthy 0 = unhealthy </field>
+        </message>
+        <message name="MOTOR_CONTROL" id = "4">
+            <description> Controls Motors </description>
+            <field name="target" type="uint8_t" enum="EOS_COMPONENT"> Which motor to target. Only responds to EOS_COMPONENT_YAW_MOTOR and EOS_COMPONENT_PITCH_MOTOR</field>
+            <field name="behavior" type="uint8_t" enum="MOTOR_BEHAVIOR"> Behavior to Execute </field>
+            <field name="motor_rpm" type="float"> RPM to set motor shaft too. Ignores gearing. Only used if MOTOR_BEHAVIOR_MOTOR_RPM is selected. </field>
+            <field name="target_angle" type="float">Angle to goto. Accounts for gearing. 0-360. Values above 360 will be wrapped around.</field>
+            <field name="device_rpm" type="float" minValue="0"> RPM to set device too. Takes into account gearing. Only used if MOTOR_BEHAVIOR_DEVICE_RPM is selected </field>
+            <field name="steps_count" type="int16_t"> Number of steps to execute. Negative values will step backwards. Only used if MOTOR_BEHAVIOR_STEP is selected</field>
+            <field name="vactual" type="int16_t"> VACTUAL value to send to stepper driver. Negative values will go backwards. Only used if MOTOR_BEHAVIOR_VACTUAL is selected</field>
+        </message>
+        <message name="MOTOR_SETTINGS" id = "5">
+            <description>Motor settings. If emitted by device, represents current settings. If emitted by control software, device will update accordingly </description>
+            <field name="motor" type="uint8_t" enum="EOS_COMPONENT" instance="true">Which motor we're referring to.</field>
+            <field name="current" type="uint16_t"> Motor current 0-2500 </field>
+            <field name="microsteps" type="uint8_t"> Microsteps used for stepping 1-256 in powers of 2</field>
+            <field name="gearing_ratio" type="float"> Gearing ratio to apply, specified as Motor Teeth:Device Teeth; Send as float i.e. 20.0/72.0 becomes 0.2777777</field>
+            <field name="spread_cycle" type="uint8_t">Boolean if spread cycle is enabled. 0 = disabled, 1 = enabled</field>
+            <field name="pwm_autoscale" type="uint8_t">Boolean if pwm_autoscale is enabled. 0 = disabled, 1 = enabled</field>
+            <field name="pwm_autograd" type="uint8_t">Boolean if pwm_autograd is enabled. 0 = disabled, 1 = enabled</field>
+            <field name="min_steps_to_next_index" type="uint8_t" invalid="0">Mininimum steps between index pulse and home switch. Set to 0 to not enforce a minimum</field>
+            <field name="home_offset_steps" type="uint16_t">Number of steps to move from home position after homing.</field>
+            <field name="steps_to_next_index" type="uint16_t">Number of steps from home switch triggering to repeatable index pulse. Read Only.</field>
+            <field name="usteps_rate" type="float" units="Hz">Rate at which microsteps are being triggered by the driver internal oscillator. Read Only.</field>
+            <field name="ustep_angle" type="float" units="deg">Device angle travelled per microstep. Read Only.</field>
+        </message>
+        <message name="MOTOR_STATUS" id = "6">
+            <description> Current Status of the motor </description>
+            <field name="motor" type="uint8_t" enum="EOS_COMPONENT" instance="true">Which motor we're referring to.</field>
+            <field name="enabled" type="uint8_t">Boolean if the motor is enabled or not. 0 = disabled, 1 = enabled.</field>
+            <field name="homed" type="uint8_t">Boolean if the motor is homed or not. 0 = not homed, 1 = homed.</field>
+            <field name="motor_rpm" type="float">Current RPM of the motor.</field>
+            <field name="device_rpm" type="float">Current RPM of the device, accounting for gearing.</field>
+            <field name="measured_rpm" type="float"> Measured RPM, if external sensor is available</field>
+            <field name="vactual" type="uint16_t">Current VACTUAL value.</field>
+            <field name="steps_count" type="int16_t">Number of steps from home. UINT16_MAX if motor is in RPM mode.</field>
+            <field name="current_angle" type="float">Current angle: 0-360. INF if not homed.</field>
+        </message>
+        <message name="IDENTIFIER" id = "7">
+            <description> Indentifiying information about the EOS device </description>
+            <field name="particle_id" type="char[24]"> Particle ID of device. Unique and unchangable </field>
+            <field name="local_ip" type="uint8_t[4]"> local IPV4 Address of the device</field>
+            <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
+            <field name="name" type="char[16]">Friendly name of device i.e. P2-123456</field>
+        </message>
+    </messages>
+</mavlink>
