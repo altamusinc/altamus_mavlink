@@ -106,5 +106,9 @@
             <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
             <field name="name" type="char[16]">Friendly name of device i.e. P2-123456</field>
         </message>
+        <message name="COMPONENT_HEALTH_TEST" id="8">
+            <description> Requests that the device tests/retests a specified component. Pass EOS_COMPONENT_ALL to test all</description>
+            <field name="component" type="uint8_t" enum="EOS_COMPONENT"> Which component(s) to request retest for</field>
+        </message>
     </messages>
 </mavlink>
