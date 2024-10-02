@@ -4,7 +4,8 @@
     <version>1</version>
     <dialect>8</dialect>
     <enums>
-        <enum name="MAV_RESULT">
+        <!-- TODO extend dart generator to allow extending enums from child dialects -->
+        <!-- <enum name="MAV_RESULT">
             <entry value="7" name="MAV_RESULT_TIMED_OUT">
                 <description>Indicates that a command has timed out. Intended for use on GCS side to indicate that target hasn't replied back with an expected ACK/NACK</description>
                 </entry>
@@ -16,7 +17,7 @@
             <entry value="2" name="MAV_CMD_STOP_EOS_SCAN">
                 <description>Stops a scan on the targeted scanner. Takes no arguments</description>
             </entry>
-        </enum>
+        </enum> -->
         <enum name="EOS_COMPONENT" bitmask="true">
             <description> Components within the EOS scanner </description>
             <entry value="1" name="EOS_COMPONENT_LIDAR"></entry>
