@@ -4,6 +4,19 @@
     <version>1</version>
     <dialect>8</dialect>
     <enums>
+        <enum name="MAV_RESULT">
+            <entry value="7" name="MAV_RESULT_TIMED_OUT">
+                <description>Indicates that a command has timed out. Intended for use on GCS side to indicate that target hasn't replied back with an expected ACK/NACK</description>
+                </entry>
+        </enum>
+        <enum name="MAV_CMD">
+            <entry value="1" name="MAV_CMD_START_EOS_SCAN">
+                <description>Starts a scan on the targeted scanner. Takes no arguments</description>
+            </entry>
+            <entry value="1" name="MAV_CMD_STOP_EOS_SCAN">
+                <description>Stops a scan on the targeted scanner. Takes no arguments</description>
+            </entry>
+        </enum>
         <enum name="EOS_COMPONENT" bitmask="true">
             <description> Components within the EOS scanner </description>
             <entry value="1" name="EOS_COMPONENT_LIDAR"></entry>
@@ -109,6 +122,15 @@
         <message name="COMPONENT_HEALTH_TEST" id="8">
             <description> Requests that the device tests/retests a specified component. Pass EOS_COMPONENT_ALL to test all</description>
             <field name="component" type="uint8_t" enum="EOS_COMPONENT"> Which component(s) to request retest for</field>
+        </message>
+        <message name="SCAN_SETTINGS" id = "9">
+            <description> Settings for a space scan</description>
+            <field name="yaw_start" type="float" units="deg"> Starting yaw angle, relative to the homed position </field>
+            <field name="yaw_stop" type="float" units="deg"> Ending yaw angle, relative to the homed position</field>
+            <field name="pitch_start" type="float" units="deg"> Starting pitch angle, relative to the homed position</field>
+            <field name="pitch_stop" type="float" units="deg"> Ending pitch angle, relative to the homed position</field>
+            <field name="point_spacing" type="float" units="deg"> Spacing between point samples. Smaller spacing leads to denser point clouds </field>
+            <field name="scan_speed" type="float" units="rpm"> How fast, in RPM to spin the pitch motor</field>
         </message>
     </messages>
 </mavlink>
