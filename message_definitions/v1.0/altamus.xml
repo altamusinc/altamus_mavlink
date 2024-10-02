@@ -13,7 +13,7 @@
             <entry value="1" name="MAV_CMD_START_EOS_SCAN">
                 <description>Starts a scan on the targeted scanner. Takes no arguments</description>
             </entry>
-            <entry value="1" name="MAV_CMD_STOP_EOS_SCAN">
+            <entry value="2" name="MAV_CMD_STOP_EOS_SCAN">
                 <description>Stops a scan on the targeted scanner. Takes no arguments</description>
             </entry>
         </enum>
