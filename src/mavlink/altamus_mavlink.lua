@@ -51,6 +51,7 @@ messageName = {
     [7] = 'IDENTIFIER',
     [8] = 'COMPONENT_HEALTH_TEST',
     [9] = 'SCAN_SETTINGS',
+    [10] = 'SCAN_STATUS',
     [0] = 'HEARTBEAT',
     [300] = 'PROTOCOL_VERSION',
     [24] = 'GPS_RAW_INT',
@@ -405,6 +406,10 @@ f.SCAN_SETTINGS_pitch_start = ProtoField.new("pitch_start (float) [deg]", "mavli
 f.SCAN_SETTINGS_pitch_stop = ProtoField.new("pitch_stop (float) [deg]", "mavlink_proto.SCAN_SETTINGS_pitch_stop", ftypes.FLOAT, nil)
 f.SCAN_SETTINGS_point_spacing = ProtoField.new("point_spacing (float) [deg]", "mavlink_proto.SCAN_SETTINGS_point_spacing", ftypes.FLOAT, nil)
 f.SCAN_SETTINGS_scan_speed = ProtoField.new("scan_speed (float) [rpm]", "mavlink_proto.SCAN_SETTINGS_scan_speed", ftypes.FLOAT, nil)
+
+f.SCAN_STATUS_start_time_unix = ProtoField.new("start_time_unix (uint32_t)", "mavlink_proto.SCAN_STATUS_start_time_unix", ftypes.UINT32, nil)
+f.SCAN_STATUS_scan_completion = ProtoField.new("scan_completion (uint8_t) [%]", "mavlink_proto.SCAN_STATUS_scan_completion", ftypes.UINT8, nil)
+f.SCAN_STATUS_time_remaining = ProtoField.new("time_remaining (uint16_t) [seconds]", "mavlink_proto.SCAN_STATUS_time_remaining", ftypes.UINT16, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -832,6 +837,23 @@ function payload_fns.payload_9(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.SCAN_SETTINGS_point_spacing, tvbrange)
     tvbrange = padded(offset + 20, 4)
     subtree = tree:add_le(f.SCAN_SETTINGS_scan_speed, tvbrange)
+end
+-- dissect payload of message type SCAN_STATUS
+function payload_fns.payload_10(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 7 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 7)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.SCAN_STATUS_start_time_unix, tvbrange)
+    tvbrange = padded(offset + 6, 1)
+    subtree = tree:add_le(f.SCAN_STATUS_scan_completion, tvbrange)
+    tvbrange = padded(offset + 4, 2)
+    subtree = tree:add_le(f.SCAN_STATUS_time_remaining, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
