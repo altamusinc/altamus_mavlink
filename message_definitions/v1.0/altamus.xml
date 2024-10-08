@@ -63,7 +63,7 @@
     <messages>
         <message name="LIDAR_READING" id="1">
             <description> Readings from the lidar. Compressed into an array of uint64 to take advantage of Mavlink2 truncating empty packets. Each field is 2 bytes. [distance][pitch][yaw][return strength]</description>
-            <field name="readings" type="uint64_t[32]"></field>
+            <field name="readings" type="uint64_t[31]"></field>
         </message>
         <message name="COMPONENT_POWER_CONTROL" id="2">
             <description> Message that will component devices on or off in the EOS scanner </description>

@@ -254,7 +254,6 @@ f.LIDAR_READING_readings_27 = ProtoField.new("readings[27] (uint64_t)", "mavlink
 f.LIDAR_READING_readings_28 = ProtoField.new("readings[28] (uint64_t)", "mavlink_proto.LIDAR_READING_readings_28", ftypes.UINT64, nil)
 f.LIDAR_READING_readings_29 = ProtoField.new("readings[29] (uint64_t)", "mavlink_proto.LIDAR_READING_readings_29", ftypes.UINT64, nil)
 f.LIDAR_READING_readings_30 = ProtoField.new("readings[30] (uint64_t)", "mavlink_proto.LIDAR_READING_readings_30", ftypes.UINT64, nil)
-f.LIDAR_READING_readings_31 = ProtoField.new("readings[31] (uint64_t)", "mavlink_proto.LIDAR_READING_readings_31", ftypes.UINT64, nil)
 
 f.COMPONENT_POWER_CONTROL_device = ProtoField.new("device (EOS_COMPONENT)", "mavlink_proto.COMPONENT_POWER_CONTROL_device", ftypes.UINT16, nil, base.HEX_DEC)
 f.COMPONENT_POWER_CONTROL_device_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.COMPONENT_POWER_CONTROL_device.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
@@ -560,9 +559,9 @@ end
 -- dissect payload of message type LIDAR_READING
 function payload_fns.payload_1(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 256 > limit) then
+    if (offset + 248 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 256)
+        padded:set_size(offset + 248)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -629,8 +628,6 @@ function payload_fns.payload_1(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.LIDAR_READING_readings_29, tvbrange)
     tvbrange = padded(offset + 240, 8)
     subtree = tree:add_le(f.LIDAR_READING_readings_30, tvbrange)
-    tvbrange = padded(offset + 248, 8)
-    subtree = tree:add_le(f.LIDAR_READING_readings_31, tvbrange)
 end
 -- dissect payload of message type COMPONENT_POWER_CONTROL
 function payload_fns.payload_2(buffer, tree, msgid, offset, limit, pinfo)

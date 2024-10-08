@@ -5,32 +5,32 @@
 
 
 typedef struct __mavlink_lidar_reading_t {
- uint64_t readings[32]; /*<  */
+ uint64_t readings[31]; /*<  */
 } mavlink_lidar_reading_t;
 
-#define MAVLINK_MSG_ID_LIDAR_READING_LEN 256
-#define MAVLINK_MSG_ID_LIDAR_READING_MIN_LEN 256
-#define MAVLINK_MSG_ID_1_LEN 256
-#define MAVLINK_MSG_ID_1_MIN_LEN 256
+#define MAVLINK_MSG_ID_LIDAR_READING_LEN 248
+#define MAVLINK_MSG_ID_LIDAR_READING_MIN_LEN 248
+#define MAVLINK_MSG_ID_1_LEN 248
+#define MAVLINK_MSG_ID_1_MIN_LEN 248
 
-#define MAVLINK_MSG_ID_LIDAR_READING_CRC 192
-#define MAVLINK_MSG_ID_1_CRC 192
+#define MAVLINK_MSG_ID_LIDAR_READING_CRC 125
+#define MAVLINK_MSG_ID_1_CRC 125
 
-#define MAVLINK_MSG_LIDAR_READING_FIELD_READINGS_LEN 32
+#define MAVLINK_MSG_LIDAR_READING_FIELD_READINGS_LEN 31
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_LIDAR_READING { \
     1, \
     "LIDAR_READING", \
     1, \
-    {  { "readings", NULL, MAVLINK_TYPE_UINT64_T, 32, 0, offsetof(mavlink_lidar_reading_t, readings) }, \
+    {  { "readings", NULL, MAVLINK_TYPE_UINT64_T, 31, 0, offsetof(mavlink_lidar_reading_t, readings) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_LIDAR_READING { \
     "LIDAR_READING", \
     1, \
-    {  { "readings", NULL, MAVLINK_TYPE_UINT64_T, 32, 0, offsetof(mavlink_lidar_reading_t, readings) }, \
+    {  { "readings", NULL, MAVLINK_TYPE_UINT64_T, 31, 0, offsetof(mavlink_lidar_reading_t, readings) }, \
          } \
 }
 #endif
@@ -50,12 +50,12 @@ static inline uint16_t mavlink_msg_lidar_reading_pack(uint8_t system_id, uint8_t
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_LIDAR_READING_LEN];
 
-    _mav_put_uint64_t_array(buf, 0, readings, 32);
+    _mav_put_uint64_t_array(buf, 0, readings, 31);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_LIDAR_READING_LEN);
 #else
     mavlink_lidar_reading_t packet;
 
-    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*32);
+    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*31);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_LIDAR_READING_LEN);
 #endif
 
@@ -79,12 +79,12 @@ static inline uint16_t mavlink_msg_lidar_reading_pack_status(uint8_t system_id, 
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_LIDAR_READING_LEN];
 
-    _mav_put_uint64_t_array(buf, 0, readings, 32);
+    _mav_put_uint64_t_array(buf, 0, readings, 31);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_LIDAR_READING_LEN);
 #else
     mavlink_lidar_reading_t packet;
 
-    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*32);
+    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*31);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_LIDAR_READING_LEN);
 #endif
 
@@ -112,12 +112,12 @@ static inline uint16_t mavlink_msg_lidar_reading_pack_chan(uint8_t system_id, ui
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_LIDAR_READING_LEN];
 
-    _mav_put_uint64_t_array(buf, 0, readings, 32);
+    _mav_put_uint64_t_array(buf, 0, readings, 31);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_LIDAR_READING_LEN);
 #else
     mavlink_lidar_reading_t packet;
 
-    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*32);
+    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*31);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_LIDAR_READING_LEN);
 #endif
 
@@ -179,12 +179,12 @@ static inline void mavlink_msg_lidar_reading_send(mavlink_channel_t chan, const 
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_LIDAR_READING_LEN];
 
-    _mav_put_uint64_t_array(buf, 0, readings, 32);
+    _mav_put_uint64_t_array(buf, 0, readings, 31);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LIDAR_READING, buf, MAVLINK_MSG_ID_LIDAR_READING_MIN_LEN, MAVLINK_MSG_ID_LIDAR_READING_LEN, MAVLINK_MSG_ID_LIDAR_READING_CRC);
 #else
     mavlink_lidar_reading_t packet;
 
-    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*32);
+    mav_array_memcpy(packet.readings, readings, sizeof(uint64_t)*31);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LIDAR_READING, (const char *)&packet, MAVLINK_MSG_ID_LIDAR_READING_MIN_LEN, MAVLINK_MSG_ID_LIDAR_READING_LEN, MAVLINK_MSG_ID_LIDAR_READING_CRC);
 #endif
 }
@@ -216,12 +216,12 @@ static inline void mavlink_msg_lidar_reading_send_buf(mavlink_message_t *msgbuf,
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
 
-    _mav_put_uint64_t_array(buf, 0, readings, 32);
+    _mav_put_uint64_t_array(buf, 0, readings, 31);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LIDAR_READING, buf, MAVLINK_MSG_ID_LIDAR_READING_MIN_LEN, MAVLINK_MSG_ID_LIDAR_READING_LEN, MAVLINK_MSG_ID_LIDAR_READING_CRC);
 #else
     mavlink_lidar_reading_t *packet = (mavlink_lidar_reading_t *)msgbuf;
 
-    mav_array_memcpy(packet->readings, readings, sizeof(uint64_t)*32);
+    mav_array_memcpy(packet->readings, readings, sizeof(uint64_t)*31);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_LIDAR_READING, (const char *)packet, MAVLINK_MSG_ID_LIDAR_READING_MIN_LEN, MAVLINK_MSG_ID_LIDAR_READING_LEN, MAVLINK_MSG_ID_LIDAR_READING_CRC);
 #endif
 }
@@ -239,7 +239,7 @@ static inline void mavlink_msg_lidar_reading_send_buf(mavlink_message_t *msgbuf,
  */
 static inline uint16_t mavlink_msg_lidar_reading_get_readings(const mavlink_message_t* msg, uint64_t *readings)
 {
-    return _MAV_RETURN_uint64_t_array(msg, readings, 32,  0);
+    return _MAV_RETURN_uint64_t_array(msg, readings, 31,  0);
 }
 
 /**
