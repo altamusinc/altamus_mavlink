@@ -139,5 +139,17 @@
             <field name="scan_completion" type="uint8_t" units="%"> Percentage complete of the scan </field>
             <field name="time_remaining" type="uint16_t" units="seconds"> Estimated time remaining in the scan, in seconds</field>
         </message>
+        <message name="REMOTE_SERVER_SETTINGS" id = "11">
+            <description> Settings for remote server locations. Includes settings server and FTP server </description>
+            <field name="server_enable" type="uint8_t">Bool value controlling if settings and checkin information should be sent to a remote server. 0 = disabled, 1 = enabled. If enabled must provide server information.</field>
+            <field name="post_server" type="char[64]">Server to send checkin info to, as well as get settings from</field>
+            <field name="post_uri" type="char[32]">URI to send checkin info to. appended to post server. E.g. /php/api.php</field>
+            <field name="post_port" type="uint16_t">Port to send checkin info to. Defaults to 80</field>
+            <field name="ftp_enable" type="uint8_t">Bool value controlling if files should be sent to FTP server. 0 = disabled, 1 = enabled. If enabled, must provide valid settings.</field>
+            <field name="ftp_server" type="char[64]">Address of server to send FTP files too.</field>
+            <field name="ftp_username" type="char[32]">Username to use when logging into FTP server</field>
+            <field name="ftp_password" type="char[32]">Password to use for FTP upload</field>
+            <field name="ftp_port" type="uint16_t">Port to send FTP info to. Defaults to 21</field>
+        </message>
     </messages>
 </mavlink>

@@ -52,6 +52,7 @@ messageName = {
     [8] = 'COMPONENT_HEALTH_TEST',
     [9] = 'SCAN_SETTINGS',
     [10] = 'SCAN_STATUS',
+    [11] = 'REMOTE_SERVER_SETTINGS',
     [0] = 'HEARTBEAT',
     [300] = 'PROTOCOL_VERSION',
     [24] = 'GPS_RAW_INT',
@@ -409,6 +410,16 @@ f.SCAN_SETTINGS_scan_speed = ProtoField.new("scan_speed (float) [rpm]", "mavlink
 f.SCAN_STATUS_start_time_unix = ProtoField.new("start_time_unix (uint32_t)", "mavlink_proto.SCAN_STATUS_start_time_unix", ftypes.UINT32, nil)
 f.SCAN_STATUS_scan_completion = ProtoField.new("scan_completion (uint8_t) [%]", "mavlink_proto.SCAN_STATUS_scan_completion", ftypes.UINT8, nil)
 f.SCAN_STATUS_time_remaining = ProtoField.new("time_remaining (uint16_t) [seconds]", "mavlink_proto.SCAN_STATUS_time_remaining", ftypes.UINT16, nil)
+
+f.REMOTE_SERVER_SETTINGS_server_enable = ProtoField.new("server_enable (uint8_t)", "mavlink_proto.REMOTE_SERVER_SETTINGS_server_enable", ftypes.UINT8, nil)
+f.REMOTE_SERVER_SETTINGS_post_server = ProtoField.new("post_server (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_post_server", ftypes.STRING, nil)
+f.REMOTE_SERVER_SETTINGS_post_uri = ProtoField.new("post_uri (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_post_uri", ftypes.STRING, nil)
+f.REMOTE_SERVER_SETTINGS_post_port = ProtoField.new("post_port (uint16_t)", "mavlink_proto.REMOTE_SERVER_SETTINGS_post_port", ftypes.UINT16, nil)
+f.REMOTE_SERVER_SETTINGS_ftp_enable = ProtoField.new("ftp_enable (uint8_t)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_enable", ftypes.UINT8, nil)
+f.REMOTE_SERVER_SETTINGS_ftp_server = ProtoField.new("ftp_server (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_server", ftypes.STRING, nil)
+f.REMOTE_SERVER_SETTINGS_ftp_username = ProtoField.new("ftp_username (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_username", ftypes.STRING, nil)
+f.REMOTE_SERVER_SETTINGS_ftp_password = ProtoField.new("ftp_password (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_password", ftypes.STRING, nil)
+f.REMOTE_SERVER_SETTINGS_ftp_port = ProtoField.new("ftp_port (uint16_t)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_port", ftypes.UINT16, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -851,6 +862,35 @@ function payload_fns.payload_10(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.SCAN_STATUS_scan_completion, tvbrange)
     tvbrange = padded(offset + 4, 2)
     subtree = tree:add_le(f.SCAN_STATUS_time_remaining, tvbrange)
+end
+-- dissect payload of message type REMOTE_SERVER_SETTINGS
+function payload_fns.payload_11(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 230 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 230)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 4, 1)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_server_enable, tvbrange)
+    tvbrange = padded(offset + 5, 64)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_post_server, tvbrange)
+    tvbrange = padded(offset + 69, 32)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_post_uri, tvbrange)
+    tvbrange = padded(offset + 0, 2)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_post_port, tvbrange)
+    tvbrange = padded(offset + 101, 1)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_ftp_enable, tvbrange)
+    tvbrange = padded(offset + 102, 64)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_ftp_server, tvbrange)
+    tvbrange = padded(offset + 166, 32)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_ftp_username, tvbrange)
+    tvbrange = padded(offset + 198, 32)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_ftp_password, tvbrange)
+    tvbrange = padded(offset + 2, 2)
+    subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_ftp_port, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
