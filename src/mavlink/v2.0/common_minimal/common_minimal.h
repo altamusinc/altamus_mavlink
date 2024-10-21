@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_COMMON_MINIMAL.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_COMMON_MINIMAL_XML_HASH 6578625699408613801
+#define MAVLINK_COMMON_MINIMAL_XML_HASH 5588486731428238970
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 #ifndef MAVLINK_MESSAGE_CRCS
-#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {244, 95, 6, 6, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
+#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {244, 95, 6, 6, 0, 0, 0}, {253, 83, 51, 54, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
 #endif
 
 #include "../protocol.h"
@@ -59,6 +59,23 @@ typedef enum MAV_TYPE
    MAV_TYPE_CAMERA=30, /* Camera | */
    MAV_TYPE_ENUM_END=31, /*  | */
 } MAV_TYPE;
+#endif
+
+/** @brief Indicates the severity level, generally used for status messages to indicate their relative urgency. Based on RFC-5424 using expanded definitions at: http://www.kiwisyslog.com/kb/info:-syslog-message-levels/. */
+#ifndef HAVE_ENUM_MAV_SEVERITY
+#define HAVE_ENUM_MAV_SEVERITY
+typedef enum MAV_SEVERITY
+{
+   MAV_SEVERITY_EMERGENCY=0, /* System is unusable. This is a "panic" condition. | */
+   MAV_SEVERITY_ALERT=1, /* Action should be taken immediately. Indicates error in non-critical systems. | */
+   MAV_SEVERITY_CRITICAL=2, /* Action must be taken immediately. Indicates failure in a primary system. | */
+   MAV_SEVERITY_ERROR=3, /* Indicates an error in secondary/redundant systems. | */
+   MAV_SEVERITY_WARNING=4, /* Indicates about a possible future error if this is not resolved within a given timeframe. Example would be a low battery warning. | */
+   MAV_SEVERITY_NOTICE=5, /* An unusual event has occurred, though not an error condition. This should be investigated for the root cause. | */
+   MAV_SEVERITY_INFO=6, /* Normal operational messages. Useful for logging. No action is required for these messages. | */
+   MAV_SEVERITY_DEBUG=7, /* Useful non-operational messages that can assist in debugging. These should not occur during normal operation. | */
+   MAV_SEVERITY_ENUM_END=8, /*  | */
+} MAV_SEVERITY;
 #endif
 
 /** @brief  */
@@ -237,14 +254,15 @@ typedef enum GPS_FIX_TYPE
 #include "./mavlink_msg_command_ack.h"
 #include "./mavlink_msg_command_cancel.h"
 #include "./mavlink_msg_message_interval.h"
+#include "./mavlink_msg_statustext.h"
 
 // base include
 
 
 
 #if MAVLINK_COMMON_MINIMAL_XML_HASH == MAVLINK_PRIMARY_XML_HASH
-# define MAVLINK_MESSAGE_INFO {MAVLINK_MESSAGE_INFO_HEARTBEAT, MAVLINK_MESSAGE_INFO_GPS_RAW_INT, MAVLINK_MESSAGE_INFO_MISSION_ITEM, MAVLINK_MESSAGE_INFO_COMMAND_INT, MAVLINK_MESSAGE_INFO_COMMAND_LONG, MAVLINK_MESSAGE_INFO_COMMAND_ACK, MAVLINK_MESSAGE_INFO_COMMAND_CANCEL, MAVLINK_MESSAGE_INFO_MESSAGE_INTERVAL, MAVLINK_MESSAGE_INFO_PROTOCOL_VERSION}
-# define MAVLINK_MESSAGE_NAMES {{ "COMMAND_ACK", 77 }, { "COMMAND_CANCEL", 80 }, { "COMMAND_INT", 75 }, { "COMMAND_LONG", 76 }, { "GPS_RAW_INT", 24 }, { "HEARTBEAT", 0 }, { "MESSAGE_INTERVAL", 244 }, { "MISSION_ITEM", 39 }, { "PROTOCOL_VERSION", 300 }}
+# define MAVLINK_MESSAGE_INFO {MAVLINK_MESSAGE_INFO_HEARTBEAT, MAVLINK_MESSAGE_INFO_GPS_RAW_INT, MAVLINK_MESSAGE_INFO_MISSION_ITEM, MAVLINK_MESSAGE_INFO_COMMAND_INT, MAVLINK_MESSAGE_INFO_COMMAND_LONG, MAVLINK_MESSAGE_INFO_COMMAND_ACK, MAVLINK_MESSAGE_INFO_COMMAND_CANCEL, MAVLINK_MESSAGE_INFO_MESSAGE_INTERVAL, MAVLINK_MESSAGE_INFO_STATUSTEXT, MAVLINK_MESSAGE_INFO_PROTOCOL_VERSION}
+# define MAVLINK_MESSAGE_NAMES {{ "COMMAND_ACK", 77 }, { "COMMAND_CANCEL", 80 }, { "COMMAND_INT", 75 }, { "COMMAND_LONG", 76 }, { "GPS_RAW_INT", 24 }, { "HEARTBEAT", 0 }, { "MESSAGE_INTERVAL", 244 }, { "MISSION_ITEM", 39 }, { "PROTOCOL_VERSION", 300 }, { "STATUSTEXT", 253 }}
 # if MAVLINK_COMMAND_24BIT
 #  include "../mavlink_get_info.h"
 # endif

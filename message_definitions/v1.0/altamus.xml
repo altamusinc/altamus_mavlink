@@ -139,13 +139,6 @@
             <field name="scan_completion" type="uint8_t" units="%"> Percentage complete of the scan </field>
             <field name="time_remaining" type="uint16_t" units="seconds"> Estimated time remaining in the scan, in seconds</field>
         </message>
-        <message name="POWER_INFORMATION" id = "11">
-            <description> Power stats of device</description>
-            <field name="instant_current" type="uint16_t" units="mA"> Instant current at sensor in Milliamps</field>
-            <field name="instant_voltage" type="uint16_t" units="mV"> Instant voltage at sensor in Millivolts</field>
-            <field name="instant_power" type="uint16_t" units="mW"> Instant power at sensor in Milliwatts</field>
-            <field name="energy_consumed" type="uint32_t" units="J"> Accumulated power since last reset in Joules</field>
-        </message>
         <message name="REMOTE_SERVER_SETTINGS" id = "11">
             <description> Settings for remote server locations. Includes settings server and FTP server </description>
             <field name="server_enable" type="uint8_t">Bool value controlling if settings and checkin information should be sent to a remote server. 0 = disabled, 1 = enabled. If enabled must provide server information.</field>
@@ -157,6 +150,13 @@
             <field name="ftp_username" type="char[32]">Username to use when logging into FTP server</field>
             <field name="ftp_password" type="char[32]">Password to use for FTP upload</field>
             <field name="ftp_port" type="uint16_t">Port to send FTP info to. Defaults to 21</field>
+        </message>
+        <message name="POWER_INFORMATION" id = "12">
+            <description> Power stats of device</description>
+            <field name="instant_current" type="uint16_t" units="mA"> Instant current at sensor in Milliamps</field>
+            <field name="instant_voltage" type="uint16_t" units="mV"> Instant voltage at sensor in Millivolts</field>
+            <field name="instant_power" type="uint16_t" units="mW"> Instant power at sensor in Milliwatts</field>
+            <field name="energy_consumed" type="uint32_t" units="J"> Accumulated power since last reset in Joules</field>
         </message>
     </messages>
 </mavlink>
