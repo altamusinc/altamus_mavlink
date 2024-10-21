@@ -122,7 +122,7 @@
         </message>
         <message name="COMPONENT_HEALTH_TEST" id="8">
             <description> Requests that the device tests/retests a specified component. Pass EOS_COMPONENT_ALL to test all</description>
-            <field name="component" type="uint8_t" enum="EOS_COMPONENT"> Which component(s) to request retest for</field>
+            <field name="component" type="uint32_t" enum="EOS_COMPONENT"> Which component(s) to request retest for</field>
         </message>
         <message name="SCAN_SETTINGS" id = "9">
             <description> Settings for a space scan</description>
@@ -138,6 +138,13 @@
             <field name="start_time_unix" type="uint32_t"> Time that scan started </field>
             <field name="scan_completion" type="uint8_t" units="%"> Percentage complete of the scan </field>
             <field name="time_remaining" type="uint16_t" units="seconds"> Estimated time remaining in the scan, in seconds</field>
+        </message>
+        <message name="POWER_INFORMATION" id = "11">
+            <description> Power stats of device</description>
+            <field name="instant_current" type="uint16_t" units="mA"> Instant current at sensor in Milliamps</field>
+            <field name="instant_voltage" type="uint16_t" units="mV"> Instant voltage at sensor in Millivolts</field>
+            <field name="instant_power" type="uint16_t" units="mW"> Instant power at sensor in Milliwatts</field>
+            <field name="energy_consumed" type="uint32_t" units="J"> Accumulated power since last reset in Joules</field>
         </message>
         <message name="REMOTE_SERVER_SETTINGS" id = "11">
             <description> Settings for remote server locations. Includes settings server and FTP server </description>
