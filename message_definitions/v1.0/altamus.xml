@@ -164,7 +164,9 @@
             <field name="ssid" type="char[32]"> Name of the SSID </field>
             <field name="bssid" type="uint8_t[6]">BSSID of the access point that the scanner is connected to</field>
             <field name="rssi" type="uint8_t"> RSSI of the signal. expressed in negative dBm</field>
+            <field name="rssi_percent" type="uint8_t"> RSSI of the signal, expressed as a percentage</field>
             <field name="snr" type="uint8_t"> SNR of the wifi. expressed as positive dB</field>
+            <field name="snr_percent" type="uint8_t">SNR of the wifi, expreseed as a percentage</field>
         </message>
     </messages>
 </mavlink>

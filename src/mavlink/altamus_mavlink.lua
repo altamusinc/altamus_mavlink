@@ -449,7 +449,9 @@ f.WIFI_INFORMATION_bssid_3 = ProtoField.new("bssid[3] (uint8_t)", "mavlink_proto
 f.WIFI_INFORMATION_bssid_4 = ProtoField.new("bssid[4] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_4", ftypes.UINT8, nil)
 f.WIFI_INFORMATION_bssid_5 = ProtoField.new("bssid[5] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_5", ftypes.UINT8, nil)
 f.WIFI_INFORMATION_rssi = ProtoField.new("rssi (uint8_t)", "mavlink_proto.WIFI_INFORMATION_rssi", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_rssi_percent = ProtoField.new("rssi_percent (uint8_t)", "mavlink_proto.WIFI_INFORMATION_rssi_percent", ftypes.UINT8, nil)
 f.WIFI_INFORMATION_snr = ProtoField.new("snr (uint8_t)", "mavlink_proto.WIFI_INFORMATION_snr", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_snr_percent = ProtoField.new("snr_percent (uint8_t)", "mavlink_proto.WIFI_INFORMATION_snr_percent", ftypes.UINT8, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -960,9 +962,9 @@ end
 -- dissect payload of message type WIFI_INFORMATION
 function payload_fns.payload_13(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 40 > limit) then
+    if (offset + 42 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 40)
+        padded:set_size(offset + 42)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -984,7 +986,11 @@ function payload_fns.payload_13(buffer, tree, msgid, offset, limit, pinfo)
     tvbrange = padded(offset + 38, 1)
     subtree = tree:add_le(f.WIFI_INFORMATION_rssi, tvbrange)
     tvbrange = padded(offset + 39, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_rssi_percent, tvbrange)
+    tvbrange = padded(offset + 40, 1)
     subtree = tree:add_le(f.WIFI_INFORMATION_snr, tvbrange)
+    tvbrange = padded(offset + 41, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_snr_percent, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)

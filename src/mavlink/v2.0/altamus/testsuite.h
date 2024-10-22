@@ -795,12 +795,14 @@ static void mavlink_test_wifi_information(uint8_t system_id, uint8_t component_i
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_wifi_information_t packet_in = {
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDE",{ 101, 102, 103, 104, 105, 106 },247,58
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDE",{ 101, 102, 103, 104, 105, 106 },247,58,125,192
     };
     mavlink_wifi_information_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.rssi = packet_in.rssi;
+        packet1.rssi_percent = packet_in.rssi_percent;
         packet1.snr = packet_in.snr;
+        packet1.snr_percent = packet_in.snr_percent;
         
         mav_array_memcpy(packet1.ssid, packet_in.ssid, sizeof(char)*32);
         mav_array_memcpy(packet1.bssid, packet_in.bssid, sizeof(uint8_t)*6);
@@ -817,12 +819,12 @@ static void mavlink_test_wifi_information(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_wifi_information_pack(system_id, component_id, &msg , packet1.ssid , packet1.bssid , packet1.rssi , packet1.snr );
+    mavlink_msg_wifi_information_pack(system_id, component_id, &msg , packet1.ssid , packet1.bssid , packet1.rssi , packet1.rssi_percent , packet1.snr , packet1.snr_percent );
     mavlink_msg_wifi_information_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_wifi_information_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.ssid , packet1.bssid , packet1.rssi , packet1.snr );
+    mavlink_msg_wifi_information_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.ssid , packet1.bssid , packet1.rssi , packet1.rssi_percent , packet1.snr , packet1.snr_percent );
     mavlink_msg_wifi_information_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -835,7 +837,7 @@ static void mavlink_test_wifi_information(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_wifi_information_send(MAVLINK_COMM_1 , packet1.ssid , packet1.bssid , packet1.rssi , packet1.snr );
+    mavlink_msg_wifi_information_send(MAVLINK_COMM_1 , packet1.ssid , packet1.bssid , packet1.rssi , packet1.rssi_percent , packet1.snr , packet1.snr_percent );
     mavlink_msg_wifi_information_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
