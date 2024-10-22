@@ -53,15 +53,19 @@ messageName = {
     [9] = 'SCAN_SETTINGS',
     [10] = 'SCAN_STATUS',
     [11] = 'REMOTE_SERVER_SETTINGS',
+    [12] = 'POWER_INFORMATION',
+    [13] = 'WIFI_INFORMATION',
     [0] = 'HEARTBEAT',
     [300] = 'PROTOCOL_VERSION',
     [24] = 'GPS_RAW_INT',
+    [30] = 'ATTITUDE',
     [39] = 'MISSION_ITEM',
     [75] = 'COMMAND_INT',
     [76] = 'COMMAND_LONG',
     [77] = 'COMMAND_ACK',
     [80] = 'COMMAND_CANCEL',
     [244] = 'MESSAGE_INTERVAL',
+    [253] = 'STATUSTEXT',
 }
 
 local enumEntryName = {
@@ -115,6 +119,16 @@ local enumEntryName = {
         [26] = "MAV_TYPE_GIMBAL",
         [27] = "MAV_TYPE_ADSB",
         [30] = "MAV_TYPE_CAMERA",
+    },
+    ["MAV_SEVERITY"] = {
+        [0] = "MAV_SEVERITY_EMERGENCY",
+        [1] = "MAV_SEVERITY_ALERT",
+        [2] = "MAV_SEVERITY_CRITICAL",
+        [3] = "MAV_SEVERITY_ERROR",
+        [4] = "MAV_SEVERITY_WARNING",
+        [5] = "MAV_SEVERITY_NOTICE",
+        [6] = "MAV_SEVERITY_INFO",
+        [7] = "MAV_SEVERITY_DEBUG",
     },
     ["MAV_CMD"] = {
         [1] = "MAV_CMD_START_EOS_SCAN",
@@ -301,6 +315,7 @@ f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_SERIAL_BRIDGE = ProtoFie
 f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_PORT_EXPANDER = ProtoField.bool("mavlink_proto.SYSTEM_STATUS_health_status_bitmask.EOS_COMPONENT_PORT_EXPANDER", "EOS_COMPONENT_PORT_EXPANDER", 16, nil, 1024)
 f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.SYSTEM_STATUS_health_status_bitmask.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
 f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.SYSTEM_STATUS_health_status_bitmask.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
+f.SYSTEM_STATUS_uptime = ProtoField.new("uptime (uint16_t) [seconds]", "mavlink_proto.SYSTEM_STATUS_uptime", ftypes.UINT16, nil)
 
 f.MOTOR_CONTROL_target = ProtoField.new("target (EOS_COMPONENT)", "mavlink_proto.MOTOR_CONTROL_target", ftypes.UINT8, nil, base.HEX_DEC)
 f.MOTOR_CONTROL_target_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
@@ -385,7 +400,7 @@ f.IDENTIFIER_mac_4 = ProtoField.new("mac[4] (uint8_t)", "mavlink_proto.IDENTIFIE
 f.IDENTIFIER_mac_5 = ProtoField.new("mac[5] (uint8_t)", "mavlink_proto.IDENTIFIER_mac_5", ftypes.UINT8, nil)
 f.IDENTIFIER_name = ProtoField.new("name (char)", "mavlink_proto.IDENTIFIER_name", ftypes.STRING, nil)
 
-f.COMPONENT_HEALTH_TEST_component = ProtoField.new("component (EOS_COMPONENT)", "mavlink_proto.COMPONENT_HEALTH_TEST_component", ftypes.UINT8, nil, base.HEX_DEC)
+f.COMPONENT_HEALTH_TEST_component = ProtoField.new("component (EOS_COMPONENT)", "mavlink_proto.COMPONENT_HEALTH_TEST_component", ftypes.UINT32, nil, base.HEX_DEC)
 f.COMPONENT_HEALTH_TEST_component_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.COMPONENT_HEALTH_TEST_component.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
 f.COMPONENT_HEALTH_TEST_component_flagEOS_COMPONENT_YAW_MOTOR = ProtoField.bool("mavlink_proto.COMPONENT_HEALTH_TEST_component.EOS_COMPONENT_YAW_MOTOR", "EOS_COMPONENT_YAW_MOTOR", 16, nil, 2)
 f.COMPONENT_HEALTH_TEST_component_flagEOS_COMPONENT_PITCH_MOTOR = ProtoField.bool("mavlink_proto.COMPONENT_HEALTH_TEST_component.EOS_COMPONENT_PITCH_MOTOR", "EOS_COMPONENT_PITCH_MOTOR", 16, nil, 4)
@@ -420,6 +435,21 @@ f.REMOTE_SERVER_SETTINGS_ftp_server = ProtoField.new("ftp_server (char)", "mavli
 f.REMOTE_SERVER_SETTINGS_ftp_username = ProtoField.new("ftp_username (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_username", ftypes.STRING, nil)
 f.REMOTE_SERVER_SETTINGS_ftp_password = ProtoField.new("ftp_password (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_password", ftypes.STRING, nil)
 f.REMOTE_SERVER_SETTINGS_ftp_port = ProtoField.new("ftp_port (uint16_t)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_port", ftypes.UINT16, nil)
+
+f.POWER_INFORMATION_instant_current = ProtoField.new("instant_current (uint16_t) [mA]", "mavlink_proto.POWER_INFORMATION_instant_current", ftypes.UINT16, nil)
+f.POWER_INFORMATION_instant_voltage = ProtoField.new("instant_voltage (uint16_t) [mV]", "mavlink_proto.POWER_INFORMATION_instant_voltage", ftypes.UINT16, nil)
+f.POWER_INFORMATION_instant_power = ProtoField.new("instant_power (uint16_t) [mW]", "mavlink_proto.POWER_INFORMATION_instant_power", ftypes.UINT16, nil)
+f.POWER_INFORMATION_energy_consumed = ProtoField.new("energy_consumed (uint32_t) [J]", "mavlink_proto.POWER_INFORMATION_energy_consumed", ftypes.UINT32, nil)
+
+f.WIFI_INFORMATION_ssid = ProtoField.new("ssid (char)", "mavlink_proto.WIFI_INFORMATION_ssid", ftypes.STRING, nil)
+f.WIFI_INFORMATION_bssid_0 = ProtoField.new("bssid[0] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_0", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_bssid_1 = ProtoField.new("bssid[1] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_1", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_bssid_2 = ProtoField.new("bssid[2] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_2", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_bssid_3 = ProtoField.new("bssid[3] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_3", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_bssid_4 = ProtoField.new("bssid[4] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_4", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_bssid_5 = ProtoField.new("bssid[5] (uint8_t)", "mavlink_proto.WIFI_INFORMATION_bssid_5", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_rssi = ProtoField.new("rssi (uint8_t)", "mavlink_proto.WIFI_INFORMATION_rssi", ftypes.UINT8, nil)
+f.WIFI_INFORMATION_snr = ProtoField.new("snr (uint8_t)", "mavlink_proto.WIFI_INFORMATION_snr", ftypes.UINT8, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -472,6 +502,14 @@ f.GPS_RAW_INT_v_acc = ProtoField.new("v_acc (uint32_t) [mm]", "mavlink_proto.GPS
 f.GPS_RAW_INT_vel_acc = ProtoField.new("vel_acc (uint32_t) [mm]", "mavlink_proto.GPS_RAW_INT_vel_acc", ftypes.UINT32, nil)
 f.GPS_RAW_INT_hdg_acc = ProtoField.new("hdg_acc (uint32_t) [degE5]", "mavlink_proto.GPS_RAW_INT_hdg_acc", ftypes.UINT32, nil)
 f.GPS_RAW_INT_yaw = ProtoField.new("yaw (uint16_t) [cdeg]", "mavlink_proto.GPS_RAW_INT_yaw", ftypes.UINT16, nil)
+
+f.ATTITUDE_time_boot_ms = ProtoField.new("time_boot_ms (uint32_t) [ms]", "mavlink_proto.ATTITUDE_time_boot_ms", ftypes.UINT32, nil)
+f.ATTITUDE_roll = ProtoField.new("roll (float) [rad]", "mavlink_proto.ATTITUDE_roll", ftypes.FLOAT, nil)
+f.ATTITUDE_pitch = ProtoField.new("pitch (float) [rad]", "mavlink_proto.ATTITUDE_pitch", ftypes.FLOAT, nil)
+f.ATTITUDE_yaw = ProtoField.new("yaw (float) [rad]", "mavlink_proto.ATTITUDE_yaw", ftypes.FLOAT, nil)
+f.ATTITUDE_rollspeed = ProtoField.new("rollspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_rollspeed", ftypes.FLOAT, nil)
+f.ATTITUDE_pitchspeed = ProtoField.new("pitchspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_pitchspeed", ftypes.FLOAT, nil)
+f.ATTITUDE_yawspeed = ProtoField.new("yawspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_yawspeed", ftypes.FLOAT, nil)
 
 f.MISSION_ITEM_target_system = ProtoField.new("target_system (uint8_t)", "mavlink_proto.MISSION_ITEM_target_system", ftypes.UINT8, nil)
 f.MISSION_ITEM_target_component = ProtoField.new("target_component (uint8_t)", "mavlink_proto.MISSION_ITEM_target_component", ftypes.UINT8, nil)
@@ -528,6 +566,11 @@ f.COMMAND_CANCEL_command = ProtoField.new("command (MAV_CMD)", "mavlink_proto.CO
 
 f.MESSAGE_INTERVAL_message_id = ProtoField.new("message_id (uint16_t)", "mavlink_proto.MESSAGE_INTERVAL_message_id", ftypes.UINT16, nil)
 f.MESSAGE_INTERVAL_interval_us = ProtoField.new("interval_us (int32_t) [us]", "mavlink_proto.MESSAGE_INTERVAL_interval_us", ftypes.INT32, nil)
+
+f.STATUSTEXT_severity = ProtoField.new("severity (MAV_SEVERITY)", "mavlink_proto.STATUSTEXT_severity", ftypes.UINT8, enumEntryName.MAV_SEVERITY)
+f.STATUSTEXT_text = ProtoField.new("text (char)", "mavlink_proto.STATUSTEXT_text", ftypes.STRING, nil)
+f.STATUSTEXT_id = ProtoField.new("id (uint16_t)", "mavlink_proto.STATUSTEXT_id", ftypes.UINT16, nil)
+f.STATUSTEXT_chunk_seq = ProtoField.new("chunk_seq (uint8_t)", "mavlink_proto.STATUSTEXT_chunk_seq", ftypes.UINT8, nil)
 
 -- dissect flag field
 function dissect_flags_EOS_COMPONENT(tree, name, tvbrange, value)
@@ -660,14 +703,14 @@ end
 -- dissect payload of message type SYSTEM_STATUS
 function payload_fns.payload_3(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 5 > limit) then
+    if (offset + 7 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 5)
+        padded:set_size(offset + 7)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
-    tvbrange = padded(offset + 4, 1)
+    tvbrange = padded(offset + 6, 1)
     subtree = tree:add_le(f.SYSTEM_STATUS_state, tvbrange)
     tvbrange = padded(offset + 0, 2)
     subtree = tree:add_le(f.SYSTEM_STATUS_power_status_bitmask, tvbrange)
@@ -677,6 +720,8 @@ function payload_fns.payload_3(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.SYSTEM_STATUS_health_status_bitmask, tvbrange)
     value = tvbrange:le_uint()
     dissect_flags_EOS_COMPONENT(subtree, "SYSTEM_STATUS_health_status_bitmask", tvbrange, value)
+    tvbrange = padded(offset + 4, 2)
+    subtree = tree:add_le(f.SYSTEM_STATUS_uptime, tvbrange)
 end
 -- dissect payload of message type MOTOR_CONTROL
 function payload_fns.payload_4(buffer, tree, msgid, offset, limit, pinfo)
@@ -811,14 +856,14 @@ end
 -- dissect payload of message type COMPONENT_HEALTH_TEST
 function payload_fns.payload_8(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 1 > limit) then
+    if (offset + 4 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 1)
+        padded:set_size(offset + 4)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
-    tvbrange = padded(offset + 0, 1)
+    tvbrange = padded(offset + 0, 4)
     subtree = tree:add_le(f.COMPONENT_HEALTH_TEST_component, tvbrange)
     value = tvbrange:le_uint()
     dissect_flags_EOS_COMPONENT(subtree, "COMPONENT_HEALTH_TEST_component", tvbrange, value)
@@ -891,6 +936,54 @@ function payload_fns.payload_11(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_ftp_password, tvbrange)
     tvbrange = padded(offset + 2, 2)
     subtree = tree:add_le(f.REMOTE_SERVER_SETTINGS_ftp_port, tvbrange)
+end
+-- dissect payload of message type POWER_INFORMATION
+function payload_fns.payload_12(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 10 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 10)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 4, 2)
+    subtree = tree:add_le(f.POWER_INFORMATION_instant_current, tvbrange)
+    tvbrange = padded(offset + 6, 2)
+    subtree = tree:add_le(f.POWER_INFORMATION_instant_voltage, tvbrange)
+    tvbrange = padded(offset + 8, 2)
+    subtree = tree:add_le(f.POWER_INFORMATION_instant_power, tvbrange)
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.POWER_INFORMATION_energy_consumed, tvbrange)
+end
+-- dissect payload of message type WIFI_INFORMATION
+function payload_fns.payload_13(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 40 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 40)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 32)
+    subtree = tree:add_le(f.WIFI_INFORMATION_ssid, tvbrange)
+    tvbrange = padded(offset + 32, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_bssid_0, tvbrange)
+    tvbrange = padded(offset + 33, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_bssid_1, tvbrange)
+    tvbrange = padded(offset + 34, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_bssid_2, tvbrange)
+    tvbrange = padded(offset + 35, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_bssid_3, tvbrange)
+    tvbrange = padded(offset + 36, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_bssid_4, tvbrange)
+    tvbrange = padded(offset + 37, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_bssid_5, tvbrange)
+    tvbrange = padded(offset + 38, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_rssi, tvbrange)
+    tvbrange = padded(offset + 39, 1)
+    subtree = tree:add_le(f.WIFI_INFORMATION_snr, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
@@ -1016,6 +1109,43 @@ function payload_fns.payload_24(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.GPS_RAW_INT_hdg_acc, tvbrange)
     tvbrange = padded(offset + 50, 2)
     subtree = tree:add_le(f.GPS_RAW_INT_yaw, tvbrange)
+end
+-- dissect payload of message type ATTITUDE
+function payload_fns.payload_30(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 28 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 28)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.ATTITUDE_time_boot_ms, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.ATTITUDE_roll, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.ATTITUDE_pitch, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
+    tvbrange = padded(offset + 12, 4)
+    subtree = tree:add_le(f.ATTITUDE_yaw, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
+    tvbrange = padded(offset + 16, 4)
+    subtree = tree:add_le(f.ATTITUDE_rollspeed, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg/s)",value*180/math.pi))
+    tvbrange = padded(offset + 20, 4)
+    subtree = tree:add_le(f.ATTITUDE_pitchspeed, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg/s)",value*180/math.pi))
+    tvbrange = padded(offset + 24, 4)
+    subtree = tree:add_le(f.ATTITUDE_yawspeed, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg/s)",value*180/math.pi))
 end
 -- dissect payload of message type MISSION_ITEM with command MAV_CMD_START_EOS_SCAN
 function payload_fns.payload_39_cmd1(buffer, tree, msgid, offset, limit, pinfo)
@@ -1779,6 +1909,25 @@ function payload_fns.payload_244(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.MESSAGE_INTERVAL_interval_us, tvbrange)
     value = tvbrange:le_int()
     subtree:append_text(time_usec_decode(value))
+end
+-- dissect payload of message type STATUSTEXT
+function payload_fns.payload_253(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 54 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 54)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 1)
+    subtree = tree:add_le(f.STATUSTEXT_severity, tvbrange)
+    tvbrange = padded(offset + 1, 50)
+    subtree = tree:add_le(f.STATUSTEXT_text, tvbrange)
+    tvbrange = padded(offset + 51, 2)
+    subtree = tree:add_le(f.STATUSTEXT_id, tvbrange)
+    tvbrange = padded(offset + 53, 1)
+    subtree = tree:add_le(f.STATUSTEXT_chunk_seq, tvbrange)
 end
 -- dissector function
 function mavlink_proto.dissector(buffer,pinfo,tree)

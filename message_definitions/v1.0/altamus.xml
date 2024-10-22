@@ -75,6 +75,7 @@
             <field name="state" type="uint8_t" enum="EOS_STATE"> Current State of the Device </field>
             <field name="power_status_bitmask" type="uint16_t" enum="EOS_COMPONENT"> Bitmask of devices and their power status: 1 = on 0 = off </field>
             <field name="health_status_bitmask" type="uint16_t" enum="EOS_COMPONENT"> Bitmask of health of devices: 1 = healthy 0 = unhealthy </field>
+            <field name="uptime" type="uint16_t" units="seconds"> Device uptime in seconds </field>
         </message>
         <message name="MOTOR_CONTROL" id = "4">
             <description> Controls Motors </description>
@@ -157,6 +158,13 @@
             <field name="instant_voltage" type="uint16_t" units="mV"> Instant voltage at sensor in Millivolts</field>
             <field name="instant_power" type="uint16_t" units="mW"> Instant power at sensor in Milliwatts</field>
             <field name="energy_consumed" type="uint32_t" units="J"> Accumulated power since last reset in Joules</field>
+        </message>
+        <message name="WIFI_INFORMATION" id = "13">
+            <description> Information about the WiFi connection</description>
+            <field name="ssid" type="char[32]"> Name of the SSID </field>
+            <field name="bssid" type="uint8_t[6]">BSSID of the access point that the scanner is connected to</field>
+            <field name="rssi" type="uint8_t"> RSSI of the signal. expressed in negative dBm</field>
+            <field name="snr" type="uint8_t"> SNR of the wifi. expressed as positive dB</field>
         </message>
     </messages>
 </mavlink>
