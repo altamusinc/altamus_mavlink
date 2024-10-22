@@ -351,6 +351,7 @@
     <field type="float" name="rollspeed" units="rad/s">Roll angular speed</field>
     <field type="float" name="pitchspeed" units="rad/s">Pitch angular speed</field>
     <field type="float" name="yawspeed" units="rad/s">Yaw angular speed</field>
+    <field type="float" name="temp" units="degreesC">Temperature of the accel,</field>
   </message> 
   <message id="39" name="MISSION_ITEM">
       <deprecated since="2020-06" replaced_by="MISSION_ITEM_INT" />

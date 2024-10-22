@@ -510,6 +510,7 @@ f.ATTITUDE_yaw = ProtoField.new("yaw (float) [rad]", "mavlink_proto.ATTITUDE_yaw
 f.ATTITUDE_rollspeed = ProtoField.new("rollspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_rollspeed", ftypes.FLOAT, nil)
 f.ATTITUDE_pitchspeed = ProtoField.new("pitchspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_pitchspeed", ftypes.FLOAT, nil)
 f.ATTITUDE_yawspeed = ProtoField.new("yawspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_yawspeed", ftypes.FLOAT, nil)
+f.ATTITUDE_temp = ProtoField.new("temp (float) [degreesC]", "mavlink_proto.ATTITUDE_temp", ftypes.FLOAT, nil)
 
 f.MISSION_ITEM_target_system = ProtoField.new("target_system (uint8_t)", "mavlink_proto.MISSION_ITEM_target_system", ftypes.UINT8, nil)
 f.MISSION_ITEM_target_component = ProtoField.new("target_component (uint8_t)", "mavlink_proto.MISSION_ITEM_target_component", ftypes.UINT8, nil)
@@ -1113,9 +1114,9 @@ end
 -- dissect payload of message type ATTITUDE
 function payload_fns.payload_30(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 28 > limit) then
+    if (offset + 32 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 28)
+        padded:set_size(offset + 32)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -1146,6 +1147,8 @@ function payload_fns.payload_30(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.ATTITUDE_yawspeed, tvbrange)
     value = tvbrange:le_float()
     subtree:append_text(string.format(" (%g deg/s)",value*180/math.pi))
+    tvbrange = padded(offset + 28, 4)
+    subtree = tree:add_le(f.ATTITUDE_temp, tvbrange)
 end
 -- dissect payload of message type MISSION_ITEM with command MAV_CMD_START_EOS_SCAN
 function payload_fns.payload_39_cmd1(buffer, tree, msgid, offset, limit, pinfo)
