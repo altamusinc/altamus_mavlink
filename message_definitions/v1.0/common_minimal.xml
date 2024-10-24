@@ -78,6 +78,9 @@
     <entry value="4" name="MAV_CMD_SEND_SETTINGS_TO_SERVER">
       <description>Requests that device sends it's settings to the settings server configured in REMOTE_SERVER_SETTINGS. Takes no arguments</description>
     </entry>
+    <entry value="5" name="MAV_CMD_CLEAR_EEPROM">
+      <description>Requests that device clears it's stored EEPROM. Takes no Arguments</description>
+    </entry>
     <entry value="511" name="MAV_CMD_SET_MESSAGE_INTERVAL" hasLocation="false" isDestination="false">
       <description>Set the interval between messages for a particular MAVLink message ID. This interface replaces REQUEST_DATA_STREAM.</description>
       <param index="1" label="Message ID" minValue="0" maxValue="16777215" increment="1">The MAVLink message ID</param>
