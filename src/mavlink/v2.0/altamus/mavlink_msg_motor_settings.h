@@ -9,7 +9,7 @@ typedef struct __mavlink_motor_settings_t {
  float usteps_rate; /*< [Hz] Rate at which microsteps are being triggered by the driver internal oscillator. Read Only.*/
  float ustep_angle; /*< [deg] Device angle travelled per microstep. Read Only.*/
  uint16_t current; /*<   Motor current 0-2500 */
- uint16_t home_offset_steps; /*<  Number of steps to move from home position after homing.*/
+ int16_t home_offset_steps; /*<  Number of steps to move from home position after homing.*/
  uint16_t steps_to_next_index; /*<  Number of steps from home switch triggering to repeatable index pulse. Read Only.*/
  uint8_t motor; /*<  Which motor we're referring to.*/
  uint8_t microsteps; /*<   Microsteps used for stepping 1-256 in powers of 2*/
@@ -24,8 +24,8 @@ typedef struct __mavlink_motor_settings_t {
 #define MAVLINK_MSG_ID_5_LEN 24
 #define MAVLINK_MSG_ID_5_MIN_LEN 24
 
-#define MAVLINK_MSG_ID_MOTOR_SETTINGS_CRC 39
-#define MAVLINK_MSG_ID_5_CRC 39
+#define MAVLINK_MSG_ID_MOTOR_SETTINGS_CRC 42
+#define MAVLINK_MSG_ID_5_CRC 42
 
 
 
@@ -42,7 +42,7 @@ typedef struct __mavlink_motor_settings_t {
          { "pwm_autoscale", NULL, MAVLINK_TYPE_UINT8_T, 0, 21, offsetof(mavlink_motor_settings_t, pwm_autoscale) }, \
          { "pwm_autograd", NULL, MAVLINK_TYPE_UINT8_T, 0, 22, offsetof(mavlink_motor_settings_t, pwm_autograd) }, \
          { "min_steps_to_next_index", NULL, MAVLINK_TYPE_UINT8_T, 0, 23, offsetof(mavlink_motor_settings_t, min_steps_to_next_index) }, \
-         { "home_offset_steps", NULL, MAVLINK_TYPE_UINT16_T, 0, 14, offsetof(mavlink_motor_settings_t, home_offset_steps) }, \
+         { "home_offset_steps", NULL, MAVLINK_TYPE_INT16_T, 0, 14, offsetof(mavlink_motor_settings_t, home_offset_steps) }, \
          { "steps_to_next_index", NULL, MAVLINK_TYPE_UINT16_T, 0, 16, offsetof(mavlink_motor_settings_t, steps_to_next_index) }, \
          { "usteps_rate", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_motor_settings_t, usteps_rate) }, \
          { "ustep_angle", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_motor_settings_t, ustep_angle) }, \
@@ -60,7 +60,7 @@ typedef struct __mavlink_motor_settings_t {
          { "pwm_autoscale", NULL, MAVLINK_TYPE_UINT8_T, 0, 21, offsetof(mavlink_motor_settings_t, pwm_autoscale) }, \
          { "pwm_autograd", NULL, MAVLINK_TYPE_UINT8_T, 0, 22, offsetof(mavlink_motor_settings_t, pwm_autograd) }, \
          { "min_steps_to_next_index", NULL, MAVLINK_TYPE_UINT8_T, 0, 23, offsetof(mavlink_motor_settings_t, min_steps_to_next_index) }, \
-         { "home_offset_steps", NULL, MAVLINK_TYPE_UINT16_T, 0, 14, offsetof(mavlink_motor_settings_t, home_offset_steps) }, \
+         { "home_offset_steps", NULL, MAVLINK_TYPE_INT16_T, 0, 14, offsetof(mavlink_motor_settings_t, home_offset_steps) }, \
          { "steps_to_next_index", NULL, MAVLINK_TYPE_UINT16_T, 0, 16, offsetof(mavlink_motor_settings_t, steps_to_next_index) }, \
          { "usteps_rate", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_motor_settings_t, usteps_rate) }, \
          { "ustep_angle", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_motor_settings_t, ustep_angle) }, \
@@ -89,7 +89,7 @@ typedef struct __mavlink_motor_settings_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_motor_settings_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, uint16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
+                               uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, int16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MOTOR_SETTINGS_LEN];
@@ -97,7 +97,7 @@ static inline uint16_t mavlink_msg_motor_settings_pack(uint8_t system_id, uint8_
     _mav_put_float(buf, 4, usteps_rate);
     _mav_put_float(buf, 8, ustep_angle);
     _mav_put_uint16_t(buf, 12, current);
-    _mav_put_uint16_t(buf, 14, home_offset_steps);
+    _mav_put_int16_t(buf, 14, home_offset_steps);
     _mav_put_uint16_t(buf, 16, steps_to_next_index);
     _mav_put_uint8_t(buf, 18, motor);
     _mav_put_uint8_t(buf, 19, microsteps);
@@ -151,7 +151,7 @@ static inline uint16_t mavlink_msg_motor_settings_pack(uint8_t system_id, uint8_
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_motor_settings_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, uint16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
+                               uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, int16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MOTOR_SETTINGS_LEN];
@@ -159,7 +159,7 @@ static inline uint16_t mavlink_msg_motor_settings_pack_status(uint8_t system_id,
     _mav_put_float(buf, 4, usteps_rate);
     _mav_put_float(buf, 8, ustep_angle);
     _mav_put_uint16_t(buf, 12, current);
-    _mav_put_uint16_t(buf, 14, home_offset_steps);
+    _mav_put_int16_t(buf, 14, home_offset_steps);
     _mav_put_uint16_t(buf, 16, steps_to_next_index);
     _mav_put_uint8_t(buf, 18, motor);
     _mav_put_uint8_t(buf, 19, microsteps);
@@ -217,7 +217,7 @@ static inline uint16_t mavlink_msg_motor_settings_pack_status(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_motor_settings_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t motor,uint16_t current,uint8_t microsteps,float gearing_ratio,uint8_t spread_cycle,uint8_t pwm_autoscale,uint8_t pwm_autograd,uint8_t min_steps_to_next_index,uint16_t home_offset_steps,uint16_t steps_to_next_index,float usteps_rate,float ustep_angle)
+                                   uint8_t motor,uint16_t current,uint8_t microsteps,float gearing_ratio,uint8_t spread_cycle,uint8_t pwm_autoscale,uint8_t pwm_autograd,uint8_t min_steps_to_next_index,int16_t home_offset_steps,uint16_t steps_to_next_index,float usteps_rate,float ustep_angle)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MOTOR_SETTINGS_LEN];
@@ -225,7 +225,7 @@ static inline uint16_t mavlink_msg_motor_settings_pack_chan(uint8_t system_id, u
     _mav_put_float(buf, 4, usteps_rate);
     _mav_put_float(buf, 8, ustep_angle);
     _mav_put_uint16_t(buf, 12, current);
-    _mav_put_uint16_t(buf, 14, home_offset_steps);
+    _mav_put_int16_t(buf, 14, home_offset_steps);
     _mav_put_uint16_t(buf, 16, steps_to_next_index);
     _mav_put_uint8_t(buf, 18, motor);
     _mav_put_uint8_t(buf, 19, microsteps);
@@ -317,7 +317,7 @@ static inline uint16_t mavlink_msg_motor_settings_encode_status(uint8_t system_i
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_motor_settings_send(mavlink_channel_t chan, uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, uint16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
+static inline void mavlink_msg_motor_settings_send(mavlink_channel_t chan, uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, int16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_MOTOR_SETTINGS_LEN];
@@ -325,7 +325,7 @@ static inline void mavlink_msg_motor_settings_send(mavlink_channel_t chan, uint8
     _mav_put_float(buf, 4, usteps_rate);
     _mav_put_float(buf, 8, ustep_angle);
     _mav_put_uint16_t(buf, 12, current);
-    _mav_put_uint16_t(buf, 14, home_offset_steps);
+    _mav_put_int16_t(buf, 14, home_offset_steps);
     _mav_put_uint16_t(buf, 16, steps_to_next_index);
     _mav_put_uint8_t(buf, 18, motor);
     _mav_put_uint8_t(buf, 19, microsteps);
@@ -376,7 +376,7 @@ static inline void mavlink_msg_motor_settings_send_struct(mavlink_channel_t chan
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_motor_settings_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, uint16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
+static inline void mavlink_msg_motor_settings_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t motor, uint16_t current, uint8_t microsteps, float gearing_ratio, uint8_t spread_cycle, uint8_t pwm_autoscale, uint8_t pwm_autograd, uint8_t min_steps_to_next_index, int16_t home_offset_steps, uint16_t steps_to_next_index, float usteps_rate, float ustep_angle)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -384,7 +384,7 @@ static inline void mavlink_msg_motor_settings_send_buf(mavlink_message_t *msgbuf
     _mav_put_float(buf, 4, usteps_rate);
     _mav_put_float(buf, 8, ustep_angle);
     _mav_put_uint16_t(buf, 12, current);
-    _mav_put_uint16_t(buf, 14, home_offset_steps);
+    _mav_put_int16_t(buf, 14, home_offset_steps);
     _mav_put_uint16_t(buf, 16, steps_to_next_index);
     _mav_put_uint8_t(buf, 18, motor);
     _mav_put_uint8_t(buf, 19, microsteps);
@@ -504,9 +504,9 @@ static inline uint8_t mavlink_msg_motor_settings_get_min_steps_to_next_index(con
  *
  * @return  Number of steps to move from home position after homing.
  */
-static inline uint16_t mavlink_msg_motor_settings_get_home_offset_steps(const mavlink_message_t* msg)
+static inline int16_t mavlink_msg_motor_settings_get_home_offset_steps(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint16_t(msg,  14);
+    return _MAV_RETURN_int16_t(msg,  14);
 }
 
 /**

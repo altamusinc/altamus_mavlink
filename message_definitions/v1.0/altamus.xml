@@ -97,7 +97,7 @@
             <field name="pwm_autoscale" type="uint8_t">Boolean if pwm_autoscale is enabled. 0 = disabled, 1 = enabled</field>
             <field name="pwm_autograd" type="uint8_t">Boolean if pwm_autograd is enabled. 0 = disabled, 1 = enabled</field>
             <field name="min_steps_to_next_index" type="uint8_t" invalid="0">Mininimum steps between index pulse and home switch. Set to 0 to not enforce a minimum</field>
-            <field name="home_offset_steps" type="uint16_t">Number of steps to move from home position after homing.</field>
+            <field name="home_offset_steps" type="int16_t">Number of steps to move from home position after homing.</field>
             <field name="steps_to_next_index" type="uint16_t">Number of steps from home switch triggering to repeatable index pulse. Read Only.</field>
             <field name="usteps_rate" type="float" units="Hz">Rate at which microsteps are being triggered by the driver internal oscillator. Read Only.</field>
             <field name="ustep_angle" type="float" units="deg">Device angle travelled per microstep. Read Only.</field>
