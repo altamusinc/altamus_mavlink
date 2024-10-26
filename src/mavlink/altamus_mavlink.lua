@@ -55,6 +55,7 @@ messageName = {
     [11] = 'REMOTE_SERVER_SETTINGS',
     [12] = 'POWER_INFORMATION',
     [13] = 'WIFI_INFORMATION',
+    [14] = 'UPLOAD_STATUS',
     [0] = 'HEARTBEAT',
     [300] = 'PROTOCOL_VERSION',
     [24] = 'GPS_RAW_INT',
@@ -458,6 +459,13 @@ f.WIFI_INFORMATION_rssi = ProtoField.new("rssi (uint8_t)", "mavlink_proto.WIFI_I
 f.WIFI_INFORMATION_rssi_percent = ProtoField.new("rssi_percent (uint8_t)", "mavlink_proto.WIFI_INFORMATION_rssi_percent", ftypes.UINT8, nil)
 f.WIFI_INFORMATION_snr = ProtoField.new("snr (uint8_t)", "mavlink_proto.WIFI_INFORMATION_snr", ftypes.UINT8, nil)
 f.WIFI_INFORMATION_snr_percent = ProtoField.new("snr_percent (uint8_t)", "mavlink_proto.WIFI_INFORMATION_snr_percent", ftypes.UINT8, nil)
+
+f.UPLOAD_STATUS_start_time_unix = ProtoField.new("start_time_unix (uint32_t)", "mavlink_proto.UPLOAD_STATUS_start_time_unix", ftypes.UINT32, nil)
+f.UPLOAD_STATUS_upload_completion = ProtoField.new("upload_completion (uint8_t) [%]", "mavlink_proto.UPLOAD_STATUS_upload_completion", ftypes.UINT8, nil)
+f.UPLOAD_STATUS_bytes_uploaded = ProtoField.new("bytes_uploaded (uint32_t)", "mavlink_proto.UPLOAD_STATUS_bytes_uploaded", ftypes.UINT32, nil)
+f.UPLOAD_STATUS_upload_size = ProtoField.new("upload_size (uint32_t) [bytes]", "mavlink_proto.UPLOAD_STATUS_upload_size", ftypes.UINT32, nil)
+f.UPLOAD_STATUS_upload_rate = ProtoField.new("upload_rate (uint16_t) [kBps]", "mavlink_proto.UPLOAD_STATUS_upload_rate", ftypes.UINT16, nil)
+f.UPLOAD_STATUS_time_remaining = ProtoField.new("time_remaining (uint16_t) [seconds]", "mavlink_proto.UPLOAD_STATUS_time_remaining", ftypes.UINT16, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -997,6 +1005,29 @@ function payload_fns.payload_13(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.WIFI_INFORMATION_snr, tvbrange)
     tvbrange = padded(offset + 41, 1)
     subtree = tree:add_le(f.WIFI_INFORMATION_snr_percent, tvbrange)
+end
+-- dissect payload of message type UPLOAD_STATUS
+function payload_fns.payload_14(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 17 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 17)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.UPLOAD_STATUS_start_time_unix, tvbrange)
+    tvbrange = padded(offset + 16, 1)
+    subtree = tree:add_le(f.UPLOAD_STATUS_upload_completion, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.UPLOAD_STATUS_bytes_uploaded, tvbrange)
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.UPLOAD_STATUS_upload_size, tvbrange)
+    tvbrange = padded(offset + 12, 2)
+    subtree = tree:add_le(f.UPLOAD_STATUS_upload_rate, tvbrange)
+    tvbrange = padded(offset + 14, 2)
+    subtree = tree:add_le(f.UPLOAD_STATUS_time_remaining, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)

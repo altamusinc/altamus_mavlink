@@ -168,5 +168,14 @@
             <field name="snr" type="uint8_t"> SNR of the wifi. expressed as positive dB</field>
             <field name="snr_percent" type="uint8_t">SNR of the wifi, expreseed as a percentage</field>
         </message>
+        <message name="UPLOAD_STATUS" id = "14">
+            <description> Status of an upload</description>
+            <field name="start_time_unix" type="uint32_t"> Time that scan started </field>
+            <field name="upload_completion" type="uint8_t" units="%"> Percentage complete of the scan </field>
+            <field name="bytes_uploaded" type="uint32_t"> number of bytes uploaded</field>
+            <field name="upload_size" type="uint32_t" units="bytes"> Size of the upload</field>
+            <field name="upload_rate" type="uint16_t" units="kBps"> Upload rate in kilobytes per seconds</field>
+            <field name="time_remaining" type="uint16_t" units="seconds"> Estimated time remaining, in seconds</field>
+        </message>
     </messages>
 </mavlink>
