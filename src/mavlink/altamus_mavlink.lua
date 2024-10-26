@@ -464,7 +464,7 @@ f.UPLOAD_STATUS_start_time_unix = ProtoField.new("start_time_unix (uint32_t)", "
 f.UPLOAD_STATUS_upload_completion = ProtoField.new("upload_completion (uint8_t) [%]", "mavlink_proto.UPLOAD_STATUS_upload_completion", ftypes.UINT8, nil)
 f.UPLOAD_STATUS_bytes_uploaded = ProtoField.new("bytes_uploaded (uint32_t)", "mavlink_proto.UPLOAD_STATUS_bytes_uploaded", ftypes.UINT32, nil)
 f.UPLOAD_STATUS_upload_size = ProtoField.new("upload_size (uint32_t) [bytes]", "mavlink_proto.UPLOAD_STATUS_upload_size", ftypes.UINT32, nil)
-f.UPLOAD_STATUS_upload_rate = ProtoField.new("upload_rate (uint16_t) [kBps]", "mavlink_proto.UPLOAD_STATUS_upload_rate", ftypes.UINT16, nil)
+f.UPLOAD_STATUS_upload_rate = ProtoField.new("upload_rate (uint16_t) [Bps]", "mavlink_proto.UPLOAD_STATUS_upload_rate", ftypes.UINT16, nil)
 f.UPLOAD_STATUS_time_remaining = ProtoField.new("time_remaining (uint16_t) [seconds]", "mavlink_proto.UPLOAD_STATUS_time_remaining", ftypes.UINT16, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)

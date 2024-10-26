@@ -174,7 +174,7 @@
             <field name="upload_completion" type="uint8_t" units="%"> Percentage complete of the scan </field>
             <field name="bytes_uploaded" type="uint32_t"> number of bytes uploaded</field>
             <field name="upload_size" type="uint32_t" units="bytes"> Size of the upload</field>
-            <field name="upload_rate" type="uint16_t" units="kBps"> Upload rate in kilobytes per seconds</field>
+            <field name="upload_rate" type="uint16_t" units="Bps"> Upload rate in bytes per seconds</field>
             <field name="time_remaining" type="uint16_t" units="seconds"> Estimated time remaining, in seconds</field>
         </message>
     </messages>
