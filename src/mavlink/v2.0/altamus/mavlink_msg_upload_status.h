@@ -8,7 +8,7 @@ typedef struct __mavlink_upload_status_t {
  uint32_t start_time_unix; /*<   Time that scan started */
  uint32_t bytes_uploaded; /*<   number of bytes uploaded*/
  uint32_t upload_size; /*< [bytes]  Size of the upload*/
- uint16_t upload_rate; /*< [kBps]  Upload rate in kilobytes per seconds*/
+ uint16_t upload_rate; /*< [Bps]  Upload rate in bytes per seconds*/
  uint16_t time_remaining; /*< [seconds]  Estimated time remaining, in seconds*/
  uint8_t upload_completion; /*< [%]  Percentage complete of the scan */
 } mavlink_upload_status_t;
@@ -60,7 +60,7 @@ typedef struct __mavlink_upload_status_t {
  * @param upload_completion [%]  Percentage complete of the scan 
  * @param bytes_uploaded   number of bytes uploaded
  * @param upload_size [bytes]  Size of the upload
- * @param upload_rate [kBps]  Upload rate in kilobytes per seconds
+ * @param upload_rate [Bps]  Upload rate in bytes per seconds
  * @param time_remaining [seconds]  Estimated time remaining, in seconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
@@ -104,7 +104,7 @@ static inline uint16_t mavlink_msg_upload_status_pack(uint8_t system_id, uint8_t
  * @param upload_completion [%]  Percentage complete of the scan 
  * @param bytes_uploaded   number of bytes uploaded
  * @param upload_size [bytes]  Size of the upload
- * @param upload_rate [kBps]  Upload rate in kilobytes per seconds
+ * @param upload_rate [Bps]  Upload rate in bytes per seconds
  * @param time_remaining [seconds]  Estimated time remaining, in seconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
@@ -151,7 +151,7 @@ static inline uint16_t mavlink_msg_upload_status_pack_status(uint8_t system_id, 
  * @param upload_completion [%]  Percentage complete of the scan 
  * @param bytes_uploaded   number of bytes uploaded
  * @param upload_size [bytes]  Size of the upload
- * @param upload_rate [kBps]  Upload rate in kilobytes per seconds
+ * @param upload_rate [Bps]  Upload rate in bytes per seconds
  * @param time_remaining [seconds]  Estimated time remaining, in seconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
@@ -234,7 +234,7 @@ static inline uint16_t mavlink_msg_upload_status_encode_status(uint8_t system_id
  * @param upload_completion [%]  Percentage complete of the scan 
  * @param bytes_uploaded   number of bytes uploaded
  * @param upload_size [bytes]  Size of the upload
- * @param upload_rate [kBps]  Upload rate in kilobytes per seconds
+ * @param upload_rate [Bps]  Upload rate in bytes per seconds
  * @param time_remaining [seconds]  Estimated time remaining, in seconds
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
@@ -360,7 +360,7 @@ static inline uint32_t mavlink_msg_upload_status_get_upload_size(const mavlink_m
 /**
  * @brief Get field upload_rate from upload_status message
  *
- * @return [kBps]  Upload rate in kilobytes per seconds
+ * @return [Bps]  Upload rate in bytes per seconds
  */
 static inline uint16_t mavlink_msg_upload_status_get_upload_rate(const mavlink_message_t* msg)
 {
