@@ -45,9 +45,6 @@ messageName = {
     [1] = 'LIDAR_READING',
     [2] = 'COMPONENT_POWER_CONTROL',
     [3] = 'SYSTEM_STATUS',
-    [4] = 'MOTOR_CONTROL',
-    [5] = 'MOTOR_SETTINGS',
-    [6] = 'MOTOR_STATUS',
     [7] = 'IDENTIFIER',
     [8] = 'COMPONENT_HEALTH_TEST',
     [9] = 'SCAN_SETTINGS',
@@ -56,7 +53,12 @@ messageName = {
     [12] = 'POWER_INFORMATION',
     [13] = 'WIFI_INFORMATION',
     [14] = 'UPLOAD_STATUS',
+    [15] = 'MOTOR_CONTROL',
+    [16] = 'MOTOR_SETTINGS',
+    [17] = 'MOTOR_STATUS',
     [0] = 'HEARTBEAT',
+    [5] = 'CHANGE_OPERATOR_CONTROL',
+    [6] = 'CHANGE_OPERATOR_CONTROL_ACK',
     [300] = 'PROTOCOL_VERSION',
     [24] = 'GPS_RAW_INT',
     [30] = 'ATTITUDE',
@@ -70,6 +72,25 @@ messageName = {
 }
 
 local enumEntryName = {
+    ["MAV_RESULT"] = {
+        [0] = "MAV_RESULT_ACCEPTED",
+        [1] = "MAV_RESULT_TEMPORARILY_REJECTED",
+        [2] = "MAV_RESULT_DENIED",
+        [3] = "MAV_RESULT_UNSUPPORTED",
+        [4] = "MAV_RESULT_FAILED",
+        [5] = "MAV_RESULT_IN_PROGRESS",
+        [6] = "MAV_RESULT_CANCELLED",
+        [7] = "MAV_RESULT_TIMED_OUT",
+    },
+    ["MAV_CMD"] = {
+        [1] = "MAV_CMD_START_EOS_SCAN",
+        [2] = "MAV_CMD_STOP_EOS_SCAN",
+        [3] = "MAV_CMD_IDENTIFY",
+        [4] = "MAV_CMD_SEND_SETTINGS_TO_SERVER",
+        [5] = "MAV_CMD_CLEAR_EEPROM",
+        [511] = "MAV_CMD_SET_MESSAGE_INTERVAL",
+        [512] = "MAV_CMD_REQUEST_MESSAGE",
+    },
     ["EOS_COMPONENT"] = {
         [1] = "EOS_COMPONENT_LIDAR",
         [2] = "EOS_COMPONENT_YAW_MOTOR",
@@ -131,15 +152,6 @@ local enumEntryName = {
         [6] = "MAV_SEVERITY_INFO",
         [7] = "MAV_SEVERITY_DEBUG",
     },
-    ["MAV_CMD"] = {
-        [1] = "MAV_CMD_START_EOS_SCAN",
-        [2] = "MAV_CMD_STOP_EOS_SCAN",
-        [3] = "MAV_CMD_IDENTIFY",
-        [4] = "MAV_CMD_SEND_SETTINGS_TO_SERVER",
-        [5] = "MAV_CMD_CLEAR_EEPROM",
-        [511] = "MAV_CMD_SET_MESSAGE_INTERVAL",
-        [512] = "MAV_CMD_REQUEST_MESSAGE",
-    },
     ["MAV_MODE_FLAG"] = {
         [1] = "MAV_MODE_FLAG_CUSTOM_MODE_ENABLED",
         [2] = "MAV_MODE_FLAG_TEST_ENABLED",
@@ -181,16 +193,6 @@ local enumEntryName = {
         [1] = "MAV_MISSION_TYPE_FENCE",
         [2] = "MAV_MISSION_TYPE_RALLY",
         [255] = "MAV_MISSION_TYPE_ALL",
-    },
-    ["MAV_RESULT"] = {
-        [0] = "MAV_RESULT_ACCEPTED",
-        [1] = "MAV_RESULT_TEMPORARILY_REJECTED",
-        [2] = "MAV_RESULT_DENIED",
-        [3] = "MAV_RESULT_UNSUPPORTED",
-        [4] = "MAV_RESULT_FAILED",
-        [5] = "MAV_RESULT_IN_PROGRESS",
-        [6] = "MAV_RESULT_CANCELLED",
-        [7] = "MAV_RESULT_TIMED_OUT",
     },
     ["MAV_FRAME"] = {
         [0] = "MAV_FRAME_GLOBAL",
@@ -324,76 +326,6 @@ f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_FLASH = ProtoField.bool(
 f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.SYSTEM_STATUS_health_status_bitmask.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
 f.SYSTEM_STATUS_uptime = ProtoField.new("uptime (uint16_t) [seconds]", "mavlink_proto.SYSTEM_STATUS_uptime", ftypes.UINT16, nil)
 
-f.MOTOR_CONTROL_target = ProtoField.new("target (EOS_COMPONENT)", "mavlink_proto.MOTOR_CONTROL_target", ftypes.UINT8, nil, base.HEX_DEC)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_YAW_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_YAW_MOTOR", "EOS_COMPONENT_YAW_MOTOR", 16, nil, 2)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_PITCH_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_PITCH_MOTOR", "EOS_COMPONENT_PITCH_MOTOR", 16, nil, 4)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_GPS = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_GPS", "EOS_COMPONENT_GPS", 16, nil, 8)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_COMPASS = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_COMPASS", "EOS_COMPONENT_COMPASS", 16, nil, 16)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_MCU = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_MCU", "EOS_COMPONENT_MCU", 16, nil, 32)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_LED = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_LED", "EOS_COMPONENT_LED", 16, nil, 64)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_ACCEL = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_ACCEL", "EOS_COMPONENT_ACCEL", 16, nil, 128)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_POWER_SENSOR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_POWER_SENSOR", "EOS_COMPONENT_POWER_SENSOR", 16, nil, 256)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_SERIAL_BRIDGE = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_SERIAL_BRIDGE", "EOS_COMPONENT_SERIAL_BRIDGE", 16, nil, 512)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_PORT_EXPANDER = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_PORT_EXPANDER", "EOS_COMPONENT_PORT_EXPANDER", 16, nil, 1024)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
-f.MOTOR_CONTROL_target_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
-f.MOTOR_CONTROL_behavior = ProtoField.new("behavior (MOTOR_BEHAVIOR)", "mavlink_proto.MOTOR_CONTROL_behavior", ftypes.UINT8, enumEntryName.MOTOR_BEHAVIOR)
-f.MOTOR_CONTROL_motor_rpm = ProtoField.new("motor_rpm (float)", "mavlink_proto.MOTOR_CONTROL_motor_rpm", ftypes.FLOAT, nil)
-f.MOTOR_CONTROL_target_angle = ProtoField.new("target_angle (float)", "mavlink_proto.MOTOR_CONTROL_target_angle", ftypes.FLOAT, nil)
-f.MOTOR_CONTROL_device_rpm = ProtoField.new("device_rpm (float)", "mavlink_proto.MOTOR_CONTROL_device_rpm", ftypes.FLOAT, nil)
-f.MOTOR_CONTROL_steps_count = ProtoField.new("steps_count (int16_t)", "mavlink_proto.MOTOR_CONTROL_steps_count", ftypes.INT16, nil)
-f.MOTOR_CONTROL_vactual = ProtoField.new("vactual (int16_t)", "mavlink_proto.MOTOR_CONTROL_vactual", ftypes.INT16, nil)
-
-f.MOTOR_SETTINGS_motor = ProtoField.new("motor (EOS_COMPONENT)", "mavlink_proto.MOTOR_SETTINGS_motor", ftypes.UINT8, nil, base.HEX_DEC)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_YAW_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_YAW_MOTOR", "EOS_COMPONENT_YAW_MOTOR", 16, nil, 2)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_PITCH_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_PITCH_MOTOR", "EOS_COMPONENT_PITCH_MOTOR", 16, nil, 4)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_GPS = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_GPS", "EOS_COMPONENT_GPS", 16, nil, 8)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_COMPASS = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_COMPASS", "EOS_COMPONENT_COMPASS", 16, nil, 16)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_MCU = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_MCU", "EOS_COMPONENT_MCU", 16, nil, 32)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_LED = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_LED", "EOS_COMPONENT_LED", 16, nil, 64)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_ACCEL = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_ACCEL", "EOS_COMPONENT_ACCEL", 16, nil, 128)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_POWER_SENSOR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_POWER_SENSOR", "EOS_COMPONENT_POWER_SENSOR", 16, nil, 256)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_SERIAL_BRIDGE = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_SERIAL_BRIDGE", "EOS_COMPONENT_SERIAL_BRIDGE", 16, nil, 512)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_PORT_EXPANDER = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_PORT_EXPANDER", "EOS_COMPONENT_PORT_EXPANDER", 16, nil, 1024)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
-f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
-f.MOTOR_SETTINGS_current = ProtoField.new("current (uint16_t)", "mavlink_proto.MOTOR_SETTINGS_current", ftypes.UINT16, nil)
-f.MOTOR_SETTINGS_microsteps = ProtoField.new("microsteps (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_microsteps", ftypes.UINT8, nil)
-f.MOTOR_SETTINGS_gearing_ratio = ProtoField.new("gearing_ratio (float)", "mavlink_proto.MOTOR_SETTINGS_gearing_ratio", ftypes.FLOAT, nil)
-f.MOTOR_SETTINGS_spread_cycle = ProtoField.new("spread_cycle (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_spread_cycle", ftypes.UINT8, nil)
-f.MOTOR_SETTINGS_pwm_autoscale = ProtoField.new("pwm_autoscale (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_pwm_autoscale", ftypes.UINT8, nil)
-f.MOTOR_SETTINGS_pwm_autograd = ProtoField.new("pwm_autograd (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_pwm_autograd", ftypes.UINT8, nil)
-f.MOTOR_SETTINGS_min_steps_to_next_index = ProtoField.new("min_steps_to_next_index (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_min_steps_to_next_index", ftypes.UINT8, nil)
-f.MOTOR_SETTINGS_home_offset_steps = ProtoField.new("home_offset_steps (int16_t)", "mavlink_proto.MOTOR_SETTINGS_home_offset_steps", ftypes.INT16, nil)
-f.MOTOR_SETTINGS_steps_to_next_index = ProtoField.new("steps_to_next_index (uint16_t)", "mavlink_proto.MOTOR_SETTINGS_steps_to_next_index", ftypes.UINT16, nil)
-f.MOTOR_SETTINGS_usteps_rate = ProtoField.new("usteps_rate (float) [Hz]", "mavlink_proto.MOTOR_SETTINGS_usteps_rate", ftypes.FLOAT, nil)
-f.MOTOR_SETTINGS_ustep_angle = ProtoField.new("ustep_angle (float) [deg]", "mavlink_proto.MOTOR_SETTINGS_ustep_angle", ftypes.FLOAT, nil)
-
-f.MOTOR_STATUS_motor = ProtoField.new("motor (EOS_COMPONENT)", "mavlink_proto.MOTOR_STATUS_motor", ftypes.UINT8, nil, base.HEX_DEC)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_YAW_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_YAW_MOTOR", "EOS_COMPONENT_YAW_MOTOR", 16, nil, 2)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_PITCH_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_PITCH_MOTOR", "EOS_COMPONENT_PITCH_MOTOR", 16, nil, 4)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_GPS = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_GPS", "EOS_COMPONENT_GPS", 16, nil, 8)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_COMPASS = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_COMPASS", "EOS_COMPONENT_COMPASS", 16, nil, 16)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_MCU = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_MCU", "EOS_COMPONENT_MCU", 16, nil, 32)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_LED = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_LED", "EOS_COMPONENT_LED", 16, nil, 64)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_ACCEL = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_ACCEL", "EOS_COMPONENT_ACCEL", 16, nil, 128)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_POWER_SENSOR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_POWER_SENSOR", "EOS_COMPONENT_POWER_SENSOR", 16, nil, 256)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_SERIAL_BRIDGE = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_SERIAL_BRIDGE", "EOS_COMPONENT_SERIAL_BRIDGE", 16, nil, 512)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_PORT_EXPANDER = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_PORT_EXPANDER", "EOS_COMPONENT_PORT_EXPANDER", 16, nil, 1024)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
-f.MOTOR_STATUS_motor_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
-f.MOTOR_STATUS_enabled = ProtoField.new("enabled (uint8_t)", "mavlink_proto.MOTOR_STATUS_enabled", ftypes.UINT8, nil)
-f.MOTOR_STATUS_homed = ProtoField.new("homed (uint8_t)", "mavlink_proto.MOTOR_STATUS_homed", ftypes.UINT8, nil)
-f.MOTOR_STATUS_motor_rpm = ProtoField.new("motor_rpm (float)", "mavlink_proto.MOTOR_STATUS_motor_rpm", ftypes.FLOAT, nil)
-f.MOTOR_STATUS_device_rpm = ProtoField.new("device_rpm (float)", "mavlink_proto.MOTOR_STATUS_device_rpm", ftypes.FLOAT, nil)
-f.MOTOR_STATUS_measured_rpm = ProtoField.new("measured_rpm (float)", "mavlink_proto.MOTOR_STATUS_measured_rpm", ftypes.FLOAT, nil)
-f.MOTOR_STATUS_vactual = ProtoField.new("vactual (uint16_t)", "mavlink_proto.MOTOR_STATUS_vactual", ftypes.UINT16, nil)
-f.MOTOR_STATUS_steps_count = ProtoField.new("steps_count (int16_t)", "mavlink_proto.MOTOR_STATUS_steps_count", ftypes.INT16, nil)
-f.MOTOR_STATUS_current_angle = ProtoField.new("current_angle (float)", "mavlink_proto.MOTOR_STATUS_current_angle", ftypes.FLOAT, nil)
-
 f.IDENTIFIER_particle_id = ProtoField.new("particle_id (char)", "mavlink_proto.IDENTIFIER_particle_id", ftypes.STRING, nil)
 f.IDENTIFIER_local_ip_0 = ProtoField.new("local_ip[0] (uint8_t)", "mavlink_proto.IDENTIFIER_local_ip_0", ftypes.UINT8, nil)
 f.IDENTIFIER_local_ip_1 = ProtoField.new("local_ip[1] (uint8_t)", "mavlink_proto.IDENTIFIER_local_ip_1", ftypes.UINT8, nil)
@@ -467,6 +399,76 @@ f.UPLOAD_STATUS_upload_size = ProtoField.new("upload_size (uint32_t) [bytes]", "
 f.UPLOAD_STATUS_upload_rate = ProtoField.new("upload_rate (uint16_t) [Bps]", "mavlink_proto.UPLOAD_STATUS_upload_rate", ftypes.UINT16, nil)
 f.UPLOAD_STATUS_time_remaining = ProtoField.new("time_remaining (uint16_t) [seconds]", "mavlink_proto.UPLOAD_STATUS_time_remaining", ftypes.UINT16, nil)
 
+f.MOTOR_CONTROL_target = ProtoField.new("target (EOS_COMPONENT)", "mavlink_proto.MOTOR_CONTROL_target", ftypes.UINT8, nil, base.HEX_DEC)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_YAW_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_YAW_MOTOR", "EOS_COMPONENT_YAW_MOTOR", 16, nil, 2)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_PITCH_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_PITCH_MOTOR", "EOS_COMPONENT_PITCH_MOTOR", 16, nil, 4)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_GPS = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_GPS", "EOS_COMPONENT_GPS", 16, nil, 8)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_COMPASS = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_COMPASS", "EOS_COMPONENT_COMPASS", 16, nil, 16)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_MCU = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_MCU", "EOS_COMPONENT_MCU", 16, nil, 32)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_LED = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_LED", "EOS_COMPONENT_LED", 16, nil, 64)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_ACCEL = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_ACCEL", "EOS_COMPONENT_ACCEL", 16, nil, 128)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_POWER_SENSOR = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_POWER_SENSOR", "EOS_COMPONENT_POWER_SENSOR", 16, nil, 256)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_SERIAL_BRIDGE = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_SERIAL_BRIDGE", "EOS_COMPONENT_SERIAL_BRIDGE", 16, nil, 512)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_PORT_EXPANDER = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_PORT_EXPANDER", "EOS_COMPONENT_PORT_EXPANDER", 16, nil, 1024)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
+f.MOTOR_CONTROL_target_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.MOTOR_CONTROL_target.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
+f.MOTOR_CONTROL_behavior = ProtoField.new("behavior (MOTOR_BEHAVIOR)", "mavlink_proto.MOTOR_CONTROL_behavior", ftypes.UINT8, enumEntryName.MOTOR_BEHAVIOR)
+f.MOTOR_CONTROL_motor_rpm = ProtoField.new("motor_rpm (float)", "mavlink_proto.MOTOR_CONTROL_motor_rpm", ftypes.FLOAT, nil)
+f.MOTOR_CONTROL_target_angle = ProtoField.new("target_angle (float)", "mavlink_proto.MOTOR_CONTROL_target_angle", ftypes.FLOAT, nil)
+f.MOTOR_CONTROL_device_rpm = ProtoField.new("device_rpm (float)", "mavlink_proto.MOTOR_CONTROL_device_rpm", ftypes.FLOAT, nil)
+f.MOTOR_CONTROL_steps_count = ProtoField.new("steps_count (int16_t)", "mavlink_proto.MOTOR_CONTROL_steps_count", ftypes.INT16, nil)
+f.MOTOR_CONTROL_vactual = ProtoField.new("vactual (int16_t)", "mavlink_proto.MOTOR_CONTROL_vactual", ftypes.INT16, nil)
+
+f.MOTOR_SETTINGS_motor = ProtoField.new("motor (EOS_COMPONENT)", "mavlink_proto.MOTOR_SETTINGS_motor", ftypes.UINT8, nil, base.HEX_DEC)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_YAW_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_YAW_MOTOR", "EOS_COMPONENT_YAW_MOTOR", 16, nil, 2)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_PITCH_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_PITCH_MOTOR", "EOS_COMPONENT_PITCH_MOTOR", 16, nil, 4)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_GPS = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_GPS", "EOS_COMPONENT_GPS", 16, nil, 8)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_COMPASS = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_COMPASS", "EOS_COMPONENT_COMPASS", 16, nil, 16)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_MCU = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_MCU", "EOS_COMPONENT_MCU", 16, nil, 32)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_LED = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_LED", "EOS_COMPONENT_LED", 16, nil, 64)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_ACCEL = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_ACCEL", "EOS_COMPONENT_ACCEL", 16, nil, 128)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_POWER_SENSOR = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_POWER_SENSOR", "EOS_COMPONENT_POWER_SENSOR", 16, nil, 256)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_SERIAL_BRIDGE = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_SERIAL_BRIDGE", "EOS_COMPONENT_SERIAL_BRIDGE", 16, nil, 512)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_PORT_EXPANDER = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_PORT_EXPANDER", "EOS_COMPONENT_PORT_EXPANDER", 16, nil, 1024)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
+f.MOTOR_SETTINGS_motor_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.MOTOR_SETTINGS_motor.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
+f.MOTOR_SETTINGS_current = ProtoField.new("current (uint16_t)", "mavlink_proto.MOTOR_SETTINGS_current", ftypes.UINT16, nil)
+f.MOTOR_SETTINGS_microsteps = ProtoField.new("microsteps (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_microsteps", ftypes.UINT8, nil)
+f.MOTOR_SETTINGS_gearing_ratio = ProtoField.new("gearing_ratio (float)", "mavlink_proto.MOTOR_SETTINGS_gearing_ratio", ftypes.FLOAT, nil)
+f.MOTOR_SETTINGS_spread_cycle = ProtoField.new("spread_cycle (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_spread_cycle", ftypes.UINT8, nil)
+f.MOTOR_SETTINGS_pwm_autoscale = ProtoField.new("pwm_autoscale (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_pwm_autoscale", ftypes.UINT8, nil)
+f.MOTOR_SETTINGS_pwm_autograd = ProtoField.new("pwm_autograd (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_pwm_autograd", ftypes.UINT8, nil)
+f.MOTOR_SETTINGS_min_steps_to_next_index = ProtoField.new("min_steps_to_next_index (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_min_steps_to_next_index", ftypes.UINT8, nil)
+f.MOTOR_SETTINGS_home_offset_steps = ProtoField.new("home_offset_steps (int16_t)", "mavlink_proto.MOTOR_SETTINGS_home_offset_steps", ftypes.INT16, nil)
+f.MOTOR_SETTINGS_steps_to_next_index = ProtoField.new("steps_to_next_index (uint16_t)", "mavlink_proto.MOTOR_SETTINGS_steps_to_next_index", ftypes.UINT16, nil)
+f.MOTOR_SETTINGS_usteps_rate = ProtoField.new("usteps_rate (float) [Hz]", "mavlink_proto.MOTOR_SETTINGS_usteps_rate", ftypes.FLOAT, nil)
+f.MOTOR_SETTINGS_ustep_angle = ProtoField.new("ustep_angle (float) [deg]", "mavlink_proto.MOTOR_SETTINGS_ustep_angle", ftypes.FLOAT, nil)
+
+f.MOTOR_STATUS_motor = ProtoField.new("motor (EOS_COMPONENT)", "mavlink_proto.MOTOR_STATUS_motor", ftypes.UINT8, nil, base.HEX_DEC)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_YAW_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_YAW_MOTOR", "EOS_COMPONENT_YAW_MOTOR", 16, nil, 2)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_PITCH_MOTOR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_PITCH_MOTOR", "EOS_COMPONENT_PITCH_MOTOR", 16, nil, 4)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_GPS = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_GPS", "EOS_COMPONENT_GPS", 16, nil, 8)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_COMPASS = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_COMPASS", "EOS_COMPONENT_COMPASS", 16, nil, 16)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_MCU = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_MCU", "EOS_COMPONENT_MCU", 16, nil, 32)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_LED = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_LED", "EOS_COMPONENT_LED", 16, nil, 64)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_ACCEL = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_ACCEL", "EOS_COMPONENT_ACCEL", 16, nil, 128)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_POWER_SENSOR = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_POWER_SENSOR", "EOS_COMPONENT_POWER_SENSOR", 16, nil, 256)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_SERIAL_BRIDGE = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_SERIAL_BRIDGE", "EOS_COMPONENT_SERIAL_BRIDGE", 16, nil, 512)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_PORT_EXPANDER = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_PORT_EXPANDER", "EOS_COMPONENT_PORT_EXPANDER", 16, nil, 1024)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
+f.MOTOR_STATUS_motor_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.MOTOR_STATUS_motor.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
+f.MOTOR_STATUS_enabled = ProtoField.new("enabled (uint8_t)", "mavlink_proto.MOTOR_STATUS_enabled", ftypes.UINT8, nil)
+f.MOTOR_STATUS_homed = ProtoField.new("homed (uint8_t)", "mavlink_proto.MOTOR_STATUS_homed", ftypes.UINT8, nil)
+f.MOTOR_STATUS_motor_rpm = ProtoField.new("motor_rpm (float)", "mavlink_proto.MOTOR_STATUS_motor_rpm", ftypes.FLOAT, nil)
+f.MOTOR_STATUS_device_rpm = ProtoField.new("device_rpm (float)", "mavlink_proto.MOTOR_STATUS_device_rpm", ftypes.FLOAT, nil)
+f.MOTOR_STATUS_measured_rpm = ProtoField.new("measured_rpm (float)", "mavlink_proto.MOTOR_STATUS_measured_rpm", ftypes.FLOAT, nil)
+f.MOTOR_STATUS_vactual = ProtoField.new("vactual (uint16_t)", "mavlink_proto.MOTOR_STATUS_vactual", ftypes.UINT16, nil)
+f.MOTOR_STATUS_steps_count = ProtoField.new("steps_count (int16_t)", "mavlink_proto.MOTOR_STATUS_steps_count", ftypes.INT16, nil)
+f.MOTOR_STATUS_current_angle = ProtoField.new("current_angle (float)", "mavlink_proto.MOTOR_STATUS_current_angle", ftypes.FLOAT, nil)
+
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
 f.HEARTBEAT_base_mode = ProtoField.new("base_mode (MAV_MODE_FLAG)", "mavlink_proto.HEARTBEAT_base_mode", ftypes.UINT8, nil, base.HEX_DEC)
@@ -481,6 +483,15 @@ f.HEARTBEAT_base_mode_flagMAV_MODE_FLAG_SAFETY_ARMED = ProtoField.bool("mavlink_
 f.HEARTBEAT_custom_mode = ProtoField.new("custom_mode (uint32_t)", "mavlink_proto.HEARTBEAT_custom_mode", ftypes.UINT32, nil)
 f.HEARTBEAT_system_status = ProtoField.new("system_status (MAV_STATE)", "mavlink_proto.HEARTBEAT_system_status", ftypes.UINT8, enumEntryName.MAV_STATE)
 f.HEARTBEAT_mavlink_version = ProtoField.new("mavlink_version (uint8_t)", "mavlink_proto.HEARTBEAT_mavlink_version", ftypes.UINT8, nil)
+
+f.CHANGE_OPERATOR_CONTROL_target_system = ProtoField.new("target_system (uint8_t)", "mavlink_proto.CHANGE_OPERATOR_CONTROL_target_system", ftypes.UINT8, nil)
+f.CHANGE_OPERATOR_CONTROL_control_request = ProtoField.new("control_request (uint8_t)", "mavlink_proto.CHANGE_OPERATOR_CONTROL_control_request", ftypes.UINT8, nil)
+f.CHANGE_OPERATOR_CONTROL_version = ProtoField.new("version (uint8_t) [rad]", "mavlink_proto.CHANGE_OPERATOR_CONTROL_version", ftypes.UINT8, nil)
+f.CHANGE_OPERATOR_CONTROL_passkey = ProtoField.new("passkey (char)", "mavlink_proto.CHANGE_OPERATOR_CONTROL_passkey", ftypes.STRING, nil)
+
+f.CHANGE_OPERATOR_CONTROL_ACK_gcs_system_id = ProtoField.new("gcs_system_id (uint8_t)", "mavlink_proto.CHANGE_OPERATOR_CONTROL_ACK_gcs_system_id", ftypes.UINT8, nil)
+f.CHANGE_OPERATOR_CONTROL_ACK_control_request = ProtoField.new("control_request (uint8_t)", "mavlink_proto.CHANGE_OPERATOR_CONTROL_ACK_control_request", ftypes.UINT8, nil)
+f.CHANGE_OPERATOR_CONTROL_ACK_ack = ProtoField.new("ack (uint8_t)", "mavlink_proto.CHANGE_OPERATOR_CONTROL_ACK_ack", ftypes.UINT8, nil)
 
 f.PROTOCOL_VERSION_version = ProtoField.new("version (uint16_t)", "mavlink_proto.PROTOCOL_VERSION_version", ftypes.UINT16, nil)
 f.PROTOCOL_VERSION_min_version = ProtoField.new("min_version (uint16_t)", "mavlink_proto.PROTOCOL_VERSION_min_version", ftypes.UINT16, nil)
@@ -740,101 +751,6 @@ function payload_fns.payload_3(buffer, tree, msgid, offset, limit, pinfo)
     tvbrange = padded(offset + 4, 2)
     subtree = tree:add_le(f.SYSTEM_STATUS_uptime, tvbrange)
 end
--- dissect payload of message type MOTOR_CONTROL
-function payload_fns.payload_4(buffer, tree, msgid, offset, limit, pinfo)
-    local padded, field_offset, value, subtree, tvbrange
-    if (offset + 18 > limit) then
-        padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 18)
-        padded = padded:tvb("Untruncated payload")
-    else
-        padded = buffer
-    end
-    tvbrange = padded(offset + 16, 1)
-    subtree = tree:add_le(f.MOTOR_CONTROL_target, tvbrange)
-    value = tvbrange:le_uint()
-    dissect_flags_EOS_COMPONENT(subtree, "MOTOR_CONTROL_target", tvbrange, value)
-    tvbrange = padded(offset + 17, 1)
-    subtree = tree:add_le(f.MOTOR_CONTROL_behavior, tvbrange)
-    tvbrange = padded(offset + 0, 4)
-    subtree = tree:add_le(f.MOTOR_CONTROL_motor_rpm, tvbrange)
-    tvbrange = padded(offset + 4, 4)
-    subtree = tree:add_le(f.MOTOR_CONTROL_target_angle, tvbrange)
-    tvbrange = padded(offset + 8, 4)
-    subtree = tree:add_le(f.MOTOR_CONTROL_device_rpm, tvbrange)
-    tvbrange = padded(offset + 12, 2)
-    subtree = tree:add_le(f.MOTOR_CONTROL_steps_count, tvbrange)
-    tvbrange = padded(offset + 14, 2)
-    subtree = tree:add_le(f.MOTOR_CONTROL_vactual, tvbrange)
-end
--- dissect payload of message type MOTOR_SETTINGS
-function payload_fns.payload_5(buffer, tree, msgid, offset, limit, pinfo)
-    local padded, field_offset, value, subtree, tvbrange
-    if (offset + 24 > limit) then
-        padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 24)
-        padded = padded:tvb("Untruncated payload")
-    else
-        padded = buffer
-    end
-    tvbrange = padded(offset + 18, 1)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_motor, tvbrange)
-    value = tvbrange:le_uint()
-    dissect_flags_EOS_COMPONENT(subtree, "MOTOR_SETTINGS_motor", tvbrange, value)
-    tvbrange = padded(offset + 12, 2)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_current, tvbrange)
-    tvbrange = padded(offset + 19, 1)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_microsteps, tvbrange)
-    tvbrange = padded(offset + 0, 4)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_gearing_ratio, tvbrange)
-    tvbrange = padded(offset + 20, 1)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_spread_cycle, tvbrange)
-    tvbrange = padded(offset + 21, 1)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_pwm_autoscale, tvbrange)
-    tvbrange = padded(offset + 22, 1)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_pwm_autograd, tvbrange)
-    tvbrange = padded(offset + 23, 1)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_min_steps_to_next_index, tvbrange)
-    tvbrange = padded(offset + 14, 2)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_home_offset_steps, tvbrange)
-    tvbrange = padded(offset + 16, 2)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_steps_to_next_index, tvbrange)
-    tvbrange = padded(offset + 4, 4)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_usteps_rate, tvbrange)
-    tvbrange = padded(offset + 8, 4)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_ustep_angle, tvbrange)
-end
--- dissect payload of message type MOTOR_STATUS
-function payload_fns.payload_6(buffer, tree, msgid, offset, limit, pinfo)
-    local padded, field_offset, value, subtree, tvbrange
-    if (offset + 23 > limit) then
-        padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 23)
-        padded = padded:tvb("Untruncated payload")
-    else
-        padded = buffer
-    end
-    tvbrange = padded(offset + 20, 1)
-    subtree = tree:add_le(f.MOTOR_STATUS_motor, tvbrange)
-    value = tvbrange:le_uint()
-    dissect_flags_EOS_COMPONENT(subtree, "MOTOR_STATUS_motor", tvbrange, value)
-    tvbrange = padded(offset + 21, 1)
-    subtree = tree:add_le(f.MOTOR_STATUS_enabled, tvbrange)
-    tvbrange = padded(offset + 22, 1)
-    subtree = tree:add_le(f.MOTOR_STATUS_homed, tvbrange)
-    tvbrange = padded(offset + 0, 4)
-    subtree = tree:add_le(f.MOTOR_STATUS_motor_rpm, tvbrange)
-    tvbrange = padded(offset + 4, 4)
-    subtree = tree:add_le(f.MOTOR_STATUS_device_rpm, tvbrange)
-    tvbrange = padded(offset + 8, 4)
-    subtree = tree:add_le(f.MOTOR_STATUS_measured_rpm, tvbrange)
-    tvbrange = padded(offset + 16, 2)
-    subtree = tree:add_le(f.MOTOR_STATUS_vactual, tvbrange)
-    tvbrange = padded(offset + 18, 2)
-    subtree = tree:add_le(f.MOTOR_STATUS_steps_count, tvbrange)
-    tvbrange = padded(offset + 12, 4)
-    subtree = tree:add_le(f.MOTOR_STATUS_current_angle, tvbrange)
-end
 -- dissect payload of message type IDENTIFIER
 function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
@@ -1029,6 +945,101 @@ function payload_fns.payload_14(buffer, tree, msgid, offset, limit, pinfo)
     tvbrange = padded(offset + 14, 2)
     subtree = tree:add_le(f.UPLOAD_STATUS_time_remaining, tvbrange)
 end
+-- dissect payload of message type MOTOR_CONTROL
+function payload_fns.payload_15(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 18 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 18)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 16, 1)
+    subtree = tree:add_le(f.MOTOR_CONTROL_target, tvbrange)
+    value = tvbrange:le_uint()
+    dissect_flags_EOS_COMPONENT(subtree, "MOTOR_CONTROL_target", tvbrange, value)
+    tvbrange = padded(offset + 17, 1)
+    subtree = tree:add_le(f.MOTOR_CONTROL_behavior, tvbrange)
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.MOTOR_CONTROL_motor_rpm, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.MOTOR_CONTROL_target_angle, tvbrange)
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.MOTOR_CONTROL_device_rpm, tvbrange)
+    tvbrange = padded(offset + 12, 2)
+    subtree = tree:add_le(f.MOTOR_CONTROL_steps_count, tvbrange)
+    tvbrange = padded(offset + 14, 2)
+    subtree = tree:add_le(f.MOTOR_CONTROL_vactual, tvbrange)
+end
+-- dissect payload of message type MOTOR_SETTINGS
+function payload_fns.payload_16(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 24 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 24)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 18, 1)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_motor, tvbrange)
+    value = tvbrange:le_uint()
+    dissect_flags_EOS_COMPONENT(subtree, "MOTOR_SETTINGS_motor", tvbrange, value)
+    tvbrange = padded(offset + 12, 2)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_current, tvbrange)
+    tvbrange = padded(offset + 19, 1)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_microsteps, tvbrange)
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_gearing_ratio, tvbrange)
+    tvbrange = padded(offset + 20, 1)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_spread_cycle, tvbrange)
+    tvbrange = padded(offset + 21, 1)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_pwm_autoscale, tvbrange)
+    tvbrange = padded(offset + 22, 1)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_pwm_autograd, tvbrange)
+    tvbrange = padded(offset + 23, 1)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_min_steps_to_next_index, tvbrange)
+    tvbrange = padded(offset + 14, 2)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_home_offset_steps, tvbrange)
+    tvbrange = padded(offset + 16, 2)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_steps_to_next_index, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_usteps_rate, tvbrange)
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_ustep_angle, tvbrange)
+end
+-- dissect payload of message type MOTOR_STATUS
+function payload_fns.payload_17(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 23 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 23)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 20, 1)
+    subtree = tree:add_le(f.MOTOR_STATUS_motor, tvbrange)
+    value = tvbrange:le_uint()
+    dissect_flags_EOS_COMPONENT(subtree, "MOTOR_STATUS_motor", tvbrange, value)
+    tvbrange = padded(offset + 21, 1)
+    subtree = tree:add_le(f.MOTOR_STATUS_enabled, tvbrange)
+    tvbrange = padded(offset + 22, 1)
+    subtree = tree:add_le(f.MOTOR_STATUS_homed, tvbrange)
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.MOTOR_STATUS_motor_rpm, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.MOTOR_STATUS_device_rpm, tvbrange)
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.MOTOR_STATUS_measured_rpm, tvbrange)
+    tvbrange = padded(offset + 16, 2)
+    subtree = tree:add_le(f.MOTOR_STATUS_vactual, tvbrange)
+    tvbrange = padded(offset + 18, 2)
+    subtree = tree:add_le(f.MOTOR_STATUS_steps_count, tvbrange)
+    tvbrange = padded(offset + 12, 4)
+    subtree = tree:add_le(f.MOTOR_STATUS_current_angle, tvbrange)
+end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
@@ -1053,6 +1064,44 @@ function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.HEARTBEAT_system_status, tvbrange)
     tvbrange = padded(offset + 8, 1)
     subtree = tree:add_le(f.HEARTBEAT_mavlink_version, tvbrange)
+end
+-- dissect payload of message type CHANGE_OPERATOR_CONTROL
+function payload_fns.payload_5(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 28 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 28)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 1)
+    subtree = tree:add_le(f.CHANGE_OPERATOR_CONTROL_target_system, tvbrange)
+    tvbrange = padded(offset + 1, 1)
+    subtree = tree:add_le(f.CHANGE_OPERATOR_CONTROL_control_request, tvbrange)
+    tvbrange = padded(offset + 2, 1)
+    subtree = tree:add_le(f.CHANGE_OPERATOR_CONTROL_version, tvbrange)
+    value = tvbrange:le_uint()
+    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
+    tvbrange = padded(offset + 3, 25)
+    subtree = tree:add_le(f.CHANGE_OPERATOR_CONTROL_passkey, tvbrange)
+end
+-- dissect payload of message type CHANGE_OPERATOR_CONTROL_ACK
+function payload_fns.payload_6(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 3 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 3)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 1)
+    subtree = tree:add_le(f.CHANGE_OPERATOR_CONTROL_ACK_gcs_system_id, tvbrange)
+    tvbrange = padded(offset + 1, 1)
+    subtree = tree:add_le(f.CHANGE_OPERATOR_CONTROL_ACK_control_request, tvbrange)
+    tvbrange = padded(offset + 2, 1)
+    subtree = tree:add_le(f.CHANGE_OPERATOR_CONTROL_ACK_ack, tvbrange)
 end
 -- dissect payload of message type PROTOCOL_VERSION
 function payload_fns.payload_300(buffer, tree, msgid, offset, limit, pinfo)

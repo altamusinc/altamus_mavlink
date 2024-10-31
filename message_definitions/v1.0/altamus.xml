@@ -85,43 +85,7 @@
             <field name="health_status_bitmask" type="uint16_t" enum="EOS_COMPONENT"> Bitmask of health of devices: 1 = healthy 0 = unhealthy </field>
             <field name="uptime" type="uint16_t" units="seconds"> Device uptime in seconds </field>
         </message>
-        <message name="MOTOR_CONTROL" id = "4">
-            <description> Controls Motors </description>
-            <field name="target" type="uint8_t" enum="EOS_COMPONENT"> Which motor to target. Only responds to EOS_COMPONENT_YAW_MOTOR and EOS_COMPONENT_PITCH_MOTOR</field>
-            <field name="behavior" type="uint8_t" enum="MOTOR_BEHAVIOR"> Behavior to Execute </field>
-            <field name="motor_rpm" type="float"> RPM to set motor shaft too. Ignores gearing. Only used if MOTOR_BEHAVIOR_MOTOR_RPM is selected. </field>
-            <field name="target_angle" type="float">Angle to goto. Accounts for gearing. 0-360. Values above 360 will be wrapped around.</field>
-            <field name="device_rpm" type="float" minValue="0"> RPM to set device too. Takes into account gearing. Only used if MOTOR_BEHAVIOR_DEVICE_RPM is selected </field>
-            <field name="steps_count" type="int16_t"> Number of steps to execute. Negative values will step backwards. Only used if MOTOR_BEHAVIOR_STEP is selected</field>
-            <field name="vactual" type="int16_t"> VACTUAL value to send to stepper driver. Negative values will go backwards. Only used if MOTOR_BEHAVIOR_VACTUAL is selected</field>
-        </message>
-        <message name="MOTOR_SETTINGS" id = "5">
-            <description>Motor settings. If emitted by device, represents current settings. If emitted by control software, device will update accordingly </description>
-            <field name="motor" type="uint8_t" enum="EOS_COMPONENT" instance="true">Which motor we're referring to.</field>
-            <field name="current" type="uint16_t"> Motor current 0-2500 </field>
-            <field name="microsteps" type="uint8_t"> Microsteps used for stepping 1-256 in powers of 2</field>
-            <field name="gearing_ratio" type="float"> Gearing ratio to apply, specified as Motor Teeth:Device Teeth; Send as float i.e. 20.0/72.0 becomes 0.2777777</field>
-            <field name="spread_cycle" type="uint8_t">Boolean if spread cycle is enabled. 0 = disabled, 1 = enabled</field>
-            <field name="pwm_autoscale" type="uint8_t">Boolean if pwm_autoscale is enabled. 0 = disabled, 1 = enabled</field>
-            <field name="pwm_autograd" type="uint8_t">Boolean if pwm_autograd is enabled. 0 = disabled, 1 = enabled</field>
-            <field name="min_steps_to_next_index" type="uint8_t" invalid="0">Mininimum steps between index pulse and home switch. Set to 0 to not enforce a minimum</field>
-            <field name="home_offset_steps" type="int16_t">Number of steps to move from home position after homing.</field>
-            <field name="steps_to_next_index" type="uint16_t">Number of steps from home switch triggering to repeatable index pulse. Read Only.</field>
-            <field name="usteps_rate" type="float" units="Hz">Rate at which microsteps are being triggered by the driver internal oscillator. Read Only.</field>
-            <field name="ustep_angle" type="float" units="deg">Device angle travelled per microstep. Read Only.</field>
-        </message>
-        <message name="MOTOR_STATUS" id = "6">
-            <description> Current Status of the motor </description>
-            <field name="motor" type="uint8_t" enum="EOS_COMPONENT" instance="true">Which motor we're referring to.</field>
-            <field name="enabled" type="uint8_t">Boolean if the motor is enabled or not. 0 = disabled, 1 = enabled.</field>
-            <field name="homed" type="uint8_t">Boolean if the motor is homed or not. 0 = not homed, 1 = homed.</field>
-            <field name="motor_rpm" type="float">Current RPM of the motor.</field>
-            <field name="device_rpm" type="float">Current RPM of the device, accounting for gearing.</field>
-            <field name="measured_rpm" type="float"> Measured RPM, if external sensor is available</field>
-            <field name="vactual" type="uint16_t">Current VACTUAL value.</field>
-            <field name="steps_count" type="int16_t">Number of steps from home. UINT16_MAX if motor is in RPM mode.</field>
-            <field name="current_angle" type="float">Current angle: 0-360. INF if not homed.</field>
-        </message>
+        <!-- messages 5 and 6 are used in common_minimal.xml -->
         <message name="IDENTIFIER" id = "7">
             <description> Indentifiying information about the EOS device </description>
             <field name="particle_id" type="char[24]"> Particle ID of device. Unique and unchangable </field>
@@ -184,6 +148,43 @@
             <field name="upload_size" type="uint32_t" units="bytes"> Size of the upload</field>
             <field name="upload_rate" type="uint16_t" units="Bps"> Upload rate in bytes per seconds</field>
             <field name="time_remaining" type="uint16_t" units="seconds"> Estimated time remaining, in seconds</field>
+        </message>
+        <message name="MOTOR_CONTROL" id = "15">
+            <description> Controls Motors </description>
+            <field name="target" type="uint8_t" enum="EOS_COMPONENT"> Which motor to target. Only responds to EOS_COMPONENT_YAW_MOTOR and EOS_COMPONENT_PITCH_MOTOR</field>
+            <field name="behavior" type="uint8_t" enum="MOTOR_BEHAVIOR"> Behavior to Execute </field>
+            <field name="motor_rpm" type="float"> RPM to set motor shaft too. Ignores gearing. Only used if MOTOR_BEHAVIOR_MOTOR_RPM is selected. </field>
+            <field name="target_angle" type="float">Angle to goto. Accounts for gearing. 0-360. Values above 360 will be wrapped around.</field>
+            <field name="device_rpm" type="float" minValue="0"> RPM to set device too. Takes into account gearing. Only used if MOTOR_BEHAVIOR_DEVICE_RPM is selected </field>
+            <field name="steps_count" type="int16_t"> Number of steps to execute. Negative values will step backwards. Only used if MOTOR_BEHAVIOR_STEP is selected</field>
+            <field name="vactual" type="int16_t"> VACTUAL value to send to stepper driver. Negative values will go backwards. Only used if MOTOR_BEHAVIOR_VACTUAL is selected</field>
+        </message>
+        <message name="MOTOR_SETTINGS" id = "16">
+            <description>Motor settings. If emitted by device, represents current settings. If emitted by control software, device will update accordingly </description>
+            <field name="motor" type="uint8_t" enum="EOS_COMPONENT" instance="true">Which motor we're referring to.</field>
+            <field name="current" type="uint16_t"> Motor current 0-2500 </field>
+            <field name="microsteps" type="uint8_t"> Microsteps used for stepping 1-256 in powers of 2</field>
+            <field name="gearing_ratio" type="float"> Gearing ratio to apply, specified as Motor Teeth:Device Teeth; Send as float i.e. 20.0/72.0 becomes 0.2777777</field>
+            <field name="spread_cycle" type="uint8_t">Boolean if spread cycle is enabled. 0 = disabled, 1 = enabled</field>
+            <field name="pwm_autoscale" type="uint8_t">Boolean if pwm_autoscale is enabled. 0 = disabled, 1 = enabled</field>
+            <field name="pwm_autograd" type="uint8_t">Boolean if pwm_autograd is enabled. 0 = disabled, 1 = enabled</field>
+            <field name="min_steps_to_next_index" type="uint8_t" invalid="0">Mininimum steps between index pulse and home switch. Set to 0 to not enforce a minimum</field>
+            <field name="home_offset_steps" type="int16_t">Number of steps to move from home position after homing.</field>
+            <field name="steps_to_next_index" type="uint16_t">Number of steps from home switch triggering to repeatable index pulse. Read Only.</field>
+            <field name="usteps_rate" type="float" units="Hz">Rate at which microsteps are being triggered by the driver internal oscillator. Read Only.</field>
+            <field name="ustep_angle" type="float" units="deg">Device angle travelled per microstep. Read Only.</field>
+        </message>
+        <message name="MOTOR_STATUS" id = "17">
+            <description> Current Status of the motor </description>
+            <field name="motor" type="uint8_t" enum="EOS_COMPONENT" instance="true">Which motor we're referring to.</field>
+            <field name="enabled" type="uint8_t">Boolean if the motor is enabled or not. 0 = disabled, 1 = enabled.</field>
+            <field name="homed" type="uint8_t">Boolean if the motor is homed or not. 0 = not homed, 1 = homed.</field>
+            <field name="motor_rpm" type="float">Current RPM of the motor.</field>
+            <field name="device_rpm" type="float">Current RPM of the device, accounting for gearing.</field>
+            <field name="measured_rpm" type="float"> Measured RPM, if external sensor is available</field>
+            <field name="vactual" type="uint16_t">Current VACTUAL value.</field>
+            <field name="steps_count" type="int16_t">Number of steps from home. UINT16_MAX if motor is in RPM mode.</field>
+            <field name="current_angle" type="float">Current angle: 0-360. INF if not homed.</field>
         </message>
     </messages>
 </mavlink>

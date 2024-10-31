@@ -1,7 +1,7 @@
 #pragma once
 // MESSAGE MOTOR_CONTROL PACKING
 
-#define MAVLINK_MSG_ID_MOTOR_CONTROL 4
+#define MAVLINK_MSG_ID_MOTOR_CONTROL 15
 
 
 typedef struct __mavlink_motor_control_t {
@@ -16,17 +16,17 @@ typedef struct __mavlink_motor_control_t {
 
 #define MAVLINK_MSG_ID_MOTOR_CONTROL_LEN 18
 #define MAVLINK_MSG_ID_MOTOR_CONTROL_MIN_LEN 18
-#define MAVLINK_MSG_ID_4_LEN 18
-#define MAVLINK_MSG_ID_4_MIN_LEN 18
+#define MAVLINK_MSG_ID_15_LEN 18
+#define MAVLINK_MSG_ID_15_MIN_LEN 18
 
 #define MAVLINK_MSG_ID_MOTOR_CONTROL_CRC 37
-#define MAVLINK_MSG_ID_4_CRC 37
+#define MAVLINK_MSG_ID_15_CRC 37
 
 
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_MOTOR_CONTROL { \
-    4, \
+    15, \
     "MOTOR_CONTROL", \
     7, \
     {  { "target", NULL, MAVLINK_TYPE_UINT8_T, 0, 16, offsetof(mavlink_motor_control_t, target) }, \
