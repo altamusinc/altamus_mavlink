@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_ALTAMUS.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_ALTAMUS_XML_HASH -8854148531553432654
+#define MAVLINK_ALTAMUS_XML_HASH 4309566806931686955
 
 #ifdef __cplusplus
 extern "C" {
@@ -109,10 +109,11 @@ typedef enum EOS_STATE
 {
    EOS_STATE_IDLE=1, /*  | */
    EOS_STATE_UPLOADING=2, /*  | */
-   EOS_STATE_SCANNING=4, /*  | */
-   EOS_STATE_INIT=8, /*  | */
-   EOS_STATE_ERROR=16, /*  | */
-   EOS_STATE_ENUM_END=17, /*  | */
+   EOS_STATE_SCANNING=3, /*  | */
+   EOS_STATE_INIT=4, /*  | */
+   EOS_STATE_ERROR=5, /*  | */
+   EOS_STATE_HOMING=6, /*  | */
+   EOS_STATE_ENUM_END=7, /*  | */
 } EOS_STATE;
 #endif
 
@@ -123,13 +124,13 @@ typedef enum MOTOR_BEHAVIOR
 {
    MOTOR_BEHAVIOR_MOTOR_ENABLE=1, /*  | */
    MOTOR_BEHAVIOR_MOTOR_DISABLE=2, /*  | */
-   MOTOR_BEHAVIOR_MOTOR_RPM=4, /*  | */
-   MOTOR_BEHAVIOR_DEVICE_RPM=8, /*  | */
-   MOTOR_BEHAVIOR_VACTUAL=16, /*  | */
-   MOTOR_BEHAVIOR_GOTO_ANGLE=32, /*  | */
-   MOTOR_BEHAVIOR_STEP=64, /*  | */
-   MOTOR_BEHAVIOR_HOME=128, /*  | */
-   MOTOR_BEHAVIOR_ENUM_END=129, /*  | */
+   MOTOR_BEHAVIOR_MOTOR_RPM=3, /*  | */
+   MOTOR_BEHAVIOR_DEVICE_RPM=4, /*  | */
+   MOTOR_BEHAVIOR_VACTUAL=5, /*  | */
+   MOTOR_BEHAVIOR_GOTO_ANGLE=6, /*  | */
+   MOTOR_BEHAVIOR_STEP=7, /*  | */
+   MOTOR_BEHAVIOR_HOME=8, /*  | */
+   MOTOR_BEHAVIOR_ENUM_END=9, /*  | */
 } MOTOR_BEHAVIOR;
 #endif
 
@@ -140,8 +141,8 @@ typedef enum EOS_COMPONENT_POWER_BEHAVIOR
 {
    EOS_COMPONENT_POWER_BEHAVIOR_ENABLE=1, /*  | */
    EOS_COMPONENT_POWER_BEHAVIOR_DISABLE=2, /*  | */
-   EOS_COMPONENT_POWER_BEHAVIOR_REBOOT=4, /*  | */
-   EOS_COMPONENT_POWER_BEHAVIOR_ENUM_END=5, /*  | */
+   EOS_COMPONENT_POWER_BEHAVIOR_REBOOT=3, /*  | */
+   EOS_COMPONENT_POWER_BEHAVIOR_ENUM_END=4, /*  | */
 } EOS_COMPONENT_POWER_BEHAVIOR;
 #endif
 

@@ -46,26 +46,27 @@
             <description> State of the device </description>
             <entry value="1" name="EOS_STATE_IDLE"></entry>
             <entry value="2" name="EOS_STATE_UPLOADING"></entry>
-            <entry value="4" name="EOS_STATE_SCANNING"></entry>
-            <entry value="8" name="EOS_STATE_INIT"></entry>
-            <entry value="16" name="EOS_STATE_ERROR"></entry>
+            <entry value="3" name="EOS_STATE_SCANNING"></entry>
+            <entry value="4" name="EOS_STATE_INIT"></entry>
+            <entry value="5" name="EOS_STATE_ERROR"></entry>
+            <entry value="6" name="EOS_STATE_HOMING"></entry>
         </enum>
         <enum name="MOTOR_BEHAVIOR">
             <description> Behaviors a motor can execute </description>
             <entry value="1" name="MOTOR_BEHAVIOR_MOTOR_ENABLE"></entry>
             <entry value="2" name="MOTOR_BEHAVIOR_MOTOR_DISABLE"></entry>
-            <entry value="4" name="MOTOR_BEHAVIOR_MOTOR_RPM"></entry>
-            <entry value="8" name="MOTOR_BEHAVIOR_DEVICE_RPM"></entry>
-            <entry value="16" name="MOTOR_BEHAVIOR_VACTUAL"></entry>
-            <entry value="32" name="MOTOR_BEHAVIOR_GOTO_ANGLE"></entry>
-            <entry value="64" name="MOTOR_BEHAVIOR_STEP"></entry>
-            <entry value="128" name="MOTOR_BEHAVIOR_HOME"></entry>
+            <entry value="3" name="MOTOR_BEHAVIOR_MOTOR_RPM"></entry>
+            <entry value="4" name="MOTOR_BEHAVIOR_DEVICE_RPM"></entry>
+            <entry value="5" name="MOTOR_BEHAVIOR_VACTUAL"></entry>
+            <entry value="6" name="MOTOR_BEHAVIOR_GOTO_ANGLE"></entry>
+            <entry value="7" name="MOTOR_BEHAVIOR_STEP"></entry>
+            <entry value="8" name="MOTOR_BEHAVIOR_HOME"></entry>
         </enum>
         <enum name="EOS_COMPONENT_POWER_BEHAVIOR">
             <description> Power behavior to execute </description>
             <entry value="1" name="EOS_COMPONENT_POWER_BEHAVIOR_ENABLE"></entry>
             <entry value="2" name="EOS_COMPONENT_POWER_BEHAVIOR_DISABLE"></entry>
-            <entry value="4" name="EOS_COMPONENT_POWER_BEHAVIOR_REBOOT"></entry>
+            <entry value="3" name="EOS_COMPONENT_POWER_BEHAVIOR_REBOOT"></entry>
         </enum>
     </enums>
     <messages>
