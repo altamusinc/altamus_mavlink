@@ -187,5 +187,18 @@
             <field name="steps_count" type="int16_t">Number of steps from home. UINT16_MAX if motor is in RPM mode.</field>
             <field name="current_angle" type="float">Current angle: 0-360. INF if not homed.</field>
         </message>
+        <message name="ORIENTATION" id = "18">
+            <description> Combined Orientation message, including GPS, compass, and accelerometer. If components are off, their respective fields will use the "INVALID" values provided.</description>
+            <field type="float" name="roll" units="rad" invalid="NaN">Roll angle (-pi..+pi). Comes from Accelerometer</field>
+            <field type="float" name="pitch" units="rad" invalid="NaN">Pitch angle (-pi..+pi). Comes from Accelerometer</field>
+            <field type="float" name="temp" units="degreesC" invalid="NaN">Temperature. Comes from Accelerometer</field>
+            <field type="int16_t" name="xmag" units="mgauss" invalid="INT16_MAX">X magnetic field strength. Comes from compass </field>
+            <field type="int16_t" name="ymag" units="mgauss" invalid="INT16_MAX">Y magnetic field strength. Comes from compass </field>
+            <field type="int16_t" name="zmag" units="mgauss" invalid="INT16_MAX">Z magnetic field strength. Comes from compass </field>
+            <field type="float" name="heading" units="rad" invalid="NaN">heading angle (-pi..+pi). Comes from Compass</field>
+            <field type="int32_t" name="lat" units="degE7">Latitude (WGS84, EGM96 ellipsoid)</field>
+            <field type="int32_t" name="lon" units="degE7">Longitude (WGS84, EGM96 ellipsoid)</field>
+            <field type="int32_t" name="alt" units="mm" invalid="INT32_MAX">Altitude (MSL). Positive for up.</field>
+        </message>
     </messages>
 </mavlink>

@@ -56,12 +56,12 @@ messageName = {
     [15] = 'MOTOR_CONTROL',
     [16] = 'MOTOR_SETTINGS',
     [17] = 'MOTOR_STATUS',
+    [18] = 'ORIENTATION',
     [0] = 'HEARTBEAT',
     [5] = 'CHANGE_OPERATOR_CONTROL',
     [6] = 'CHANGE_OPERATOR_CONTROL_ACK',
     [300] = 'PROTOCOL_VERSION',
     [24] = 'GPS_RAW_INT',
-    [30] = 'ATTITUDE',
     [39] = 'MISSION_ITEM',
     [75] = 'COMMAND_INT',
     [76] = 'COMMAND_LONG',
@@ -472,6 +472,17 @@ f.MOTOR_STATUS_vactual = ProtoField.new("vactual (uint16_t)", "mavlink_proto.MOT
 f.MOTOR_STATUS_steps_count = ProtoField.new("steps_count (int16_t)", "mavlink_proto.MOTOR_STATUS_steps_count", ftypes.INT16, nil)
 f.MOTOR_STATUS_current_angle = ProtoField.new("current_angle (float)", "mavlink_proto.MOTOR_STATUS_current_angle", ftypes.FLOAT, nil)
 
+f.ORIENTATION_roll = ProtoField.new("roll (float) [rad]", "mavlink_proto.ORIENTATION_roll", ftypes.FLOAT, nil)
+f.ORIENTATION_pitch = ProtoField.new("pitch (float) [rad]", "mavlink_proto.ORIENTATION_pitch", ftypes.FLOAT, nil)
+f.ORIENTATION_temp = ProtoField.new("temp (float) [degreesC]", "mavlink_proto.ORIENTATION_temp", ftypes.FLOAT, nil)
+f.ORIENTATION_xmag = ProtoField.new("xmag (int16_t) [mgauss]", "mavlink_proto.ORIENTATION_xmag", ftypes.INT16, nil)
+f.ORIENTATION_ymag = ProtoField.new("ymag (int16_t) [mgauss]", "mavlink_proto.ORIENTATION_ymag", ftypes.INT16, nil)
+f.ORIENTATION_zmag = ProtoField.new("zmag (int16_t) [mgauss]", "mavlink_proto.ORIENTATION_zmag", ftypes.INT16, nil)
+f.ORIENTATION_heading = ProtoField.new("heading (float) [rad]", "mavlink_proto.ORIENTATION_heading", ftypes.FLOAT, nil)
+f.ORIENTATION_lat = ProtoField.new("lat (int32_t) [degE7]", "mavlink_proto.ORIENTATION_lat", ftypes.INT32, nil)
+f.ORIENTATION_lon = ProtoField.new("lon (int32_t) [degE7]", "mavlink_proto.ORIENTATION_lon", ftypes.INT32, nil)
+f.ORIENTATION_alt = ProtoField.new("alt (int32_t) [mm]", "mavlink_proto.ORIENTATION_alt", ftypes.INT32, nil)
+
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
 f.HEARTBEAT_base_mode = ProtoField.new("base_mode (MAV_MODE_FLAG)", "mavlink_proto.HEARTBEAT_base_mode", ftypes.UINT8, nil, base.HEX_DEC)
@@ -532,15 +543,6 @@ f.GPS_RAW_INT_v_acc = ProtoField.new("v_acc (uint32_t) [mm]", "mavlink_proto.GPS
 f.GPS_RAW_INT_vel_acc = ProtoField.new("vel_acc (uint32_t) [mm]", "mavlink_proto.GPS_RAW_INT_vel_acc", ftypes.UINT32, nil)
 f.GPS_RAW_INT_hdg_acc = ProtoField.new("hdg_acc (uint32_t) [degE5]", "mavlink_proto.GPS_RAW_INT_hdg_acc", ftypes.UINT32, nil)
 f.GPS_RAW_INT_yaw = ProtoField.new("yaw (uint16_t) [cdeg]", "mavlink_proto.GPS_RAW_INT_yaw", ftypes.UINT16, nil)
-
-f.ATTITUDE_time_boot_ms = ProtoField.new("time_boot_ms (uint32_t) [ms]", "mavlink_proto.ATTITUDE_time_boot_ms", ftypes.UINT32, nil)
-f.ATTITUDE_roll = ProtoField.new("roll (float) [rad]", "mavlink_proto.ATTITUDE_roll", ftypes.FLOAT, nil)
-f.ATTITUDE_pitch = ProtoField.new("pitch (float) [rad]", "mavlink_proto.ATTITUDE_pitch", ftypes.FLOAT, nil)
-f.ATTITUDE_yaw = ProtoField.new("yaw (float) [rad]", "mavlink_proto.ATTITUDE_yaw", ftypes.FLOAT, nil)
-f.ATTITUDE_rollspeed = ProtoField.new("rollspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_rollspeed", ftypes.FLOAT, nil)
-f.ATTITUDE_pitchspeed = ProtoField.new("pitchspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_pitchspeed", ftypes.FLOAT, nil)
-f.ATTITUDE_yawspeed = ProtoField.new("yawspeed (float) [rad/s]", "mavlink_proto.ATTITUDE_yawspeed", ftypes.FLOAT, nil)
-f.ATTITUDE_temp = ProtoField.new("temp (float) [degreesC]", "mavlink_proto.ATTITUDE_temp", ftypes.FLOAT, nil)
 
 f.MISSION_ITEM_target_system = ProtoField.new("target_system (uint8_t)", "mavlink_proto.MISSION_ITEM_target_system", ftypes.UINT8, nil)
 f.MISSION_ITEM_target_component = ProtoField.new("target_component (uint8_t)", "mavlink_proto.MISSION_ITEM_target_component", ftypes.UINT8, nil)
@@ -1051,6 +1053,47 @@ function payload_fns.payload_17(buffer, tree, msgid, offset, limit, pinfo)
     tvbrange = padded(offset + 12, 4)
     subtree = tree:add_le(f.MOTOR_STATUS_current_angle, tvbrange)
 end
+-- dissect payload of message type ORIENTATION
+function payload_fns.payload_18(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 34 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 34)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.ORIENTATION_roll, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.ORIENTATION_pitch, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.ORIENTATION_temp, tvbrange)
+    tvbrange = padded(offset + 28, 2)
+    subtree = tree:add_le(f.ORIENTATION_xmag, tvbrange)
+    tvbrange = padded(offset + 30, 2)
+    subtree = tree:add_le(f.ORIENTATION_ymag, tvbrange)
+    tvbrange = padded(offset + 32, 2)
+    subtree = tree:add_le(f.ORIENTATION_zmag, tvbrange)
+    tvbrange = padded(offset + 12, 4)
+    subtree = tree:add_le(f.ORIENTATION_heading, tvbrange)
+    value = tvbrange:le_float()
+    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
+    tvbrange = padded(offset + 16, 4)
+    subtree = tree:add_le(f.ORIENTATION_lat, tvbrange)
+    value = tvbrange:le_int()
+    subtree:append_text(string.format(" (%.7f deg)",value/1E7))
+    tvbrange = padded(offset + 20, 4)
+    subtree = tree:add_le(f.ORIENTATION_lon, tvbrange)
+    value = tvbrange:le_int()
+    subtree:append_text(string.format(" (%.7f deg)",value/1E7))
+    tvbrange = padded(offset + 24, 4)
+    subtree = tree:add_le(f.ORIENTATION_alt, tvbrange)
+end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
@@ -1213,45 +1256,6 @@ function payload_fns.payload_24(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.GPS_RAW_INT_hdg_acc, tvbrange)
     tvbrange = padded(offset + 50, 2)
     subtree = tree:add_le(f.GPS_RAW_INT_yaw, tvbrange)
-end
--- dissect payload of message type ATTITUDE
-function payload_fns.payload_30(buffer, tree, msgid, offset, limit, pinfo)
-    local padded, field_offset, value, subtree, tvbrange
-    if (offset + 32 > limit) then
-        padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 32)
-        padded = padded:tvb("Untruncated payload")
-    else
-        padded = buffer
-    end
-    tvbrange = padded(offset + 0, 4)
-    subtree = tree:add_le(f.ATTITUDE_time_boot_ms, tvbrange)
-    tvbrange = padded(offset + 4, 4)
-    subtree = tree:add_le(f.ATTITUDE_roll, tvbrange)
-    value = tvbrange:le_float()
-    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
-    tvbrange = padded(offset + 8, 4)
-    subtree = tree:add_le(f.ATTITUDE_pitch, tvbrange)
-    value = tvbrange:le_float()
-    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
-    tvbrange = padded(offset + 12, 4)
-    subtree = tree:add_le(f.ATTITUDE_yaw, tvbrange)
-    value = tvbrange:le_float()
-    subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
-    tvbrange = padded(offset + 16, 4)
-    subtree = tree:add_le(f.ATTITUDE_rollspeed, tvbrange)
-    value = tvbrange:le_float()
-    subtree:append_text(string.format(" (%g deg/s)",value*180/math.pi))
-    tvbrange = padded(offset + 20, 4)
-    subtree = tree:add_le(f.ATTITUDE_pitchspeed, tvbrange)
-    value = tvbrange:le_float()
-    subtree:append_text(string.format(" (%g deg/s)",value*180/math.pi))
-    tvbrange = padded(offset + 24, 4)
-    subtree = tree:add_le(f.ATTITUDE_yawspeed, tvbrange)
-    value = tvbrange:le_float()
-    subtree:append_text(string.format(" (%g deg/s)",value*180/math.pi))
-    tvbrange = padded(offset + 28, 4)
-    subtree = tree:add_le(f.ATTITUDE_temp, tvbrange)
 end
 -- dissect payload of message type MISSION_ITEM with command MAV_CMD_START_EOS_SCAN
 function payload_fns.payload_39_cmd1(buffer, tree, msgid, offset, limit, pinfo)
