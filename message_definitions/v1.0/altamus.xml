@@ -196,8 +196,8 @@
             <field type="int16_t" name="ymag" units="mgauss" invalid="INT16_MAX">Y magnetic field strength. Comes from compass </field>
             <field type="int16_t" name="zmag" units="mgauss" invalid="INT16_MAX">Z magnetic field strength. Comes from compass </field>
             <field type="float" name="heading" units="rad" invalid="NaN">heading angle (-pi..+pi). Comes from Compass</field>
-            <field type="int32_t" name="lat" units="degE7">Latitude (WGS84, EGM96 ellipsoid)</field>
-            <field type="int32_t" name="lon" units="degE7">Longitude (WGS84, EGM96 ellipsoid)</field>
+            <field type="int32_t" name="lat" units="degE7" invalid="INT32_MAX">Latitude (WGS84, EGM96 ellipsoid)</field>
+            <field type="int32_t" name="lon" units="degE7" invalid="INT32_MAX">Longitude (WGS84, EGM96 ellipsoid)</field>
             <field type="int32_t" name="alt" units="mm" invalid="INT32_MAX">Altitude (MSL). Positive for up.</field>
         </message>
     </messages>
