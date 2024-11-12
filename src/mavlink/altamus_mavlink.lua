@@ -68,6 +68,8 @@ messageName = {
     [77] = 'COMMAND_ACK',
     [80] = 'COMMAND_CANCEL',
     [244] = 'MESSAGE_INTERVAL',
+    [251] = 'NAMED_VALUE_FLOAT',
+    [252] = 'NAMED_VALUE_INT',
     [253] = 'STATUSTEXT',
 }
 
@@ -595,6 +597,14 @@ f.COMMAND_CANCEL_command = ProtoField.new("command (MAV_CMD)", "mavlink_proto.CO
 
 f.MESSAGE_INTERVAL_message_id = ProtoField.new("message_id (uint16_t)", "mavlink_proto.MESSAGE_INTERVAL_message_id", ftypes.UINT16, nil)
 f.MESSAGE_INTERVAL_interval_us = ProtoField.new("interval_us (int32_t) [us]", "mavlink_proto.MESSAGE_INTERVAL_interval_us", ftypes.INT32, nil)
+
+f.NAMED_VALUE_FLOAT_time_boot_ms = ProtoField.new("time_boot_ms (uint32_t) [ms]", "mavlink_proto.NAMED_VALUE_FLOAT_time_boot_ms", ftypes.UINT32, nil)
+f.NAMED_VALUE_FLOAT_name = ProtoField.new("name (char)", "mavlink_proto.NAMED_VALUE_FLOAT_name", ftypes.STRING, nil)
+f.NAMED_VALUE_FLOAT_value = ProtoField.new("value (float)", "mavlink_proto.NAMED_VALUE_FLOAT_value", ftypes.FLOAT, nil)
+
+f.NAMED_VALUE_INT_time_boot_ms = ProtoField.new("time_boot_ms (uint32_t) [ms]", "mavlink_proto.NAMED_VALUE_INT_time_boot_ms", ftypes.UINT32, nil)
+f.NAMED_VALUE_INT_name = ProtoField.new("name (char)", "mavlink_proto.NAMED_VALUE_INT_name", ftypes.STRING, nil)
+f.NAMED_VALUE_INT_value = ProtoField.new("value (int32_t)", "mavlink_proto.NAMED_VALUE_INT_value", ftypes.INT32, nil)
 
 f.STATUSTEXT_severity = ProtoField.new("severity (MAV_SEVERITY)", "mavlink_proto.STATUSTEXT_severity", ftypes.UINT8, enumEntryName.MAV_SEVERITY)
 f.STATUSTEXT_text = ProtoField.new("text (char)", "mavlink_proto.STATUSTEXT_text", ftypes.STRING, nil)
@@ -2338,6 +2348,40 @@ function payload_fns.payload_244(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.MESSAGE_INTERVAL_interval_us, tvbrange)
     value = tvbrange:le_int()
     subtree:append_text(time_usec_decode(value))
+end
+-- dissect payload of message type NAMED_VALUE_FLOAT
+function payload_fns.payload_251(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 18 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 18)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.NAMED_VALUE_FLOAT_time_boot_ms, tvbrange)
+    tvbrange = padded(offset + 8, 10)
+    subtree = tree:add_le(f.NAMED_VALUE_FLOAT_name, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.NAMED_VALUE_FLOAT_value, tvbrange)
+end
+-- dissect payload of message type NAMED_VALUE_INT
+function payload_fns.payload_252(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 18 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 18)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.NAMED_VALUE_INT_time_boot_ms, tvbrange)
+    tvbrange = padded(offset + 8, 10)
+    subtree = tree:add_le(f.NAMED_VALUE_INT_name, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.NAMED_VALUE_INT_value, tvbrange)
 end
 -- dissect payload of message type STATUSTEXT
 function payload_fns.payload_253(buffer, tree, msgid, offset, limit, pinfo)
