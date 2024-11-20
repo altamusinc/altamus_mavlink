@@ -341,6 +341,8 @@ f.IDENTIFIER_mac_3 = ProtoField.new("mac[3] (uint8_t)", "mavlink_proto.IDENTIFIE
 f.IDENTIFIER_mac_4 = ProtoField.new("mac[4] (uint8_t)", "mavlink_proto.IDENTIFIER_mac_4", ftypes.UINT8, nil)
 f.IDENTIFIER_mac_5 = ProtoField.new("mac[5] (uint8_t)", "mavlink_proto.IDENTIFIER_mac_5", ftypes.UINT8, nil)
 f.IDENTIFIER_name = ProtoField.new("name (char)", "mavlink_proto.IDENTIFIER_name", ftypes.STRING, nil)
+f.IDENTIFIER_site_friendly_name = ProtoField.new("site_friendly_name (char)", "mavlink_proto.IDENTIFIER_site_friendly_name", ftypes.STRING, nil)
+f.IDENTIFIER_site_name = ProtoField.new("site_name (char)", "mavlink_proto.IDENTIFIER_site_name", ftypes.STRING, nil)
 
 f.COMPONENT_HEALTH_TEST_component = ProtoField.new("component (EOS_COMPONENT)", "mavlink_proto.COMPONENT_HEALTH_TEST_component", ftypes.UINT32, nil, base.HEX_DEC)
 f.COMPONENT_HEALTH_TEST_component_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.COMPONENT_HEALTH_TEST_component.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
@@ -767,9 +769,9 @@ end
 -- dissect payload of message type IDENTIFIER
 function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 50 > limit) then
+    if (offset + 114 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 50)
+        padded:set_size(offset + 114)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -796,8 +798,12 @@ function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.IDENTIFIER_mac_4, tvbrange)
     tvbrange = padded(offset + 33, 1)
     subtree = tree:add_le(f.IDENTIFIER_mac_5, tvbrange)
-    tvbrange = padded(offset + 34, 16)
+    tvbrange = padded(offset + 34, 20)
     subtree = tree:add_le(f.IDENTIFIER_name, tvbrange)
+    tvbrange = padded(offset + 54, 30)
+    subtree = tree:add_le(f.IDENTIFIER_site_friendly_name, tvbrange)
+    tvbrange = padded(offset + 84, 30)
+    subtree = tree:add_le(f.IDENTIFIER_site_name, tvbrange)
 end
 -- dissect payload of message type COMPONENT_HEALTH_TEST
 function payload_fns.payload_8(buffer, tree, msgid, offset, limit, pinfo)

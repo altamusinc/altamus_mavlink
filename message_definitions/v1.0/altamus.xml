@@ -92,7 +92,9 @@
             <field name="particle_id" type="char[24]"> Particle ID of device. Unique and unchangable </field>
             <field name="local_ip" type="uint8_t[4]"> local IPV4 Address of the device</field>
             <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
-            <field name="name" type="char[16]">Friendly name of device i.e. P2-123456</field>
+            <field name="name" type="char[20]">Friendly name of device i.e. P2-123456</field>
+            <field name="site_friendly_name" type="char[30]"> Friendly name for the site it's at, i.e. "57 Rock West"</field>
+            <field name="site_name" type="char[30]"> Name of the site where the scanner is located, i.e. "Gainesville Plant"</field>
         </message>
         <message name="COMPONENT_HEALTH_TEST" id="8">
             <description> Requests that the device tests/retests a specified component. Pass EOS_COMPONENT_ALL to test all</description>

@@ -218,7 +218,7 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_identifier_t packet_in = {
-        "ABCDEFGHIJKLMNOPQRSTUVW",{ 77, 78, 79, 80 },{ 89, 90, 91, 92, 93, 94 },"IJKLMNOPQRSTUVW"
+        "ABCDEFGHIJKLMNOPQRSTUVW",{ 77, 78, 79, 80 },{ 89, 90, 91, 92, 93, 94 },"IJKLMNOPQRSTUVWXYZA","CDEFGHIJKLMNOPQRSTUVWXYZABCDE","GHIJKLMNOPQRSTUVWXYZABCDEFGHI"
     };
     mavlink_identifier_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -226,7 +226,9 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
         mav_array_memcpy(packet1.particle_id, packet_in.particle_id, sizeof(char)*24);
         mav_array_memcpy(packet1.local_ip, packet_in.local_ip, sizeof(uint8_t)*4);
         mav_array_memcpy(packet1.mac, packet_in.mac, sizeof(uint8_t)*6);
-        mav_array_memcpy(packet1.name, packet_in.name, sizeof(char)*16);
+        mav_array_memcpy(packet1.name, packet_in.name, sizeof(char)*20);
+        mav_array_memcpy(packet1.site_friendly_name, packet_in.site_friendly_name, sizeof(char)*30);
+        mav_array_memcpy(packet1.site_name, packet_in.site_name, sizeof(char)*30);
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
         if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
@@ -240,12 +242,12 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_identifier_pack(system_id, component_id, &msg , packet1.particle_id , packet1.local_ip , packet1.mac , packet1.name );
+    mavlink_msg_identifier_pack(system_id, component_id, &msg , packet1.particle_id , packet1.local_ip , packet1.mac , packet1.name , packet1.site_friendly_name , packet1.site_name );
     mavlink_msg_identifier_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_identifier_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.particle_id , packet1.local_ip , packet1.mac , packet1.name );
+    mavlink_msg_identifier_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.particle_id , packet1.local_ip , packet1.mac , packet1.name , packet1.site_friendly_name , packet1.site_name );
     mavlink_msg_identifier_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -258,7 +260,7 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_identifier_send(MAVLINK_COMM_1 , packet1.particle_id , packet1.local_ip , packet1.mac , packet1.name );
+    mavlink_msg_identifier_send(MAVLINK_COMM_1 , packet1.particle_id , packet1.local_ip , packet1.mac , packet1.name , packet1.site_friendly_name , packet1.site_name );
     mavlink_msg_identifier_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
