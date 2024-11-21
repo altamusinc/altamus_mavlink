@@ -68,6 +68,20 @@
             <entry value="2" name="EOS_COMPONENT_POWER_BEHAVIOR_DISABLE"></entry>
             <entry value="3" name="EOS_COMPONENT_POWER_BEHAVIOR_REBOOT"></entry>
         </enum>
+        <enum name="WIFI_CREDIENTIALS_BEHAVIOR">
+            <description> Behavior to execute related to wifi network</description>
+            <entry value="1" name="WIFI_CREDIENTIALS_BEHAVIOR_ADD"></entry>
+            <entry value="2" name="WIFI_CREDIENTIALS_BEHAVIOR_CLEAR"></entry>
+            <entry value="3" name="WIFI_CREDIENTIALS_BEHAVIOR_LIST"></entry>
+            <entry value="4" name="WIFI_CREDIENTIALS_BEHAVIOR_LIST_RESPONSE"></entry>
+        </enum>
+        <enum name="WIFI_AUTH_TYPE">
+            <description>Auth type of the wifi</description>
+            <entry value="1" name="WIFI_AUTH_TYPE_UNSECURED"></entry>
+            <entry value="2" name="WIFI_AUTH_TYPE_WEP"></entry>
+            <entry value="3" name="WIFI_AUTH_TYPE_WPA"></entry>
+            <entry value="4" name="WIFI_AUTH_TYPE_WPA2"></entry>
+        </enum>
     </enums>
     <messages>
         <message name="LIDAR_READING" id="1">
@@ -201,6 +215,13 @@
             <field type="int32_t" name="lat" units="degE7" invalid="INT32_MAX">Latitude (WGS84, EGM96 ellipsoid)</field>
             <field type="int32_t" name="lon" units="degE7" invalid="INT32_MAX">Longitude (WGS84, EGM96 ellipsoid)</field>
             <field type="int32_t" name="alt" units="mm" invalid="INT32_MAX">Altitude (MSL). Positive for up.</field>
+        </message>
+        <message name="WIFI_CREDENTIALS" id = "19">
+            <description>Used to query/set the wifi credientials of the device</description>
+            <field name="behavior" type="uint8_t" enum="WIFI_CREDIENTIALS_BEHAVIOR">What behavior to execute, eg, clear, add, list</field>
+            <field name="ssid" type="char[64]">Name of the SSID</field>
+            <field name="password" type="char[64]">Password of the SSID. leave blank for open networks. Will be left blank if reporting</field>
+            <field name="auth_type" type="uint8_t" enum="WIFI_AUTH_TYPE">Auth type of the network; eg; WPA2</field>
         </message>
     </messages>
 </mavlink>
