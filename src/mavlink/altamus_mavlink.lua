@@ -67,6 +67,7 @@ messageName = {
     [76] = 'COMMAND_LONG',
     [77] = 'COMMAND_ACK',
     [80] = 'COMMAND_CANCEL',
+    [111] = 'TIMESYNC',
     [244] = 'MESSAGE_INTERVAL',
     [251] = 'NAMED_VALUE_FLOAT',
     [252] = 'NAMED_VALUE_INT',
@@ -598,6 +599,11 @@ f.COMMAND_ACK_target_component = ProtoField.new("target_component (uint8_t)", "m
 f.COMMAND_CANCEL_target_system = ProtoField.new("target_system (uint8_t)", "mavlink_proto.COMMAND_CANCEL_target_system", ftypes.UINT8, nil)
 f.COMMAND_CANCEL_target_component = ProtoField.new("target_component (uint8_t)", "mavlink_proto.COMMAND_CANCEL_target_component", ftypes.UINT8, nil)
 f.COMMAND_CANCEL_command = ProtoField.new("command (MAV_CMD)", "mavlink_proto.COMMAND_CANCEL_command", ftypes.UINT16, enumEntryName.MAV_CMD)
+
+f.TIMESYNC_tc1 = ProtoField.new("tc1 (int64_t) [ns]", "mavlink_proto.TIMESYNC_tc1", ftypes.INT64, nil)
+f.TIMESYNC_ts1 = ProtoField.new("ts1 (int64_t) [ns]", "mavlink_proto.TIMESYNC_ts1", ftypes.INT64, nil)
+f.TIMESYNC_target_system = ProtoField.new("target_system (uint8_t)", "mavlink_proto.TIMESYNC_target_system", ftypes.UINT8, nil)
+f.TIMESYNC_target_component = ProtoField.new("target_component (uint8_t)", "mavlink_proto.TIMESYNC_target_component", ftypes.UINT8, nil)
 
 f.MESSAGE_INTERVAL_message_id = ProtoField.new("message_id (uint16_t)", "mavlink_proto.MESSAGE_INTERVAL_message_id", ftypes.UINT16, nil)
 f.MESSAGE_INTERVAL_interval_us = ProtoField.new("interval_us (int32_t) [us]", "mavlink_proto.MESSAGE_INTERVAL_interval_us", ftypes.INT32, nil)
@@ -2341,6 +2347,25 @@ function payload_fns.payload_80(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.COMMAND_CANCEL_target_component, tvbrange)
     tvbrange = padded(offset + 0, 2)
     subtree = tree:add_le(f.COMMAND_CANCEL_command, tvbrange)
+end
+-- dissect payload of message type TIMESYNC
+function payload_fns.payload_111(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 18 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 18)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 8)
+    subtree = tree:add_le(f.TIMESYNC_tc1, tvbrange)
+    tvbrange = padded(offset + 8, 8)
+    subtree = tree:add_le(f.TIMESYNC_ts1, tvbrange)
+    tvbrange = padded(offset + 16, 1)
+    subtree = tree:add_le(f.TIMESYNC_target_system, tvbrange)
+    tvbrange = padded(offset + 17, 1)
+    subtree = tree:add_le(f.TIMESYNC_target_component, tvbrange)
 end
 -- dissect payload of message type MESSAGE_INTERVAL
 function payload_fns.payload_244(buffer, tree, msgid, offset, limit, pinfo)
