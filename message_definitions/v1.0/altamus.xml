@@ -82,6 +82,32 @@
             <entry value="3" name="WIFI_AUTH_TYPE_WPA"></entry>
             <entry value="4" name="WIFI_AUTH_TYPE_WPA2"></entry>
         </enum>
+        <enum name="SCAN_STOP_REASON" bitmask="true">
+            <description>Reasons to stop a scan</description>
+            <entry value="2**0" name="SCAN_STOP_REASON_INCOMPLETE"></entry> 
+            <entry value="2**1" name="SCAN_STOP_REASON_PITCH_HOME_ERROR"></entry> 
+            <entry value="2**2" name="SCAN_STOP_REASON_PITCH_INDEX_ERROR"></entry> 
+            <entry value="2**3" name="SCAN_STOP_REASON_PITCH_MAGNET_ERROR"></entry> 
+            <entry value="2**4" name="SCAN_STOP_REASON_YAW_HOME_ERROR"></entry> 
+            <entry value="2**5" name="SCAN_STOP_REASON_YAW_INDEX_ERROR"></entry> 
+            <entry value="2**6" name="SCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT"></entry> 
+            <entry value="2**7" name="SCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT"></entry> 
+            <entry value="2**8" name="SCAN_STOP_REASON_RANGEFINDER_ERROR_RATE"></entry> 
+            <entry value="2**9" name="SCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE"></entry> 
+            <entry value="2**10" name="SCAN_STOP_REASON_RANGEFINDER_ERROR_FOG"></entry> 
+            <entry value="2**11" name="SCAN_STOP_REASON_USER_CANCELED"></entry> 
+            <entry value="2**12" name="SCAN_STOP_REASON_SCAN_TIMEOUT"></entry> 
+            <entry value="2**13" name="SCAN_STOP_REASON_NORMAL_COMPLETE"></entry> 
+        </enum>
+        <enum name="SCAN_START_REASON" bitmask="true">
+            <entry value="2**0" name="SCAN_START_REASON_LOCAL_APP"></entry>
+            <entry value="2**1" name="SCAN_START_REASON_WEB"></entry>
+            <entry value="2**2" name="SCAN_START_REASON_SCHEDULE"></entry>
+        </enum>
+        <enum name="SCAN_RESULT_INFO_TYPE">
+            <entry value="1" name="SCAN_RESULT_INFO_ACTUAL"></entry>
+            <entry value="2" name="SCAN_RESULT_INFO_ESTIMATED"></entry>
+        </enum>
     </enums>
     <messages>
         <message name="LIDAR_READING" id="1">
@@ -120,8 +146,10 @@
             <field name="yaw_stop" type="float" units="deg"> Ending yaw angle, relative to the homed position</field>
             <field name="pitch_start" type="float" units="deg"> Starting pitch angle, relative to the homed position</field>
             <field name="pitch_stop" type="float" units="deg"> Ending pitch angle, relative to the homed position</field>
+            <field name="pitch_rest_angle" type="float" units="deg"> Angle that the pitch to should go to at end of the scan</field>
             <field name="point_spacing" type="float" units="deg"> Spacing between point samples. Smaller spacing leads to denser point clouds </field>
             <field name="scan_speed" type="float" units="rpm"> How fast, in RPM to spin the pitch motor</field>
+            <field name="scan_stop_reasons" type="uint16_t" display="bitmask" enum="SCAN_STOP_REASON"> Bitmask of allowed reasons for the scan to stop. 0 means that no detected errors will stop the scan. </field>
         </message>
         <message name="SCAN_STATUS" id = "10">
             <description> Status of a scan</description>
@@ -222,6 +250,30 @@
             <field name="ssid" type="char[64]">Name of the SSID</field>
             <field name="password" type="char[64]">Password of the SSID. leave blank for open networks. Will be left blank if reporting</field>
             <field name="auth_type" type="uint8_t" enum="WIFI_AUTH_TYPE">Auth type of the network; eg; WPA2</field>
+        </message>
+        <message name="LIDAR_SETTINGS" id="20">
+            <description>Settings for Benewake TF* lidar</description>
+            <field type="uint16_t" name="update_rate" units="hz">Lidar update rate, in hz</field>
+            <field type="uint8_t" name="fog_mode_enable">Boolean for if fog mode should be enabled. 0 = off, 1 = on</field>
+            <field type="uint8_t" name="output_disabled_at_boot"> Boolean for if the lidar should be emitting readings when powered up, or if a separate "output enable" command must be sent after it's turned on. 0 = false , 1 = true</field>
+            <field type="char[10]" name="firmware_version"> String representation of firmware version of the lidar eg: "2.1.8". Read-only</field>
+        </message>
+        <message name="SCAN_RESULT_INFO" id="21">
+            <description>Information about a scan</description>
+            <field type="uint8_t" name="type" enum="SCAN_RESULT_INFO_TYPE"> What type of info this is, estimated or actual</field>
+            <field type="uint32_t" name="num_points"> Number of points</field>
+            <field type="uint64_t" name="start_time_unix"> Unix start time</field>
+            <field type="uint64_t" name="end_time_unix"> Unix end time</field>
+            <field type="uint32_t" name="scan_duration" units="seconds"> Duration of the scan, in seconds</field>
+            <field type="uint16_t" name="scan_stop_reason" enum="SCAN_STOP_REASON"> Reason for the scan stopping</field>
+            <field type="uint16_t" name="scan_start_reason" enum="SCAN_START_REASON"> Reason for scan starting</field>
+        </message>
+        <message name="SCAN_TRANSFORM" id="22">
+            <description> Transformation to apply to raw points.</description>
+            <field type="uint16_t" name="roll_offset" units="RadE-4"></field>
+            <field type="uint16_t" name="pitch_offset" units="RadE-4"></field>
+            <field type="float" name="pitch_scale" units="%"></field>
+            <field type="float" name="yaw_scale" units="%"></field>
         </message>
     </messages>
 </mavlink>

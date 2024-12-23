@@ -57,6 +57,10 @@ messageName = {
     [16] = 'MOTOR_SETTINGS',
     [17] = 'MOTOR_STATUS',
     [18] = 'ORIENTATION',
+    [19] = 'WIFI_CREDENTIALS',
+    [20] = 'LIDAR_SETTINGS',
+    [21] = 'SCAN_RESULT_INFO',
+    [22] = 'SCAN_TRANSFORM',
     [0] = 'HEARTBEAT',
     [5] = 'CHANGE_OPERATOR_CONTROL',
     [6] = 'CHANGE_OPERATOR_CONTROL_ACK',
@@ -131,6 +135,43 @@ local enumEntryName = {
         [1] = "EOS_COMPONENT_POWER_BEHAVIOR_ENABLE",
         [2] = "EOS_COMPONENT_POWER_BEHAVIOR_DISABLE",
         [3] = "EOS_COMPONENT_POWER_BEHAVIOR_REBOOT",
+    },
+    ["WIFI_CREDIENTIALS_BEHAVIOR"] = {
+        [1] = "WIFI_CREDIENTIALS_BEHAVIOR_ADD",
+        [2] = "WIFI_CREDIENTIALS_BEHAVIOR_CLEAR",
+        [3] = "WIFI_CREDIENTIALS_BEHAVIOR_LIST",
+        [4] = "WIFI_CREDIENTIALS_BEHAVIOR_LIST_RESPONSE",
+    },
+    ["WIFI_AUTH_TYPE"] = {
+        [1] = "WIFI_AUTH_TYPE_UNSECURED",
+        [2] = "WIFI_AUTH_TYPE_WEP",
+        [3] = "WIFI_AUTH_TYPE_WPA",
+        [4] = "WIFI_AUTH_TYPE_WPA2",
+    },
+    ["SCAN_STOP_REASON"] = {
+        [1] = "SCAN_STOP_REASON_INCOMPLETE",
+        [2] = "SCAN_STOP_REASON_PITCH_HOME_ERROR",
+        [4] = "SCAN_STOP_REASON_PITCH_INDEX_ERROR",
+        [8] = "SCAN_STOP_REASON_PITCH_MAGNET_ERROR",
+        [16] = "SCAN_STOP_REASON_YAW_HOME_ERROR",
+        [32] = "SCAN_STOP_REASON_YAW_INDEX_ERROR",
+        [64] = "SCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT",
+        [128] = "SCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT",
+        [256] = "SCAN_STOP_REASON_RANGEFINDER_ERROR_RATE",
+        [512] = "SCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE",
+        [1024] = "SCAN_STOP_REASON_RANGEFINDER_ERROR_FOG",
+        [2048] = "SCAN_STOP_REASON_USER_CANCELED",
+        [4096] = "SCAN_STOP_REASON_SCAN_TIMEOUT",
+        [8192] = "SCAN_STOP_REASON_NORMAL_COMPLETE",
+    },
+    ["SCAN_START_REASON"] = {
+        [1] = "SCAN_START_REASON_LOCAL_APP",
+        [2] = "SCAN_START_REASON_WEB",
+        [4] = "SCAN_START_REASON_SCHEDULE",
+    },
+    ["SCAN_RESULT_INFO_TYPE"] = {
+        [1] = "SCAN_RESULT_INFO_ACTUAL",
+        [2] = "SCAN_RESULT_INFO_ESTIMATED",
     },
     ["MAV_AUTOPILOT"] = {
         [0] = "MAV_AUTOPILOT_GENERIC",
@@ -364,8 +405,24 @@ f.SCAN_SETTINGS_yaw_start = ProtoField.new("yaw_start (float) [deg]", "mavlink_p
 f.SCAN_SETTINGS_yaw_stop = ProtoField.new("yaw_stop (float) [deg]", "mavlink_proto.SCAN_SETTINGS_yaw_stop", ftypes.FLOAT, nil)
 f.SCAN_SETTINGS_pitch_start = ProtoField.new("pitch_start (float) [deg]", "mavlink_proto.SCAN_SETTINGS_pitch_start", ftypes.FLOAT, nil)
 f.SCAN_SETTINGS_pitch_stop = ProtoField.new("pitch_stop (float) [deg]", "mavlink_proto.SCAN_SETTINGS_pitch_stop", ftypes.FLOAT, nil)
+f.SCAN_SETTINGS_pitch_rest_angle = ProtoField.new("pitch_rest_angle (float) [deg]", "mavlink_proto.SCAN_SETTINGS_pitch_rest_angle", ftypes.FLOAT, nil)
 f.SCAN_SETTINGS_point_spacing = ProtoField.new("point_spacing (float) [deg]", "mavlink_proto.SCAN_SETTINGS_point_spacing", ftypes.FLOAT, nil)
 f.SCAN_SETTINGS_scan_speed = ProtoField.new("scan_speed (float) [rpm]", "mavlink_proto.SCAN_SETTINGS_scan_speed", ftypes.FLOAT, nil)
+f.SCAN_SETTINGS_scan_stop_reasons = ProtoField.new("scan_stop_reasons (SCAN_STOP_REASON)", "mavlink_proto.SCAN_SETTINGS_scan_stop_reasons", ftypes.UINT16, nil, base.HEX_DEC)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_INCOMPLETE = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_INCOMPLETE", "SCAN_STOP_REASON_INCOMPLETE", 16, nil, 1)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_PITCH_HOME_ERROR = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_PITCH_HOME_ERROR", "SCAN_STOP_REASON_PITCH_HOME_ERROR", 16, nil, 2)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_PITCH_INDEX_ERROR = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_PITCH_INDEX_ERROR", "SCAN_STOP_REASON_PITCH_INDEX_ERROR", 16, nil, 4)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_PITCH_MAGNET_ERROR = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_PITCH_MAGNET_ERROR", "SCAN_STOP_REASON_PITCH_MAGNET_ERROR", 16, nil, 8)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_YAW_HOME_ERROR = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_YAW_HOME_ERROR", "SCAN_STOP_REASON_YAW_HOME_ERROR", 16, nil, 16)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_YAW_INDEX_ERROR = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_YAW_INDEX_ERROR", "SCAN_STOP_REASON_YAW_INDEX_ERROR", 16, nil, 32)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT", "SCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT", 16, nil, 64)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT", "SCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT", 16, nil, 128)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_RATE = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_RANGEFINDER_ERROR_RATE", "SCAN_STOP_REASON_RANGEFINDER_ERROR_RATE", 16, nil, 256)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE", "SCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE", 16, nil, 512)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_FOG = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_RANGEFINDER_ERROR_FOG", "SCAN_STOP_REASON_RANGEFINDER_ERROR_FOG", 16, nil, 1024)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_USER_CANCELED = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_USER_CANCELED", "SCAN_STOP_REASON_USER_CANCELED", 16, nil, 2048)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_SCAN_TIMEOUT = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_SCAN_TIMEOUT", "SCAN_STOP_REASON_SCAN_TIMEOUT", 16, nil, 4096)
+f.SCAN_SETTINGS_scan_stop_reasons_flagSCAN_STOP_REASON_NORMAL_COMPLETE = ProtoField.bool("mavlink_proto.SCAN_SETTINGS_scan_stop_reasons.SCAN_STOP_REASON_NORMAL_COMPLETE", "SCAN_STOP_REASON_NORMAL_COMPLETE", 16, nil, 8192)
 
 f.SCAN_STATUS_start_time_unix = ProtoField.new("start_time_unix (uint32_t)", "mavlink_proto.SCAN_STATUS_start_time_unix", ftypes.UINT32, nil)
 f.SCAN_STATUS_scan_completion = ProtoField.new("scan_completion (uint8_t) [%]", "mavlink_proto.SCAN_STATUS_scan_completion", ftypes.UINT8, nil)
@@ -485,6 +542,46 @@ f.ORIENTATION_heading = ProtoField.new("heading (float) [rad]", "mavlink_proto.O
 f.ORIENTATION_lat = ProtoField.new("lat (int32_t) [degE7]", "mavlink_proto.ORIENTATION_lat", ftypes.INT32, nil)
 f.ORIENTATION_lon = ProtoField.new("lon (int32_t) [degE7]", "mavlink_proto.ORIENTATION_lon", ftypes.INT32, nil)
 f.ORIENTATION_alt = ProtoField.new("alt (int32_t) [mm]", "mavlink_proto.ORIENTATION_alt", ftypes.INT32, nil)
+
+f.WIFI_CREDENTIALS_behavior = ProtoField.new("behavior (WIFI_CREDIENTIALS_BEHAVIOR)", "mavlink_proto.WIFI_CREDENTIALS_behavior", ftypes.UINT8, enumEntryName.WIFI_CREDIENTIALS_BEHAVIOR)
+f.WIFI_CREDENTIALS_ssid = ProtoField.new("ssid (char)", "mavlink_proto.WIFI_CREDENTIALS_ssid", ftypes.STRING, nil)
+f.WIFI_CREDENTIALS_password = ProtoField.new("password (char)", "mavlink_proto.WIFI_CREDENTIALS_password", ftypes.STRING, nil)
+f.WIFI_CREDENTIALS_auth_type = ProtoField.new("auth_type (WIFI_AUTH_TYPE)", "mavlink_proto.WIFI_CREDENTIALS_auth_type", ftypes.UINT8, enumEntryName.WIFI_AUTH_TYPE)
+
+f.LIDAR_SETTINGS_update_rate = ProtoField.new("update_rate (uint16_t) [hz]", "mavlink_proto.LIDAR_SETTINGS_update_rate", ftypes.UINT16, nil)
+f.LIDAR_SETTINGS_fog_mode_enable = ProtoField.new("fog_mode_enable (uint8_t)", "mavlink_proto.LIDAR_SETTINGS_fog_mode_enable", ftypes.UINT8, nil)
+f.LIDAR_SETTINGS_output_disabled_at_boot = ProtoField.new("output_disabled_at_boot (uint8_t)", "mavlink_proto.LIDAR_SETTINGS_output_disabled_at_boot", ftypes.UINT8, nil)
+f.LIDAR_SETTINGS_firmware_version = ProtoField.new("firmware_version (char)", "mavlink_proto.LIDAR_SETTINGS_firmware_version", ftypes.STRING, nil)
+
+f.SCAN_RESULT_INFO_type = ProtoField.new("type (SCAN_RESULT_INFO_TYPE)", "mavlink_proto.SCAN_RESULT_INFO_type", ftypes.UINT8, enumEntryName.SCAN_RESULT_INFO_TYPE)
+f.SCAN_RESULT_INFO_num_points = ProtoField.new("num_points (uint32_t)", "mavlink_proto.SCAN_RESULT_INFO_num_points", ftypes.UINT32, nil)
+f.SCAN_RESULT_INFO_start_time_unix = ProtoField.new("start_time_unix (uint64_t)", "mavlink_proto.SCAN_RESULT_INFO_start_time_unix", ftypes.UINT64, nil)
+f.SCAN_RESULT_INFO_end_time_unix = ProtoField.new("end_time_unix (uint64_t)", "mavlink_proto.SCAN_RESULT_INFO_end_time_unix", ftypes.UINT64, nil)
+f.SCAN_RESULT_INFO_scan_duration = ProtoField.new("scan_duration (uint32_t) [seconds]", "mavlink_proto.SCAN_RESULT_INFO_scan_duration", ftypes.UINT32, nil)
+f.SCAN_RESULT_INFO_scan_stop_reason = ProtoField.new("scan_stop_reason (SCAN_STOP_REASON)", "mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason", ftypes.UINT16, nil, base.HEX_DEC)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_INCOMPLETE = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_INCOMPLETE", "SCAN_STOP_REASON_INCOMPLETE", 16, nil, 1)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_PITCH_HOME_ERROR = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_PITCH_HOME_ERROR", "SCAN_STOP_REASON_PITCH_HOME_ERROR", 16, nil, 2)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_PITCH_INDEX_ERROR = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_PITCH_INDEX_ERROR", "SCAN_STOP_REASON_PITCH_INDEX_ERROR", 16, nil, 4)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_PITCH_MAGNET_ERROR = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_PITCH_MAGNET_ERROR", "SCAN_STOP_REASON_PITCH_MAGNET_ERROR", 16, nil, 8)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_YAW_HOME_ERROR = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_YAW_HOME_ERROR", "SCAN_STOP_REASON_YAW_HOME_ERROR", 16, nil, 16)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_YAW_INDEX_ERROR = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_YAW_INDEX_ERROR", "SCAN_STOP_REASON_YAW_INDEX_ERROR", 16, nil, 32)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT", "SCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT", 16, nil, 64)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT", "SCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT", 16, nil, 128)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_RATE = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_RANGEFINDER_ERROR_RATE", "SCAN_STOP_REASON_RANGEFINDER_ERROR_RATE", 16, nil, 256)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE", "SCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE", 16, nil, 512)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_FOG = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_RANGEFINDER_ERROR_FOG", "SCAN_STOP_REASON_RANGEFINDER_ERROR_FOG", 16, nil, 1024)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_USER_CANCELED = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_USER_CANCELED", "SCAN_STOP_REASON_USER_CANCELED", 16, nil, 2048)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_SCAN_TIMEOUT = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_SCAN_TIMEOUT", "SCAN_STOP_REASON_SCAN_TIMEOUT", 16, nil, 4096)
+f.SCAN_RESULT_INFO_scan_stop_reason_flagSCAN_STOP_REASON_NORMAL_COMPLETE = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_stop_reason.SCAN_STOP_REASON_NORMAL_COMPLETE", "SCAN_STOP_REASON_NORMAL_COMPLETE", 16, nil, 8192)
+f.SCAN_RESULT_INFO_scan_start_reason = ProtoField.new("scan_start_reason (SCAN_START_REASON)", "mavlink_proto.SCAN_RESULT_INFO_scan_start_reason", ftypes.UINT16, nil, base.HEX_DEC)
+f.SCAN_RESULT_INFO_scan_start_reason_flagSCAN_START_REASON_LOCAL_APP = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_start_reason.SCAN_START_REASON_LOCAL_APP", "SCAN_START_REASON_LOCAL_APP", 4, nil, 1)
+f.SCAN_RESULT_INFO_scan_start_reason_flagSCAN_START_REASON_WEB = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_start_reason.SCAN_START_REASON_WEB", "SCAN_START_REASON_WEB", 4, nil, 2)
+f.SCAN_RESULT_INFO_scan_start_reason_flagSCAN_START_REASON_SCHEDULE = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_start_reason.SCAN_START_REASON_SCHEDULE", "SCAN_START_REASON_SCHEDULE", 4, nil, 4)
+
+f.SCAN_TRANSFORM_roll_offset = ProtoField.new("roll_offset (uint16_t) [RadE-4]", "mavlink_proto.SCAN_TRANSFORM_roll_offset", ftypes.UINT16, nil)
+f.SCAN_TRANSFORM_pitch_offset = ProtoField.new("pitch_offset (uint16_t) [RadE-4]", "mavlink_proto.SCAN_TRANSFORM_pitch_offset", ftypes.UINT16, nil)
+f.SCAN_TRANSFORM_pitch_scale = ProtoField.new("pitch_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_pitch_scale", ftypes.FLOAT, nil)
+f.SCAN_TRANSFORM_yaw_scale = ProtoField.new("yaw_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_yaw_scale", ftypes.FLOAT, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -636,6 +733,29 @@ function dissect_flags_EOS_COMPONENT(tree, name, tvbrange, value)
     tree:add_le(f[name .. "_flagEOS_COMPONENT_PORT_EXPANDER"], tvbrange, value)
     tree:add_le(f[name .. "_flagEOS_COMPONENT_FLASH"], tvbrange, value)
     tree:add_le(f[name .. "_flagEOS_COMPONENT_ALL"], tvbrange, value)
+end
+-- dissect flag field
+function dissect_flags_SCAN_STOP_REASON(tree, name, tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_INCOMPLETE"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_PITCH_HOME_ERROR"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_PITCH_INDEX_ERROR"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_PITCH_MAGNET_ERROR"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_YAW_HOME_ERROR"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_YAW_INDEX_ERROR"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_DISABLE_OUTPUT"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_ENABLE_OUTPUT"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_RATE"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_SAVE"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_RANGEFINDER_ERROR_FOG"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_USER_CANCELED"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_SCAN_TIMEOUT"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_STOP_REASON_NORMAL_COMPLETE"], tvbrange, value)
+end
+-- dissect flag field
+function dissect_flags_SCAN_START_REASON(tree, name, tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_START_REASON_LOCAL_APP"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_START_REASON_WEB"], tvbrange, value)
+    tree:add_le(f[name .. "_flagSCAN_START_REASON_SCHEDULE"], tvbrange, value)
 end
 -- dissect flag field
 function dissect_flags_MAV_MODE_FLAG(tree, name, tvbrange, value)
@@ -829,9 +949,9 @@ end
 -- dissect payload of message type SCAN_SETTINGS
 function payload_fns.payload_9(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 24 > limit) then
+    if (offset + 30 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 24)
+        padded:set_size(offset + 30)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -845,9 +965,15 @@ function payload_fns.payload_9(buffer, tree, msgid, offset, limit, pinfo)
     tvbrange = padded(offset + 12, 4)
     subtree = tree:add_le(f.SCAN_SETTINGS_pitch_stop, tvbrange)
     tvbrange = padded(offset + 16, 4)
-    subtree = tree:add_le(f.SCAN_SETTINGS_point_spacing, tvbrange)
+    subtree = tree:add_le(f.SCAN_SETTINGS_pitch_rest_angle, tvbrange)
     tvbrange = padded(offset + 20, 4)
+    subtree = tree:add_le(f.SCAN_SETTINGS_point_spacing, tvbrange)
+    tvbrange = padded(offset + 24, 4)
     subtree = tree:add_le(f.SCAN_SETTINGS_scan_speed, tvbrange)
+    tvbrange = padded(offset + 28, 2)
+    subtree = tree:add_le(f.SCAN_SETTINGS_scan_stop_reasons, tvbrange)
+    value = tvbrange:le_uint()
+    dissect_flags_SCAN_STOP_REASON(subtree, "SCAN_SETTINGS_scan_stop_reasons", tvbrange, value)
 end
 -- dissect payload of message type SCAN_STATUS
 function payload_fns.payload_10(buffer, tree, msgid, offset, limit, pinfo)
@@ -1105,6 +1231,92 @@ function payload_fns.payload_18(buffer, tree, msgid, offset, limit, pinfo)
     subtree:append_text(string.format(" (%.7f deg)",value/1E7))
     tvbrange = padded(offset + 24, 4)
     subtree = tree:add_le(f.ORIENTATION_alt, tvbrange)
+end
+-- dissect payload of message type WIFI_CREDENTIALS
+function payload_fns.payload_19(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 130 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 130)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 1)
+    subtree = tree:add_le(f.WIFI_CREDENTIALS_behavior, tvbrange)
+    tvbrange = padded(offset + 1, 64)
+    subtree = tree:add_le(f.WIFI_CREDENTIALS_ssid, tvbrange)
+    tvbrange = padded(offset + 65, 64)
+    subtree = tree:add_le(f.WIFI_CREDENTIALS_password, tvbrange)
+    tvbrange = padded(offset + 129, 1)
+    subtree = tree:add_le(f.WIFI_CREDENTIALS_auth_type, tvbrange)
+end
+-- dissect payload of message type LIDAR_SETTINGS
+function payload_fns.payload_20(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 14 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 14)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 2)
+    subtree = tree:add_le(f.LIDAR_SETTINGS_update_rate, tvbrange)
+    tvbrange = padded(offset + 2, 1)
+    subtree = tree:add_le(f.LIDAR_SETTINGS_fog_mode_enable, tvbrange)
+    tvbrange = padded(offset + 3, 1)
+    subtree = tree:add_le(f.LIDAR_SETTINGS_output_disabled_at_boot, tvbrange)
+    tvbrange = padded(offset + 4, 10)
+    subtree = tree:add_le(f.LIDAR_SETTINGS_firmware_version, tvbrange)
+end
+-- dissect payload of message type SCAN_RESULT_INFO
+function payload_fns.payload_21(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 29 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 29)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 28, 1)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_type, tvbrange)
+    tvbrange = padded(offset + 16, 4)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_num_points, tvbrange)
+    tvbrange = padded(offset + 0, 8)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_start_time_unix, tvbrange)
+    tvbrange = padded(offset + 8, 8)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_end_time_unix, tvbrange)
+    tvbrange = padded(offset + 20, 4)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_scan_duration, tvbrange)
+    tvbrange = padded(offset + 24, 2)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_scan_stop_reason, tvbrange)
+    value = tvbrange:le_uint()
+    dissect_flags_SCAN_STOP_REASON(subtree, "SCAN_RESULT_INFO_scan_stop_reason", tvbrange, value)
+    tvbrange = padded(offset + 26, 2)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_scan_start_reason, tvbrange)
+    value = tvbrange:le_uint()
+    dissect_flags_SCAN_START_REASON(subtree, "SCAN_RESULT_INFO_scan_start_reason", tvbrange, value)
+end
+-- dissect payload of message type SCAN_TRANSFORM
+function payload_fns.payload_22(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 12 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 12)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 8, 2)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_roll_offset, tvbrange)
+    tvbrange = padded(offset + 10, 2)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_pitch_offset, tvbrange)
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_pitch_scale, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_yaw_scale, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
