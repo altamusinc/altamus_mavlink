@@ -8,19 +8,20 @@ typedef struct __mavlink_scan_result_info_t {
  uint64_t start_time_unix; /*<   Unix start time*/
  uint64_t end_time_unix; /*<   Unix end time*/
  uint32_t num_points; /*<   Number of points*/
+ uint32_t file_size_bytes; /*<   Size of the resulting .bin file*/
  uint32_t scan_duration; /*< [seconds]  Duration of the scan, in seconds*/
  uint16_t scan_stop_reason; /*<   Reason for the scan stopping*/
  uint16_t scan_start_reason; /*<   Reason for scan starting*/
  uint8_t type; /*<   What type of info this is, estimated or actual*/
 } mavlink_scan_result_info_t;
 
-#define MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN 29
-#define MAVLINK_MSG_ID_SCAN_RESULT_INFO_MIN_LEN 29
-#define MAVLINK_MSG_ID_21_LEN 29
-#define MAVLINK_MSG_ID_21_MIN_LEN 29
+#define MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN 33
+#define MAVLINK_MSG_ID_SCAN_RESULT_INFO_MIN_LEN 33
+#define MAVLINK_MSG_ID_21_LEN 33
+#define MAVLINK_MSG_ID_21_MIN_LEN 33
 
-#define MAVLINK_MSG_ID_SCAN_RESULT_INFO_CRC 138
-#define MAVLINK_MSG_ID_21_CRC 138
+#define MAVLINK_MSG_ID_SCAN_RESULT_INFO_CRC 31
+#define MAVLINK_MSG_ID_21_CRC 31
 
 
 
@@ -28,27 +29,29 @@ typedef struct __mavlink_scan_result_info_t {
 #define MAVLINK_MESSAGE_INFO_SCAN_RESULT_INFO { \
     21, \
     "SCAN_RESULT_INFO", \
-    7, \
-    {  { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 28, offsetof(mavlink_scan_result_info_t, type) }, \
+    8, \
+    {  { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_scan_result_info_t, type) }, \
          { "num_points", NULL, MAVLINK_TYPE_UINT32_T, 0, 16, offsetof(mavlink_scan_result_info_t, num_points) }, \
+         { "file_size_bytes", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_scan_result_info_t, file_size_bytes) }, \
          { "start_time_unix", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_scan_result_info_t, start_time_unix) }, \
          { "end_time_unix", NULL, MAVLINK_TYPE_UINT64_T, 0, 8, offsetof(mavlink_scan_result_info_t, end_time_unix) }, \
-         { "scan_duration", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_scan_result_info_t, scan_duration) }, \
-         { "scan_stop_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 24, offsetof(mavlink_scan_result_info_t, scan_stop_reason) }, \
-         { "scan_start_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 26, offsetof(mavlink_scan_result_info_t, scan_start_reason) }, \
+         { "scan_duration", NULL, MAVLINK_TYPE_UINT32_T, 0, 24, offsetof(mavlink_scan_result_info_t, scan_duration) }, \
+         { "scan_stop_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 28, offsetof(mavlink_scan_result_info_t, scan_stop_reason) }, \
+         { "scan_start_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 30, offsetof(mavlink_scan_result_info_t, scan_start_reason) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_SCAN_RESULT_INFO { \
     "SCAN_RESULT_INFO", \
-    7, \
-    {  { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 28, offsetof(mavlink_scan_result_info_t, type) }, \
+    8, \
+    {  { "type", NULL, MAVLINK_TYPE_UINT8_T, 0, 32, offsetof(mavlink_scan_result_info_t, type) }, \
          { "num_points", NULL, MAVLINK_TYPE_UINT32_T, 0, 16, offsetof(mavlink_scan_result_info_t, num_points) }, \
+         { "file_size_bytes", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_scan_result_info_t, file_size_bytes) }, \
          { "start_time_unix", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_scan_result_info_t, start_time_unix) }, \
          { "end_time_unix", NULL, MAVLINK_TYPE_UINT64_T, 0, 8, offsetof(mavlink_scan_result_info_t, end_time_unix) }, \
-         { "scan_duration", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_scan_result_info_t, scan_duration) }, \
-         { "scan_stop_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 24, offsetof(mavlink_scan_result_info_t, scan_stop_reason) }, \
-         { "scan_start_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 26, offsetof(mavlink_scan_result_info_t, scan_start_reason) }, \
+         { "scan_duration", NULL, MAVLINK_TYPE_UINT32_T, 0, 24, offsetof(mavlink_scan_result_info_t, scan_duration) }, \
+         { "scan_stop_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 28, offsetof(mavlink_scan_result_info_t, scan_stop_reason) }, \
+         { "scan_start_reason", NULL, MAVLINK_TYPE_UINT16_T, 0, 30, offsetof(mavlink_scan_result_info_t, scan_start_reason) }, \
          } \
 }
 #endif
@@ -61,6 +64,7 @@ typedef struct __mavlink_scan_result_info_t {
  *
  * @param type   What type of info this is, estimated or actual
  * @param num_points   Number of points
+ * @param file_size_bytes   Size of the resulting .bin file
  * @param start_time_unix   Unix start time
  * @param end_time_unix   Unix end time
  * @param scan_duration [seconds]  Duration of the scan, in seconds
@@ -69,17 +73,18 @@ typedef struct __mavlink_scan_result_info_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_result_info_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t type, uint32_t num_points, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
+                               uint8_t type, uint32_t num_points, uint32_t file_size_bytes, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN];
     _mav_put_uint64_t(buf, 0, start_time_unix);
     _mav_put_uint64_t(buf, 8, end_time_unix);
     _mav_put_uint32_t(buf, 16, num_points);
-    _mav_put_uint32_t(buf, 20, scan_duration);
-    _mav_put_uint16_t(buf, 24, scan_stop_reason);
-    _mav_put_uint16_t(buf, 26, scan_start_reason);
-    _mav_put_uint8_t(buf, 28, type);
+    _mav_put_uint32_t(buf, 20, file_size_bytes);
+    _mav_put_uint32_t(buf, 24, scan_duration);
+    _mav_put_uint16_t(buf, 28, scan_stop_reason);
+    _mav_put_uint16_t(buf, 30, scan_start_reason);
+    _mav_put_uint8_t(buf, 32, type);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN);
 #else
@@ -87,6 +92,7 @@ static inline uint16_t mavlink_msg_scan_result_info_pack(uint8_t system_id, uint
     packet.start_time_unix = start_time_unix;
     packet.end_time_unix = end_time_unix;
     packet.num_points = num_points;
+    packet.file_size_bytes = file_size_bytes;
     packet.scan_duration = scan_duration;
     packet.scan_stop_reason = scan_stop_reason;
     packet.scan_start_reason = scan_start_reason;
@@ -108,6 +114,7 @@ static inline uint16_t mavlink_msg_scan_result_info_pack(uint8_t system_id, uint
  *
  * @param type   What type of info this is, estimated or actual
  * @param num_points   Number of points
+ * @param file_size_bytes   Size of the resulting .bin file
  * @param start_time_unix   Unix start time
  * @param end_time_unix   Unix end time
  * @param scan_duration [seconds]  Duration of the scan, in seconds
@@ -116,17 +123,18 @@ static inline uint16_t mavlink_msg_scan_result_info_pack(uint8_t system_id, uint
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_result_info_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t type, uint32_t num_points, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
+                               uint8_t type, uint32_t num_points, uint32_t file_size_bytes, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN];
     _mav_put_uint64_t(buf, 0, start_time_unix);
     _mav_put_uint64_t(buf, 8, end_time_unix);
     _mav_put_uint32_t(buf, 16, num_points);
-    _mav_put_uint32_t(buf, 20, scan_duration);
-    _mav_put_uint16_t(buf, 24, scan_stop_reason);
-    _mav_put_uint16_t(buf, 26, scan_start_reason);
-    _mav_put_uint8_t(buf, 28, type);
+    _mav_put_uint32_t(buf, 20, file_size_bytes);
+    _mav_put_uint32_t(buf, 24, scan_duration);
+    _mav_put_uint16_t(buf, 28, scan_stop_reason);
+    _mav_put_uint16_t(buf, 30, scan_start_reason);
+    _mav_put_uint8_t(buf, 32, type);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN);
 #else
@@ -134,6 +142,7 @@ static inline uint16_t mavlink_msg_scan_result_info_pack_status(uint8_t system_i
     packet.start_time_unix = start_time_unix;
     packet.end_time_unix = end_time_unix;
     packet.num_points = num_points;
+    packet.file_size_bytes = file_size_bytes;
     packet.scan_duration = scan_duration;
     packet.scan_stop_reason = scan_stop_reason;
     packet.scan_start_reason = scan_start_reason;
@@ -158,6 +167,7 @@ static inline uint16_t mavlink_msg_scan_result_info_pack_status(uint8_t system_i
  * @param msg The MAVLink message to compress the data into
  * @param type   What type of info this is, estimated or actual
  * @param num_points   Number of points
+ * @param file_size_bytes   Size of the resulting .bin file
  * @param start_time_unix   Unix start time
  * @param end_time_unix   Unix end time
  * @param scan_duration [seconds]  Duration of the scan, in seconds
@@ -167,17 +177,18 @@ static inline uint16_t mavlink_msg_scan_result_info_pack_status(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_scan_result_info_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t type,uint32_t num_points,uint64_t start_time_unix,uint64_t end_time_unix,uint32_t scan_duration,uint16_t scan_stop_reason,uint16_t scan_start_reason)
+                                   uint8_t type,uint32_t num_points,uint32_t file_size_bytes,uint64_t start_time_unix,uint64_t end_time_unix,uint32_t scan_duration,uint16_t scan_stop_reason,uint16_t scan_start_reason)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN];
     _mav_put_uint64_t(buf, 0, start_time_unix);
     _mav_put_uint64_t(buf, 8, end_time_unix);
     _mav_put_uint32_t(buf, 16, num_points);
-    _mav_put_uint32_t(buf, 20, scan_duration);
-    _mav_put_uint16_t(buf, 24, scan_stop_reason);
-    _mav_put_uint16_t(buf, 26, scan_start_reason);
-    _mav_put_uint8_t(buf, 28, type);
+    _mav_put_uint32_t(buf, 20, file_size_bytes);
+    _mav_put_uint32_t(buf, 24, scan_duration);
+    _mav_put_uint16_t(buf, 28, scan_stop_reason);
+    _mav_put_uint16_t(buf, 30, scan_start_reason);
+    _mav_put_uint8_t(buf, 32, type);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN);
 #else
@@ -185,6 +196,7 @@ static inline uint16_t mavlink_msg_scan_result_info_pack_chan(uint8_t system_id,
     packet.start_time_unix = start_time_unix;
     packet.end_time_unix = end_time_unix;
     packet.num_points = num_points;
+    packet.file_size_bytes = file_size_bytes;
     packet.scan_duration = scan_duration;
     packet.scan_stop_reason = scan_stop_reason;
     packet.scan_start_reason = scan_start_reason;
@@ -207,7 +219,7 @@ static inline uint16_t mavlink_msg_scan_result_info_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_scan_result_info_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_scan_result_info_t* scan_result_info)
 {
-    return mavlink_msg_scan_result_info_pack(system_id, component_id, msg, scan_result_info->type, scan_result_info->num_points, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
+    return mavlink_msg_scan_result_info_pack(system_id, component_id, msg, scan_result_info->type, scan_result_info->num_points, scan_result_info->file_size_bytes, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
 }
 
 /**
@@ -221,7 +233,7 @@ static inline uint16_t mavlink_msg_scan_result_info_encode(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_scan_result_info_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_scan_result_info_t* scan_result_info)
 {
-    return mavlink_msg_scan_result_info_pack_chan(system_id, component_id, chan, msg, scan_result_info->type, scan_result_info->num_points, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
+    return mavlink_msg_scan_result_info_pack_chan(system_id, component_id, chan, msg, scan_result_info->type, scan_result_info->num_points, scan_result_info->file_size_bytes, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
 }
 
 /**
@@ -235,7 +247,7 @@ static inline uint16_t mavlink_msg_scan_result_info_encode_chan(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_scan_result_info_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_scan_result_info_t* scan_result_info)
 {
-    return mavlink_msg_scan_result_info_pack_status(system_id, component_id, _status, msg,  scan_result_info->type, scan_result_info->num_points, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
+    return mavlink_msg_scan_result_info_pack_status(system_id, component_id, _status, msg,  scan_result_info->type, scan_result_info->num_points, scan_result_info->file_size_bytes, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
 }
 
 /**
@@ -244,6 +256,7 @@ static inline uint16_t mavlink_msg_scan_result_info_encode_status(uint8_t system
  *
  * @param type   What type of info this is, estimated or actual
  * @param num_points   Number of points
+ * @param file_size_bytes   Size of the resulting .bin file
  * @param start_time_unix   Unix start time
  * @param end_time_unix   Unix end time
  * @param scan_duration [seconds]  Duration of the scan, in seconds
@@ -252,17 +265,18 @@ static inline uint16_t mavlink_msg_scan_result_info_encode_status(uint8_t system
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_scan_result_info_send(mavlink_channel_t chan, uint8_t type, uint32_t num_points, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
+static inline void mavlink_msg_scan_result_info_send(mavlink_channel_t chan, uint8_t type, uint32_t num_points, uint32_t file_size_bytes, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN];
     _mav_put_uint64_t(buf, 0, start_time_unix);
     _mav_put_uint64_t(buf, 8, end_time_unix);
     _mav_put_uint32_t(buf, 16, num_points);
-    _mav_put_uint32_t(buf, 20, scan_duration);
-    _mav_put_uint16_t(buf, 24, scan_stop_reason);
-    _mav_put_uint16_t(buf, 26, scan_start_reason);
-    _mav_put_uint8_t(buf, 28, type);
+    _mav_put_uint32_t(buf, 20, file_size_bytes);
+    _mav_put_uint32_t(buf, 24, scan_duration);
+    _mav_put_uint16_t(buf, 28, scan_stop_reason);
+    _mav_put_uint16_t(buf, 30, scan_start_reason);
+    _mav_put_uint8_t(buf, 32, type);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_RESULT_INFO, buf, MAVLINK_MSG_ID_SCAN_RESULT_INFO_MIN_LEN, MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN, MAVLINK_MSG_ID_SCAN_RESULT_INFO_CRC);
 #else
@@ -270,6 +284,7 @@ static inline void mavlink_msg_scan_result_info_send(mavlink_channel_t chan, uin
     packet.start_time_unix = start_time_unix;
     packet.end_time_unix = end_time_unix;
     packet.num_points = num_points;
+    packet.file_size_bytes = file_size_bytes;
     packet.scan_duration = scan_duration;
     packet.scan_stop_reason = scan_stop_reason;
     packet.scan_start_reason = scan_start_reason;
@@ -287,7 +302,7 @@ static inline void mavlink_msg_scan_result_info_send(mavlink_channel_t chan, uin
 static inline void mavlink_msg_scan_result_info_send_struct(mavlink_channel_t chan, const mavlink_scan_result_info_t* scan_result_info)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_scan_result_info_send(chan, scan_result_info->type, scan_result_info->num_points, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
+    mavlink_msg_scan_result_info_send(chan, scan_result_info->type, scan_result_info->num_points, scan_result_info->file_size_bytes, scan_result_info->start_time_unix, scan_result_info->end_time_unix, scan_result_info->scan_duration, scan_result_info->scan_stop_reason, scan_result_info->scan_start_reason);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_RESULT_INFO, (const char *)scan_result_info, MAVLINK_MSG_ID_SCAN_RESULT_INFO_MIN_LEN, MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN, MAVLINK_MSG_ID_SCAN_RESULT_INFO_CRC);
 #endif
@@ -301,17 +316,18 @@ static inline void mavlink_msg_scan_result_info_send_struct(mavlink_channel_t ch
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_scan_result_info_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t type, uint32_t num_points, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
+static inline void mavlink_msg_scan_result_info_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t type, uint32_t num_points, uint32_t file_size_bytes, uint64_t start_time_unix, uint64_t end_time_unix, uint32_t scan_duration, uint16_t scan_stop_reason, uint16_t scan_start_reason)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_uint64_t(buf, 0, start_time_unix);
     _mav_put_uint64_t(buf, 8, end_time_unix);
     _mav_put_uint32_t(buf, 16, num_points);
-    _mav_put_uint32_t(buf, 20, scan_duration);
-    _mav_put_uint16_t(buf, 24, scan_stop_reason);
-    _mav_put_uint16_t(buf, 26, scan_start_reason);
-    _mav_put_uint8_t(buf, 28, type);
+    _mav_put_uint32_t(buf, 20, file_size_bytes);
+    _mav_put_uint32_t(buf, 24, scan_duration);
+    _mav_put_uint16_t(buf, 28, scan_stop_reason);
+    _mav_put_uint16_t(buf, 30, scan_start_reason);
+    _mav_put_uint8_t(buf, 32, type);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_RESULT_INFO, buf, MAVLINK_MSG_ID_SCAN_RESULT_INFO_MIN_LEN, MAVLINK_MSG_ID_SCAN_RESULT_INFO_LEN, MAVLINK_MSG_ID_SCAN_RESULT_INFO_CRC);
 #else
@@ -319,6 +335,7 @@ static inline void mavlink_msg_scan_result_info_send_buf(mavlink_message_t *msgb
     packet->start_time_unix = start_time_unix;
     packet->end_time_unix = end_time_unix;
     packet->num_points = num_points;
+    packet->file_size_bytes = file_size_bytes;
     packet->scan_duration = scan_duration;
     packet->scan_stop_reason = scan_stop_reason;
     packet->scan_start_reason = scan_start_reason;
@@ -341,7 +358,7 @@ static inline void mavlink_msg_scan_result_info_send_buf(mavlink_message_t *msgb
  */
 static inline uint8_t mavlink_msg_scan_result_info_get_type(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  28);
+    return _MAV_RETURN_uint8_t(msg,  32);
 }
 
 /**
@@ -352,6 +369,16 @@ static inline uint8_t mavlink_msg_scan_result_info_get_type(const mavlink_messag
 static inline uint32_t mavlink_msg_scan_result_info_get_num_points(const mavlink_message_t* msg)
 {
     return _MAV_RETURN_uint32_t(msg,  16);
+}
+
+/**
+ * @brief Get field file_size_bytes from scan_result_info message
+ *
+ * @return   Size of the resulting .bin file
+ */
+static inline uint32_t mavlink_msg_scan_result_info_get_file_size_bytes(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint32_t(msg,  20);
 }
 
 /**
@@ -381,7 +408,7 @@ static inline uint64_t mavlink_msg_scan_result_info_get_end_time_unix(const mavl
  */
 static inline uint32_t mavlink_msg_scan_result_info_get_scan_duration(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint32_t(msg,  20);
+    return _MAV_RETURN_uint32_t(msg,  24);
 }
 
 /**
@@ -391,7 +418,7 @@ static inline uint32_t mavlink_msg_scan_result_info_get_scan_duration(const mavl
  */
 static inline uint16_t mavlink_msg_scan_result_info_get_scan_stop_reason(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint16_t(msg,  24);
+    return _MAV_RETURN_uint16_t(msg,  28);
 }
 
 /**
@@ -401,7 +428,7 @@ static inline uint16_t mavlink_msg_scan_result_info_get_scan_stop_reason(const m
  */
 static inline uint16_t mavlink_msg_scan_result_info_get_scan_start_reason(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint16_t(msg,  26);
+    return _MAV_RETURN_uint16_t(msg,  30);
 }
 
 /**
@@ -416,6 +443,7 @@ static inline void mavlink_msg_scan_result_info_decode(const mavlink_message_t* 
     scan_result_info->start_time_unix = mavlink_msg_scan_result_info_get_start_time_unix(msg);
     scan_result_info->end_time_unix = mavlink_msg_scan_result_info_get_end_time_unix(msg);
     scan_result_info->num_points = mavlink_msg_scan_result_info_get_num_points(msg);
+    scan_result_info->file_size_bytes = mavlink_msg_scan_result_info_get_file_size_bytes(msg);
     scan_result_info->scan_duration = mavlink_msg_scan_result_info_get_scan_duration(msg);
     scan_result_info->scan_stop_reason = mavlink_msg_scan_result_info_get_scan_stop_reason(msg);
     scan_result_info->scan_start_reason = mavlink_msg_scan_result_info_get_scan_start_reason(msg);

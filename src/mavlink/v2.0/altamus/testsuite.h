@@ -1120,13 +1120,14 @@ static void mavlink_test_scan_result_info(uint8_t system_id, uint8_t component_i
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_scan_result_info_t packet_in = {
-        93372036854775807ULL,93372036854776311ULL,963498296,963498504,18483,18587,89
+        93372036854775807ULL,93372036854776311ULL,963498296,963498504,963498712,18691,18795,101
     };
     mavlink_scan_result_info_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.start_time_unix = packet_in.start_time_unix;
         packet1.end_time_unix = packet_in.end_time_unix;
         packet1.num_points = packet_in.num_points;
+        packet1.file_size_bytes = packet_in.file_size_bytes;
         packet1.scan_duration = packet_in.scan_duration;
         packet1.scan_stop_reason = packet_in.scan_stop_reason;
         packet1.scan_start_reason = packet_in.scan_start_reason;
@@ -1145,12 +1146,12 @@ static void mavlink_test_scan_result_info(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_scan_result_info_pack(system_id, component_id, &msg , packet1.type , packet1.num_points , packet1.start_time_unix , packet1.end_time_unix , packet1.scan_duration , packet1.scan_stop_reason , packet1.scan_start_reason );
+    mavlink_msg_scan_result_info_pack(system_id, component_id, &msg , packet1.type , packet1.num_points , packet1.file_size_bytes , packet1.start_time_unix , packet1.end_time_unix , packet1.scan_duration , packet1.scan_stop_reason , packet1.scan_start_reason );
     mavlink_msg_scan_result_info_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_scan_result_info_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.type , packet1.num_points , packet1.start_time_unix , packet1.end_time_unix , packet1.scan_duration , packet1.scan_stop_reason , packet1.scan_start_reason );
+    mavlink_msg_scan_result_info_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.type , packet1.num_points , packet1.file_size_bytes , packet1.start_time_unix , packet1.end_time_unix , packet1.scan_duration , packet1.scan_stop_reason , packet1.scan_start_reason );
     mavlink_msg_scan_result_info_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -1163,7 +1164,7 @@ static void mavlink_test_scan_result_info(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_scan_result_info_send(MAVLINK_COMM_1 , packet1.type , packet1.num_points , packet1.start_time_unix , packet1.end_time_unix , packet1.scan_duration , packet1.scan_stop_reason , packet1.scan_start_reason );
+    mavlink_msg_scan_result_info_send(MAVLINK_COMM_1 , packet1.type , packet1.num_points , packet1.file_size_bytes , packet1.start_time_unix , packet1.end_time_unix , packet1.scan_duration , packet1.scan_stop_reason , packet1.scan_start_reason );
     mavlink_msg_scan_result_info_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

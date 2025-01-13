@@ -562,6 +562,7 @@ f.LIDAR_SETTINGS_firmware_version = ProtoField.new("firmware_version (char)", "m
 
 f.SCAN_RESULT_INFO_type = ProtoField.new("type (SCAN_RESULT_INFO_TYPE)", "mavlink_proto.SCAN_RESULT_INFO_type", ftypes.UINT8, enumEntryName.SCAN_RESULT_INFO_TYPE)
 f.SCAN_RESULT_INFO_num_points = ProtoField.new("num_points (uint32_t)", "mavlink_proto.SCAN_RESULT_INFO_num_points", ftypes.UINT32, nil)
+f.SCAN_RESULT_INFO_file_size_bytes = ProtoField.new("file_size_bytes (uint32_t)", "mavlink_proto.SCAN_RESULT_INFO_file_size_bytes", ftypes.UINT32, nil)
 f.SCAN_RESULT_INFO_start_time_unix = ProtoField.new("start_time_unix (uint64_t)", "mavlink_proto.SCAN_RESULT_INFO_start_time_unix", ftypes.UINT64, nil)
 f.SCAN_RESULT_INFO_end_time_unix = ProtoField.new("end_time_unix (uint64_t)", "mavlink_proto.SCAN_RESULT_INFO_end_time_unix", ftypes.UINT64, nil)
 f.SCAN_RESULT_INFO_scan_duration = ProtoField.new("scan_duration (uint32_t) [seconds]", "mavlink_proto.SCAN_RESULT_INFO_scan_duration", ftypes.UINT32, nil)
@@ -1282,28 +1283,30 @@ end
 -- dissect payload of message type SCAN_RESULT_INFO
 function payload_fns.payload_21(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 29 > limit) then
+    if (offset + 33 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 29)
+        padded:set_size(offset + 33)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
-    tvbrange = padded(offset + 28, 1)
+    tvbrange = padded(offset + 32, 1)
     subtree = tree:add_le(f.SCAN_RESULT_INFO_type, tvbrange)
     tvbrange = padded(offset + 16, 4)
     subtree = tree:add_le(f.SCAN_RESULT_INFO_num_points, tvbrange)
+    tvbrange = padded(offset + 20, 4)
+    subtree = tree:add_le(f.SCAN_RESULT_INFO_file_size_bytes, tvbrange)
     tvbrange = padded(offset + 0, 8)
     subtree = tree:add_le(f.SCAN_RESULT_INFO_start_time_unix, tvbrange)
     tvbrange = padded(offset + 8, 8)
     subtree = tree:add_le(f.SCAN_RESULT_INFO_end_time_unix, tvbrange)
-    tvbrange = padded(offset + 20, 4)
+    tvbrange = padded(offset + 24, 4)
     subtree = tree:add_le(f.SCAN_RESULT_INFO_scan_duration, tvbrange)
-    tvbrange = padded(offset + 24, 2)
+    tvbrange = padded(offset + 28, 2)
     subtree = tree:add_le(f.SCAN_RESULT_INFO_scan_stop_reason, tvbrange)
     value = tvbrange:le_uint()
     dissect_flags_SCAN_STOP_REASON(subtree, "SCAN_RESULT_INFO_scan_stop_reason", tvbrange, value)
-    tvbrange = padded(offset + 26, 2)
+    tvbrange = padded(offset + 30, 2)
     subtree = tree:add_le(f.SCAN_RESULT_INFO_scan_start_reason, tvbrange)
     value = tvbrange:le_uint()
     dissect_flags_SCAN_START_REASON(subtree, "SCAN_RESULT_INFO_scan_start_reason", tvbrange, value)

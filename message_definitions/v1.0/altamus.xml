@@ -269,6 +269,7 @@
             <description>Information about a scan</description>
             <field type="uint8_t" name="type" enum="SCAN_RESULT_INFO_TYPE"> What type of info this is, estimated or actual</field>
             <field type="uint32_t" name="num_points"> Number of points</field>
+            <field type="uint32_t" name="file_size_bytes"> Size of the resulting .bin file</field>
             <field type="uint64_t" name="start_time_unix"> Unix start time</field>
             <field type="uint64_t" name="end_time_unix"> Unix end time</field>
             <field type="uint32_t" name="scan_duration" units="seconds"> Duration of the scan, in seconds</field>
