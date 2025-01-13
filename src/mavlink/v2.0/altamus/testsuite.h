@@ -535,14 +535,15 @@ static void mavlink_test_power_information(uint8_t system_id, uint8_t component_
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_power_information_t packet_in = {
-        963497464,17443,17547,17651
+        963497464,17443,17547,17651,163
     };
     mavlink_power_information_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.energy_consumed = packet_in.energy_consumed;
-        packet1.instant_current = packet_in.instant_current;
-        packet1.instant_voltage = packet_in.instant_voltage;
-        packet1.instant_power = packet_in.instant_power;
+        packet1.current = packet_in.current;
+        packet1.voltage = packet_in.voltage;
+        packet1.power = packet_in.power;
+        packet1.type = packet_in.type;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -557,12 +558,12 @@ static void mavlink_test_power_information(uint8_t system_id, uint8_t component_
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_power_information_pack(system_id, component_id, &msg , packet1.instant_current , packet1.instant_voltage , packet1.instant_power , packet1.energy_consumed );
+    mavlink_msg_power_information_pack(system_id, component_id, &msg , packet1.type , packet1.current , packet1.voltage , packet1.power , packet1.energy_consumed );
     mavlink_msg_power_information_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_power_information_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.instant_current , packet1.instant_voltage , packet1.instant_power , packet1.energy_consumed );
+    mavlink_msg_power_information_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.type , packet1.current , packet1.voltage , packet1.power , packet1.energy_consumed );
     mavlink_msg_power_information_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -575,7 +576,7 @@ static void mavlink_test_power_information(uint8_t system_id, uint8_t component_
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_power_information_send(MAVLINK_COMM_1 , packet1.instant_current , packet1.instant_voltage , packet1.instant_power , packet1.energy_consumed );
+    mavlink_msg_power_information_send(MAVLINK_COMM_1 , packet1.type , packet1.current , packet1.voltage , packet1.power , packet1.energy_consumed );
     mavlink_msg_power_information_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

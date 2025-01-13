@@ -108,6 +108,12 @@
             <entry value="1" name="SCAN_RESULT_INFO_ACTUAL"></entry>
             <entry value="2" name="SCAN_RESULT_INFO_ESTIMATED"></entry>
         </enum>
+        <enum name="POWER_INFORMATION_TYPE">
+            <entry value="1" name="POWER_INFORMATION_TYPE_INSTANT"></entry>
+            <entry value="2" name="POWER_INFORMATION_TYPE_AVERAGE"></entry>
+            <entry value="3" name="POWER_INFORMATION_TYPE_MAXIMUM"></entry>
+            <entry value="4" name="POWER_INFORMATION_TYPE_MINIMUM"></entry>
+        </enum>
     </enums>
     <messages>
         <message name="LIDAR_READING" id="1">
@@ -171,9 +177,10 @@
         </message>
         <message name="POWER_INFORMATION" id = "12">
             <description> Power stats of device</description>
-            <field name="instant_current" type="uint16_t" units="mA"> Instant current at sensor in Milliamps</field>
-            <field name="instant_voltage" type="uint16_t" units="mV"> Instant voltage at sensor in Millivolts</field>
-            <field name="instant_power" type="uint16_t" units="mW"> Instant power at sensor in Milliwatts</field>
+            <field name="type" type="uint8_t" enum="POWER_INFORMATION_TYPE"> Type of reading: instant, average, max, min</field>
+            <field name="current" type="uint16_t" units="mA"> current in Milliamps</field>
+            <field name="voltage" type="uint16_t" units="mV"> voltage in Millivolts</field>
+            <field name="power" type="uint16_t" units="mW"> power in Milliwatts</field>
             <field name="energy_consumed" type="uint32_t" units="J"> Accumulated power since last reset in Joules</field>
         </message>
         <message name="WIFI_INFORMATION" id = "13">

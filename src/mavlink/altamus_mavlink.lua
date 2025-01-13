@@ -173,6 +173,12 @@ local enumEntryName = {
         [1] = "SCAN_RESULT_INFO_ACTUAL",
         [2] = "SCAN_RESULT_INFO_ESTIMATED",
     },
+    ["POWER_INFORMATION_TYPE"] = {
+        [1] = "POWER_INFORMATION_TYPE_INSTANT",
+        [2] = "POWER_INFORMATION_TYPE_AVERAGE",
+        [3] = "POWER_INFORMATION_TYPE_MAXIMUM",
+        [4] = "POWER_INFORMATION_TYPE_MINIMUM",
+    },
     ["MAV_AUTOPILOT"] = {
         [0] = "MAV_AUTOPILOT_GENERIC",
         [8] = "MAV_AUTOPILOT_INVALID",
@@ -438,9 +444,10 @@ f.REMOTE_SERVER_SETTINGS_ftp_username = ProtoField.new("ftp_username (char)", "m
 f.REMOTE_SERVER_SETTINGS_ftp_password = ProtoField.new("ftp_password (char)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_password", ftypes.STRING, nil)
 f.REMOTE_SERVER_SETTINGS_ftp_port = ProtoField.new("ftp_port (uint16_t)", "mavlink_proto.REMOTE_SERVER_SETTINGS_ftp_port", ftypes.UINT16, nil)
 
-f.POWER_INFORMATION_instant_current = ProtoField.new("instant_current (uint16_t) [mA]", "mavlink_proto.POWER_INFORMATION_instant_current", ftypes.UINT16, nil)
-f.POWER_INFORMATION_instant_voltage = ProtoField.new("instant_voltage (uint16_t) [mV]", "mavlink_proto.POWER_INFORMATION_instant_voltage", ftypes.UINT16, nil)
-f.POWER_INFORMATION_instant_power = ProtoField.new("instant_power (uint16_t) [mW]", "mavlink_proto.POWER_INFORMATION_instant_power", ftypes.UINT16, nil)
+f.POWER_INFORMATION_type = ProtoField.new("type (POWER_INFORMATION_TYPE)", "mavlink_proto.POWER_INFORMATION_type", ftypes.UINT8, enumEntryName.POWER_INFORMATION_TYPE)
+f.POWER_INFORMATION_current = ProtoField.new("current (uint16_t) [mA]", "mavlink_proto.POWER_INFORMATION_current", ftypes.UINT16, nil)
+f.POWER_INFORMATION_voltage = ProtoField.new("voltage (uint16_t) [mV]", "mavlink_proto.POWER_INFORMATION_voltage", ftypes.UINT16, nil)
+f.POWER_INFORMATION_power = ProtoField.new("power (uint16_t) [mW]", "mavlink_proto.POWER_INFORMATION_power", ftypes.UINT16, nil)
 f.POWER_INFORMATION_energy_consumed = ProtoField.new("energy_consumed (uint32_t) [J]", "mavlink_proto.POWER_INFORMATION_energy_consumed", ftypes.UINT32, nil)
 
 f.WIFI_INFORMATION_ssid = ProtoField.new("ssid (char)", "mavlink_proto.WIFI_INFORMATION_ssid", ftypes.STRING, nil)
@@ -1024,19 +1031,21 @@ end
 -- dissect payload of message type POWER_INFORMATION
 function payload_fns.payload_12(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 10 > limit) then
+    if (offset + 11 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 10)
+        padded:set_size(offset + 11)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
+    tvbrange = padded(offset + 10, 1)
+    subtree = tree:add_le(f.POWER_INFORMATION_type, tvbrange)
     tvbrange = padded(offset + 4, 2)
-    subtree = tree:add_le(f.POWER_INFORMATION_instant_current, tvbrange)
+    subtree = tree:add_le(f.POWER_INFORMATION_current, tvbrange)
     tvbrange = padded(offset + 6, 2)
-    subtree = tree:add_le(f.POWER_INFORMATION_instant_voltage, tvbrange)
+    subtree = tree:add_le(f.POWER_INFORMATION_voltage, tvbrange)
     tvbrange = padded(offset + 8, 2)
-    subtree = tree:add_le(f.POWER_INFORMATION_instant_power, tvbrange)
+    subtree = tree:add_le(f.POWER_INFORMATION_power, tvbrange)
     tvbrange = padded(offset + 0, 4)
     subtree = tree:add_le(f.POWER_INFORMATION_energy_consumed, tvbrange)
 end
