@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_COMMON_MINIMAL.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_COMMON_MINIMAL_XML_HASH 6319257332878745109
+#define MAVLINK_COMMON_MINIMAL_XML_HASH 8450925645281430664
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 #ifndef MAVLINK_MESSAGE_CRCS
-#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {5, 217, 28, 28, 1, 0, 0}, {6, 104, 3, 3, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {111, 34, 16, 18, 3, 16, 17}, {244, 95, 6, 6, 0, 0, 0}, {251, 170, 18, 18, 0, 0, 0}, {252, 44, 18, 18, 0, 0, 0}, {253, 83, 51, 54, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
+#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {5, 217, 28, 28, 1, 0, 0}, {6, 104, 3, 3, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {110, 84, 254, 254, 3, 1, 2}, {111, 34, 16, 18, 3, 16, 17}, {244, 95, 6, 6, 0, 0, 0}, {251, 170, 18, 18, 0, 0, 0}, {252, 44, 18, 18, 0, 0, 0}, {253, 83, 51, 54, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
 #endif
 
 #include "../protocol.h"
@@ -42,6 +42,54 @@ typedef enum MAV_AUTOPILOT
    MAV_AUTOPILOT_INVALID=8, /* No valid autopilot, e.g. a GCS or other MAVLink component | */
    MAV_AUTOPILOT_ENUM_END=9, /*  | */
 } MAV_AUTOPILOT;
+#endif
+
+/** @brief MAV FTP error codes (https://mavlink.io/en/services/ftp.html) */
+#ifndef HAVE_ENUM_MAV_FTP_ERR
+#define HAVE_ENUM_MAV_FTP_ERR
+typedef enum MAV_FTP_ERR
+{
+   MAV_FTP_ERR_NONE=0, /* None: No error | */
+   MAV_FTP_ERR_FAIL=1, /* Fail: Unknown failure | */
+   MAV_FTP_ERR_FAILERRNO=2, /* FailErrno: Command failed, Err number sent back in PayloadHeader.data[1].
+		This is a file-system error number understood by the server operating system. | */
+   MAV_FTP_ERR_INVALIDDATASIZE=3, /* InvalidDataSize: Payload size is invalid | */
+   MAV_FTP_ERR_INVALIDSESSION=4, /* InvalidSession: Session is not currently open | */
+   MAV_FTP_ERR_NOSESSIONSAVAILABLE=5, /* NoSessionsAvailable: All available sessions are already in use | */
+   MAV_FTP_ERR_EOF=6, /* EOF: Offset past end of file for ListDirectory and ReadFile commands | */
+   MAV_FTP_ERR_UNKNOWNCOMMAND=7, /* UnknownCommand: Unknown command / opcode | */
+   MAV_FTP_ERR_FILEEXISTS=8, /* FileExists: File/directory already exists | */
+   MAV_FTP_ERR_FILEPROTECTED=9, /* FileProtected: File/directory is write protected | */
+   MAV_FTP_ERR_FILENOTFOUND=10, /* FileNotFound: File/directory not found | */
+   MAV_FTP_ERR_ENUM_END=11, /*  | */
+} MAV_FTP_ERR;
+#endif
+
+/** @brief MAV FTP opcodes: https://mavlink.io/en/services/ftp.html */
+#ifndef HAVE_ENUM_MAV_FTP_OPCODE
+#define HAVE_ENUM_MAV_FTP_OPCODE
+typedef enum MAV_FTP_OPCODE
+{
+   MAV_FTP_OPCODE_NONE=0, /* None. Ignored, always ACKed | */
+   MAV_FTP_OPCODE_TERMINATESESSION=1, /* TerminateSession: Terminates open Read session | */
+   MAV_FTP_OPCODE_RESETSESSION=2, /* ResetSessions: Terminates all open read sessions | */
+   MAV_FTP_OPCODE_LISTDIRECTORY=3, /* ListDirectory. List files and directories in path from offset | */
+   MAV_FTP_OPCODE_OPENFILERO=4, /* OpenFileRO: Opens file at path for reading, returns session | */
+   MAV_FTP_OPCODE_READFILE=5, /* ReadFile: Reads size bytes from offset in session | */
+   MAV_FTP_OPCODE_CREATEFILE=6, /* CreateFile: Creates file at path for writing, returns session | */
+   MAV_FTP_OPCODE_WRITEFILE=7, /* WriteFile: Writes size bytes to offset in session | */
+   MAV_FTP_OPCODE_REMOVEFILE=8, /* RemoveFile: Remove file at path | */
+   MAV_FTP_OPCODE_CREATEDIRECTORY=9, /* CreateDirectory: Creates directory at path | */
+   MAV_FTP_OPCODE_REMOVEDIRECTORY=10, /* RemoveDirectory: Removes directory at path. The directory must be empty. | */
+   MAV_FTP_OPCODE_OPENFILEWO=11, /* OpenFileWO: Opens file at path for writing, returns session | */
+   MAV_FTP_OPCODE_TRUNCATEFILE=12, /* TruncateFile: Truncate file at path to offset length | */
+   MAV_FTP_OPCODE_RENAME=13, /* Rename: Rename path1 to path2 | */
+   MAV_FTP_OPCODE_CALCFILECRC=14, /* CalcFileCRC32: Calculate CRC32 for file at path | */
+   MAV_FTP_OPCODE_BURSTREADFILE=15, /* BurstReadFile: Burst download session file | */
+   MAV_FTP_OPCODE_ACK=128, /* ACK: ACK response | */
+   MAV_FTP_OPCODE_NAK=129, /* NAK: NAK response | */
+   MAV_FTP_OPCODE_ENUM_END=130, /*  | */
+} MAV_FTP_OPCODE;
 #endif
 
 /** @brief MAVLINK component type reported in HEARTBEAT message. Flight controllers must report the type of the vehicle on which they are mounted (e.g. MAV_TYPE_OCTOROTOR). All other components must report a value appropriate for their type (e.g. a camera must use MAV_TYPE_CAMERA). */
@@ -211,6 +259,7 @@ typedef enum GPS_FIX_TYPE
 #include "./mavlink_msg_command_long.h"
 #include "./mavlink_msg_command_ack.h"
 #include "./mavlink_msg_command_cancel.h"
+#include "./mavlink_msg_file_transfer_protocol.h"
 #include "./mavlink_msg_timesync.h"
 #include "./mavlink_msg_message_interval.h"
 #include "./mavlink_msg_named_value_float.h"
@@ -222,8 +271,8 @@ typedef enum GPS_FIX_TYPE
 
 
 #if MAVLINK_COMMON_MINIMAL_XML_HASH == MAVLINK_PRIMARY_XML_HASH
-# define MAVLINK_MESSAGE_INFO {MAVLINK_MESSAGE_INFO_HEARTBEAT, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL_ACK, MAVLINK_MESSAGE_INFO_GPS_RAW_INT, MAVLINK_MESSAGE_INFO_MISSION_ITEM, MAVLINK_MESSAGE_INFO_COMMAND_INT, MAVLINK_MESSAGE_INFO_COMMAND_LONG, MAVLINK_MESSAGE_INFO_COMMAND_ACK, MAVLINK_MESSAGE_INFO_COMMAND_CANCEL, MAVLINK_MESSAGE_INFO_TIMESYNC, MAVLINK_MESSAGE_INFO_MESSAGE_INTERVAL, MAVLINK_MESSAGE_INFO_NAMED_VALUE_FLOAT, MAVLINK_MESSAGE_INFO_NAMED_VALUE_INT, MAVLINK_MESSAGE_INFO_STATUSTEXT, MAVLINK_MESSAGE_INFO_PROTOCOL_VERSION}
-# define MAVLINK_MESSAGE_NAMES {{ "CHANGE_OPERATOR_CONTROL", 5 }, { "CHANGE_OPERATOR_CONTROL_ACK", 6 }, { "COMMAND_ACK", 77 }, { "COMMAND_CANCEL", 80 }, { "COMMAND_INT", 75 }, { "COMMAND_LONG", 76 }, { "GPS_RAW_INT", 24 }, { "HEARTBEAT", 0 }, { "MESSAGE_INTERVAL", 244 }, { "MISSION_ITEM", 39 }, { "NAMED_VALUE_FLOAT", 251 }, { "NAMED_VALUE_INT", 252 }, { "PROTOCOL_VERSION", 300 }, { "STATUSTEXT", 253 }, { "TIMESYNC", 111 }}
+# define MAVLINK_MESSAGE_INFO {MAVLINK_MESSAGE_INFO_HEARTBEAT, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL_ACK, MAVLINK_MESSAGE_INFO_GPS_RAW_INT, MAVLINK_MESSAGE_INFO_MISSION_ITEM, MAVLINK_MESSAGE_INFO_COMMAND_INT, MAVLINK_MESSAGE_INFO_COMMAND_LONG, MAVLINK_MESSAGE_INFO_COMMAND_ACK, MAVLINK_MESSAGE_INFO_COMMAND_CANCEL, MAVLINK_MESSAGE_INFO_FILE_TRANSFER_PROTOCOL, MAVLINK_MESSAGE_INFO_TIMESYNC, MAVLINK_MESSAGE_INFO_MESSAGE_INTERVAL, MAVLINK_MESSAGE_INFO_NAMED_VALUE_FLOAT, MAVLINK_MESSAGE_INFO_NAMED_VALUE_INT, MAVLINK_MESSAGE_INFO_STATUSTEXT, MAVLINK_MESSAGE_INFO_PROTOCOL_VERSION}
+# define MAVLINK_MESSAGE_NAMES {{ "CHANGE_OPERATOR_CONTROL", 5 }, { "CHANGE_OPERATOR_CONTROL_ACK", 6 }, { "COMMAND_ACK", 77 }, { "COMMAND_CANCEL", 80 }, { "COMMAND_INT", 75 }, { "COMMAND_LONG", 76 }, { "FILE_TRANSFER_PROTOCOL", 110 }, { "GPS_RAW_INT", 24 }, { "HEARTBEAT", 0 }, { "MESSAGE_INTERVAL", 244 }, { "MISSION_ITEM", 39 }, { "NAMED_VALUE_FLOAT", 251 }, { "NAMED_VALUE_INT", 252 }, { "PROTOCOL_VERSION", 300 }, { "STATUSTEXT", 253 }, { "TIMESYNC", 111 }}
 # if MAVLINK_COMMAND_24BIT
 #  include "../mavlink_get_info.h"
 # endif
