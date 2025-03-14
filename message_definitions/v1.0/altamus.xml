@@ -254,9 +254,9 @@
         <message name="WIFI_CREDENTIALS" id = "19">
             <description>Used to query/set the wifi credientials of the device</description>
             <field name="behavior" type="uint8_t" enum="WIFI_CREDIENTIALS_BEHAVIOR">What behavior to execute, eg, clear, add, list</field>
-            <field name="ssid" type="char[64]">Name of the SSID</field>
-            <field name="password" type="char[64]">Password of the SSID. leave blank for open networks. Will be left blank if reporting</field>
             <field name="auth_type" type="uint8_t" enum="WIFI_AUTH_TYPE">Auth type of the network; eg; WPA2</field>
+            <field name="ssid" type="char[50]">Name of the SSID</field>
+            <field name="password" type="char[50]">Password of the SSID. leave blank for open networks. Will be left blank if reporting</field>
         </message>
         <message name="LIDAR_SETTINGS" id="20">
             <description>Settings for Benewake TF* lidar</description>

@@ -16,12 +16,13 @@ time_usec_threshold = UInt64.new(0,0x40000)
 -- function to append human-readable time onto unix_time_us fields
 local function time_usec_decode(value)
     if value > time_usec_threshold then
-        d = os.date("%Y-%m-%d %H:%M:%S",value:tonumber() / 1000000.0)
+        s = math.floor(value:tonumber() / 1000000.0)
         us = value % 1000000
+        d = os.date("%Y-%m-%d %H:%M:%S",s)
         us = string.format("%06d",us:tonumber())
-        ok, tz = pcall(os.date," %Z",value:tonumber() / 1000000.0)
+        ok, tz = pcall(os.date," %Z",s)
         if not ok then
-            tz = os.date(" %z",value:tonumber() / 1000000.0)
+            tz = os.date(" %z",s)
         end
         return " (" .. d .. "." .. us .. tz .. ")"
     elseif value < 1000000 then
@@ -585,9 +586,9 @@ f.ORIENTATION_lon = ProtoField.new("lon (int32_t) [degE7]", "mavlink_proto.ORIEN
 f.ORIENTATION_alt = ProtoField.new("alt (int32_t) [mm]", "mavlink_proto.ORIENTATION_alt", ftypes.INT32, nil)
 
 f.WIFI_CREDENTIALS_behavior = ProtoField.new("behavior (WIFI_CREDIENTIALS_BEHAVIOR)", "mavlink_proto.WIFI_CREDENTIALS_behavior", ftypes.UINT8, enumEntryName.WIFI_CREDIENTIALS_BEHAVIOR)
+f.WIFI_CREDENTIALS_auth_type = ProtoField.new("auth_type (WIFI_AUTH_TYPE)", "mavlink_proto.WIFI_CREDENTIALS_auth_type", ftypes.UINT8, enumEntryName.WIFI_AUTH_TYPE)
 f.WIFI_CREDENTIALS_ssid = ProtoField.new("ssid (char)", "mavlink_proto.WIFI_CREDENTIALS_ssid", ftypes.STRING, nil)
 f.WIFI_CREDENTIALS_password = ProtoField.new("password (char)", "mavlink_proto.WIFI_CREDENTIALS_password", ftypes.STRING, nil)
-f.WIFI_CREDENTIALS_auth_type = ProtoField.new("auth_type (WIFI_AUTH_TYPE)", "mavlink_proto.WIFI_CREDENTIALS_auth_type", ftypes.UINT8, enumEntryName.WIFI_AUTH_TYPE)
 
 f.LIDAR_SETTINGS_update_rate = ProtoField.new("update_rate (uint16_t) [hz]", "mavlink_proto.LIDAR_SETTINGS_update_rate", ftypes.UINT16, nil)
 f.LIDAR_SETTINGS_fog_mode_enable = ProtoField.new("fog_mode_enable (uint8_t)", "mavlink_proto.LIDAR_SETTINGS_fog_mode_enable", ftypes.UINT8, nil)
@@ -1534,21 +1535,21 @@ end
 -- dissect payload of message type WIFI_CREDENTIALS
 function payload_fns.payload_19(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 130 > limit) then
+    if (offset + 102 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 130)
+        padded:set_size(offset + 102)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
     tvbrange = padded(offset + 0, 1)
     subtree = tree:add_le(f.WIFI_CREDENTIALS_behavior, tvbrange)
-    tvbrange = padded(offset + 1, 64)
-    subtree = tree:add_le(f.WIFI_CREDENTIALS_ssid, tvbrange)
-    tvbrange = padded(offset + 65, 64)
-    subtree = tree:add_le(f.WIFI_CREDENTIALS_password, tvbrange)
-    tvbrange = padded(offset + 129, 1)
+    tvbrange = padded(offset + 1, 1)
     subtree = tree:add_le(f.WIFI_CREDENTIALS_auth_type, tvbrange)
+    tvbrange = padded(offset + 2, 50)
+    subtree = tree:add_le(f.WIFI_CREDENTIALS_ssid, tvbrange)
+    tvbrange = padded(offset + 52, 50)
+    subtree = tree:add_le(f.WIFI_CREDENTIALS_password, tvbrange)
 end
 -- dissect payload of message type LIDAR_SETTINGS
 function payload_fns.payload_20(buffer, tree, msgid, offset, limit, pinfo)

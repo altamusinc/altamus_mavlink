@@ -6,21 +6,21 @@
 
 typedef struct __mavlink_wifi_credentials_t {
  uint8_t behavior; /*<  What behavior to execute, eg, clear, add, list*/
- char ssid[64]; /*<  Name of the SSID*/
- char password[64]; /*<  Password of the SSID. leave blank for open networks. Will be left blank if reporting*/
  uint8_t auth_type; /*<  Auth type of the network; eg; WPA2*/
+ char ssid[50]; /*<  Name of the SSID*/
+ char password[50]; /*<  Password of the SSID. leave blank for open networks. Will be left blank if reporting*/
 } mavlink_wifi_credentials_t;
 
-#define MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN 130
-#define MAVLINK_MSG_ID_WIFI_CREDENTIALS_MIN_LEN 130
-#define MAVLINK_MSG_ID_19_LEN 130
-#define MAVLINK_MSG_ID_19_MIN_LEN 130
+#define MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN 102
+#define MAVLINK_MSG_ID_WIFI_CREDENTIALS_MIN_LEN 102
+#define MAVLINK_MSG_ID_19_LEN 102
+#define MAVLINK_MSG_ID_19_MIN_LEN 102
 
 #define MAVLINK_MSG_ID_WIFI_CREDENTIALS_CRC 100
 #define MAVLINK_MSG_ID_19_CRC 100
 
-#define MAVLINK_MSG_WIFI_CREDENTIALS_FIELD_SSID_LEN 64
-#define MAVLINK_MSG_WIFI_CREDENTIALS_FIELD_PASSWORD_LEN 64
+#define MAVLINK_MSG_WIFI_CREDENTIALS_FIELD_SSID_LEN 50
+#define MAVLINK_MSG_WIFI_CREDENTIALS_FIELD_PASSWORD_LEN 50
 
 #if MAVLINK_COMMAND_24BIT
 #define MAVLINK_MESSAGE_INFO_WIFI_CREDENTIALS { \
@@ -28,9 +28,9 @@ typedef struct __mavlink_wifi_credentials_t {
     "WIFI_CREDENTIALS", \
     4, \
     {  { "behavior", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_wifi_credentials_t, behavior) }, \
-         { "ssid", NULL, MAVLINK_TYPE_CHAR, 64, 1, offsetof(mavlink_wifi_credentials_t, ssid) }, \
-         { "password", NULL, MAVLINK_TYPE_CHAR, 64, 65, offsetof(mavlink_wifi_credentials_t, password) }, \
-         { "auth_type", NULL, MAVLINK_TYPE_UINT8_T, 0, 129, offsetof(mavlink_wifi_credentials_t, auth_type) }, \
+         { "auth_type", NULL, MAVLINK_TYPE_UINT8_T, 0, 1, offsetof(mavlink_wifi_credentials_t, auth_type) }, \
+         { "ssid", NULL, MAVLINK_TYPE_CHAR, 50, 2, offsetof(mavlink_wifi_credentials_t, ssid) }, \
+         { "password", NULL, MAVLINK_TYPE_CHAR, 50, 52, offsetof(mavlink_wifi_credentials_t, password) }, \
          } \
 }
 #else
@@ -38,9 +38,9 @@ typedef struct __mavlink_wifi_credentials_t {
     "WIFI_CREDENTIALS", \
     4, \
     {  { "behavior", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_wifi_credentials_t, behavior) }, \
-         { "ssid", NULL, MAVLINK_TYPE_CHAR, 64, 1, offsetof(mavlink_wifi_credentials_t, ssid) }, \
-         { "password", NULL, MAVLINK_TYPE_CHAR, 64, 65, offsetof(mavlink_wifi_credentials_t, password) }, \
-         { "auth_type", NULL, MAVLINK_TYPE_UINT8_T, 0, 129, offsetof(mavlink_wifi_credentials_t, auth_type) }, \
+         { "auth_type", NULL, MAVLINK_TYPE_UINT8_T, 0, 1, offsetof(mavlink_wifi_credentials_t, auth_type) }, \
+         { "ssid", NULL, MAVLINK_TYPE_CHAR, 50, 2, offsetof(mavlink_wifi_credentials_t, ssid) }, \
+         { "password", NULL, MAVLINK_TYPE_CHAR, 50, 52, offsetof(mavlink_wifi_credentials_t, password) }, \
          } \
 }
 #endif
@@ -52,27 +52,27 @@ typedef struct __mavlink_wifi_credentials_t {
  * @param msg The MAVLink message to compress the data into
  *
  * @param behavior  What behavior to execute, eg, clear, add, list
+ * @param auth_type  Auth type of the network; eg; WPA2
  * @param ssid  Name of the SSID
  * @param password  Password of the SSID. leave blank for open networks. Will be left blank if reporting
- * @param auth_type  Auth type of the network; eg; WPA2
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_wifi_credentials_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t behavior, const char *ssid, const char *password, uint8_t auth_type)
+                               uint8_t behavior, uint8_t auth_type, const char *ssid, const char *password)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN];
     _mav_put_uint8_t(buf, 0, behavior);
-    _mav_put_uint8_t(buf, 129, auth_type);
-    _mav_put_char_array(buf, 1, ssid, 64);
-    _mav_put_char_array(buf, 65, password, 64);
+    _mav_put_uint8_t(buf, 1, auth_type);
+    _mav_put_char_array(buf, 2, ssid, 50);
+    _mav_put_char_array(buf, 52, password, 50);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN);
 #else
     mavlink_wifi_credentials_t packet;
     packet.behavior = behavior;
     packet.auth_type = auth_type;
-    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*64);
-    mav_array_memcpy(packet.password, password, sizeof(char)*64);
+    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*50);
+    mav_array_memcpy(packet.password, password, sizeof(char)*50);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN);
 #endif
 
@@ -88,27 +88,27 @@ static inline uint16_t mavlink_msg_wifi_credentials_pack(uint8_t system_id, uint
  * @param msg The MAVLink message to compress the data into
  *
  * @param behavior  What behavior to execute, eg, clear, add, list
+ * @param auth_type  Auth type of the network; eg; WPA2
  * @param ssid  Name of the SSID
  * @param password  Password of the SSID. leave blank for open networks. Will be left blank if reporting
- * @param auth_type  Auth type of the network; eg; WPA2
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_wifi_credentials_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t behavior, const char *ssid, const char *password, uint8_t auth_type)
+                               uint8_t behavior, uint8_t auth_type, const char *ssid, const char *password)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN];
     _mav_put_uint8_t(buf, 0, behavior);
-    _mav_put_uint8_t(buf, 129, auth_type);
-    _mav_put_char_array(buf, 1, ssid, 64);
-    _mav_put_char_array(buf, 65, password, 64);
+    _mav_put_uint8_t(buf, 1, auth_type);
+    _mav_put_char_array(buf, 2, ssid, 50);
+    _mav_put_char_array(buf, 52, password, 50);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN);
 #else
     mavlink_wifi_credentials_t packet;
     packet.behavior = behavior;
     packet.auth_type = auth_type;
-    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*64);
-    mav_array_memcpy(packet.password, password, sizeof(char)*64);
+    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*50);
+    mav_array_memcpy(packet.password, password, sizeof(char)*50);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN);
 #endif
 
@@ -127,28 +127,28 @@ static inline uint16_t mavlink_msg_wifi_credentials_pack_status(uint8_t system_i
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
  * @param behavior  What behavior to execute, eg, clear, add, list
+ * @param auth_type  Auth type of the network; eg; WPA2
  * @param ssid  Name of the SSID
  * @param password  Password of the SSID. leave blank for open networks. Will be left blank if reporting
- * @param auth_type  Auth type of the network; eg; WPA2
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_wifi_credentials_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t behavior,const char *ssid,const char *password,uint8_t auth_type)
+                                   uint8_t behavior,uint8_t auth_type,const char *ssid,const char *password)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN];
     _mav_put_uint8_t(buf, 0, behavior);
-    _mav_put_uint8_t(buf, 129, auth_type);
-    _mav_put_char_array(buf, 1, ssid, 64);
-    _mav_put_char_array(buf, 65, password, 64);
+    _mav_put_uint8_t(buf, 1, auth_type);
+    _mav_put_char_array(buf, 2, ssid, 50);
+    _mav_put_char_array(buf, 52, password, 50);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN);
 #else
     mavlink_wifi_credentials_t packet;
     packet.behavior = behavior;
     packet.auth_type = auth_type;
-    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*64);
-    mav_array_memcpy(packet.password, password, sizeof(char)*64);
+    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*50);
+    mav_array_memcpy(packet.password, password, sizeof(char)*50);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN);
 #endif
 
@@ -166,7 +166,7 @@ static inline uint16_t mavlink_msg_wifi_credentials_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_wifi_credentials_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_wifi_credentials_t* wifi_credentials)
 {
-    return mavlink_msg_wifi_credentials_pack(system_id, component_id, msg, wifi_credentials->behavior, wifi_credentials->ssid, wifi_credentials->password, wifi_credentials->auth_type);
+    return mavlink_msg_wifi_credentials_pack(system_id, component_id, msg, wifi_credentials->behavior, wifi_credentials->auth_type, wifi_credentials->ssid, wifi_credentials->password);
 }
 
 /**
@@ -180,7 +180,7 @@ static inline uint16_t mavlink_msg_wifi_credentials_encode(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_wifi_credentials_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_wifi_credentials_t* wifi_credentials)
 {
-    return mavlink_msg_wifi_credentials_pack_chan(system_id, component_id, chan, msg, wifi_credentials->behavior, wifi_credentials->ssid, wifi_credentials->password, wifi_credentials->auth_type);
+    return mavlink_msg_wifi_credentials_pack_chan(system_id, component_id, chan, msg, wifi_credentials->behavior, wifi_credentials->auth_type, wifi_credentials->ssid, wifi_credentials->password);
 }
 
 /**
@@ -194,7 +194,7 @@ static inline uint16_t mavlink_msg_wifi_credentials_encode_chan(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_wifi_credentials_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_wifi_credentials_t* wifi_credentials)
 {
-    return mavlink_msg_wifi_credentials_pack_status(system_id, component_id, _status, msg,  wifi_credentials->behavior, wifi_credentials->ssid, wifi_credentials->password, wifi_credentials->auth_type);
+    return mavlink_msg_wifi_credentials_pack_status(system_id, component_id, _status, msg,  wifi_credentials->behavior, wifi_credentials->auth_type, wifi_credentials->ssid, wifi_credentials->password);
 }
 
 /**
@@ -202,27 +202,27 @@ static inline uint16_t mavlink_msg_wifi_credentials_encode_status(uint8_t system
  * @param chan MAVLink channel to send the message
  *
  * @param behavior  What behavior to execute, eg, clear, add, list
+ * @param auth_type  Auth type of the network; eg; WPA2
  * @param ssid  Name of the SSID
  * @param password  Password of the SSID. leave blank for open networks. Will be left blank if reporting
- * @param auth_type  Auth type of the network; eg; WPA2
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_wifi_credentials_send(mavlink_channel_t chan, uint8_t behavior, const char *ssid, const char *password, uint8_t auth_type)
+static inline void mavlink_msg_wifi_credentials_send(mavlink_channel_t chan, uint8_t behavior, uint8_t auth_type, const char *ssid, const char *password)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN];
     _mav_put_uint8_t(buf, 0, behavior);
-    _mav_put_uint8_t(buf, 129, auth_type);
-    _mav_put_char_array(buf, 1, ssid, 64);
-    _mav_put_char_array(buf, 65, password, 64);
+    _mav_put_uint8_t(buf, 1, auth_type);
+    _mav_put_char_array(buf, 2, ssid, 50);
+    _mav_put_char_array(buf, 52, password, 50);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CREDENTIALS, buf, MAVLINK_MSG_ID_WIFI_CREDENTIALS_MIN_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_CRC);
 #else
     mavlink_wifi_credentials_t packet;
     packet.behavior = behavior;
     packet.auth_type = auth_type;
-    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*64);
-    mav_array_memcpy(packet.password, password, sizeof(char)*64);
+    mav_array_memcpy(packet.ssid, ssid, sizeof(char)*50);
+    mav_array_memcpy(packet.password, password, sizeof(char)*50);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CREDENTIALS, (const char *)&packet, MAVLINK_MSG_ID_WIFI_CREDENTIALS_MIN_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_CRC);
 #endif
 }
@@ -235,7 +235,7 @@ static inline void mavlink_msg_wifi_credentials_send(mavlink_channel_t chan, uin
 static inline void mavlink_msg_wifi_credentials_send_struct(mavlink_channel_t chan, const mavlink_wifi_credentials_t* wifi_credentials)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_wifi_credentials_send(chan, wifi_credentials->behavior, wifi_credentials->ssid, wifi_credentials->password, wifi_credentials->auth_type);
+    mavlink_msg_wifi_credentials_send(chan, wifi_credentials->behavior, wifi_credentials->auth_type, wifi_credentials->ssid, wifi_credentials->password);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CREDENTIALS, (const char *)wifi_credentials, MAVLINK_MSG_ID_WIFI_CREDENTIALS_MIN_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_CRC);
 #endif
@@ -249,21 +249,21 @@ static inline void mavlink_msg_wifi_credentials_send_struct(mavlink_channel_t ch
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_wifi_credentials_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t behavior, const char *ssid, const char *password, uint8_t auth_type)
+static inline void mavlink_msg_wifi_credentials_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t behavior, uint8_t auth_type, const char *ssid, const char *password)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_uint8_t(buf, 0, behavior);
-    _mav_put_uint8_t(buf, 129, auth_type);
-    _mav_put_char_array(buf, 1, ssid, 64);
-    _mav_put_char_array(buf, 65, password, 64);
+    _mav_put_uint8_t(buf, 1, auth_type);
+    _mav_put_char_array(buf, 2, ssid, 50);
+    _mav_put_char_array(buf, 52, password, 50);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CREDENTIALS, buf, MAVLINK_MSG_ID_WIFI_CREDENTIALS_MIN_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_CRC);
 #else
     mavlink_wifi_credentials_t *packet = (mavlink_wifi_credentials_t *)msgbuf;
     packet->behavior = behavior;
     packet->auth_type = auth_type;
-    mav_array_memcpy(packet->ssid, ssid, sizeof(char)*64);
-    mav_array_memcpy(packet->password, password, sizeof(char)*64);
+    mav_array_memcpy(packet->ssid, ssid, sizeof(char)*50);
+    mav_array_memcpy(packet->password, password, sizeof(char)*50);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WIFI_CREDENTIALS, (const char *)packet, MAVLINK_MSG_ID_WIFI_CREDENTIALS_MIN_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN, MAVLINK_MSG_ID_WIFI_CREDENTIALS_CRC);
 #endif
 }
@@ -285,13 +285,23 @@ static inline uint8_t mavlink_msg_wifi_credentials_get_behavior(const mavlink_me
 }
 
 /**
+ * @brief Get field auth_type from wifi_credentials message
+ *
+ * @return  Auth type of the network; eg; WPA2
+ */
+static inline uint8_t mavlink_msg_wifi_credentials_get_auth_type(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  1);
+}
+
+/**
  * @brief Get field ssid from wifi_credentials message
  *
  * @return  Name of the SSID
  */
 static inline uint16_t mavlink_msg_wifi_credentials_get_ssid(const mavlink_message_t* msg, char *ssid)
 {
-    return _MAV_RETURN_char_array(msg, ssid, 64,  1);
+    return _MAV_RETURN_char_array(msg, ssid, 50,  2);
 }
 
 /**
@@ -301,17 +311,7 @@ static inline uint16_t mavlink_msg_wifi_credentials_get_ssid(const mavlink_messa
  */
 static inline uint16_t mavlink_msg_wifi_credentials_get_password(const mavlink_message_t* msg, char *password)
 {
-    return _MAV_RETURN_char_array(msg, password, 64,  65);
-}
-
-/**
- * @brief Get field auth_type from wifi_credentials message
- *
- * @return  Auth type of the network; eg; WPA2
- */
-static inline uint8_t mavlink_msg_wifi_credentials_get_auth_type(const mavlink_message_t* msg)
-{
-    return _MAV_RETURN_uint8_t(msg,  129);
+    return _MAV_RETURN_char_array(msg, password, 50,  52);
 }
 
 /**
@@ -324,9 +324,9 @@ static inline void mavlink_msg_wifi_credentials_decode(const mavlink_message_t* 
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     wifi_credentials->behavior = mavlink_msg_wifi_credentials_get_behavior(msg);
+    wifi_credentials->auth_type = mavlink_msg_wifi_credentials_get_auth_type(msg);
     mavlink_msg_wifi_credentials_get_ssid(msg, wifi_credentials->ssid);
     mavlink_msg_wifi_credentials_get_password(msg, wifi_credentials->password);
-    wifi_credentials->auth_type = mavlink_msg_wifi_credentials_get_auth_type(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN? msg->len : MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN;
         memset(wifi_credentials, 0, MAVLINK_MSG_ID_WIFI_CREDENTIALS_LEN);
