@@ -26,6 +26,11 @@
               <description>Requests that device clears it's stored EEPROM. Takes no Arguments</description>
             </entry>
         </enum>
+        <enum name="MAV_FTP_OPCODE">
+            <entry value="16" name="MAV_FTP_OPCODE_UPLOAD_TO_REMOTE">
+                <description> Upload file at given path to the remote server configured in REMOTE_SERVER_SETTINGS</description>
+            </entry>
+        </enum>
         <enum name="EOS_COMPONENT" bitmask="true">
             <description> Components within the EOS scanner </description>
             <entry value="1" name="EOS_COMPONENT_LIDAR"></entry>
