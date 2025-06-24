@@ -283,10 +283,10 @@
         </message>
         <message name="SCAN_TRANSFORM" id="22">
             <description> Transformation to apply to raw points.</description>
-            <field type="int16_t" name="roll_offset" units="mRad"></field>
-            <field type="int16_t" name="pitch_offset" units="mRad"></field>
-            <field type="float" name="pitch_scale" units="%"></field>
-            <field type="float" name="yaw_scale" units="%"></field>
+            <field type="float" name="roll_offset" units="degrees" default="0.0"></field>
+            <field type="float" name="pitch_offset" units="degrees" default="0.0"></field>
+            <field type="float" name="pitch_scale" units="%" default="1.0"></field>
+            <field type="float" name="yaw_scale" units="%" default="1.0"></field>
         </message>
     </messages>
 </mavlink>
