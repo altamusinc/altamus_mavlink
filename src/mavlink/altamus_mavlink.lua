@@ -622,8 +622,8 @@ f.SCAN_RESULT_INFO_scan_start_reason_flagSCAN_START_REASON_LOCAL_APP = ProtoFiel
 f.SCAN_RESULT_INFO_scan_start_reason_flagSCAN_START_REASON_WEB = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_start_reason.SCAN_START_REASON_WEB", "SCAN_START_REASON_WEB", 4, nil, 2)
 f.SCAN_RESULT_INFO_scan_start_reason_flagSCAN_START_REASON_SCHEDULE = ProtoField.bool("mavlink_proto.SCAN_RESULT_INFO_scan_start_reason.SCAN_START_REASON_SCHEDULE", "SCAN_START_REASON_SCHEDULE", 4, nil, 4)
 
-f.SCAN_TRANSFORM_roll_offset = ProtoField.new("roll_offset (int16_t) [mRad]", "mavlink_proto.SCAN_TRANSFORM_roll_offset", ftypes.INT16, nil)
-f.SCAN_TRANSFORM_pitch_offset = ProtoField.new("pitch_offset (int16_t) [mRad]", "mavlink_proto.SCAN_TRANSFORM_pitch_offset", ftypes.INT16, nil)
+f.SCAN_TRANSFORM_roll_offset = ProtoField.new("roll_offset (float) [degrees]", "mavlink_proto.SCAN_TRANSFORM_roll_offset", ftypes.FLOAT, nil)
+f.SCAN_TRANSFORM_pitch_offset = ProtoField.new("pitch_offset (float) [degrees]", "mavlink_proto.SCAN_TRANSFORM_pitch_offset", ftypes.FLOAT, nil)
 f.SCAN_TRANSFORM_pitch_scale = ProtoField.new("pitch_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_pitch_scale", ftypes.FLOAT, nil)
 f.SCAN_TRANSFORM_yaw_scale = ProtoField.new("yaw_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_yaw_scale", ftypes.FLOAT, nil)
 
@@ -1605,20 +1605,20 @@ end
 -- dissect payload of message type SCAN_TRANSFORM
 function payload_fns.payload_22(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 12 > limit) then
+    if (offset + 16 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 12)
+        padded:set_size(offset + 16)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
-    tvbrange = padded(offset + 8, 2)
-    subtree = tree:add_le(f.SCAN_TRANSFORM_roll_offset, tvbrange)
-    tvbrange = padded(offset + 10, 2)
-    subtree = tree:add_le(f.SCAN_TRANSFORM_pitch_offset, tvbrange)
     tvbrange = padded(offset + 0, 4)
-    subtree = tree:add_le(f.SCAN_TRANSFORM_pitch_scale, tvbrange)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_roll_offset, tvbrange)
     tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_pitch_offset, tvbrange)
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_pitch_scale, tvbrange)
+    tvbrange = padded(offset + 12, 4)
     subtree = tree:add_le(f.SCAN_TRANSFORM_yaw_scale, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT

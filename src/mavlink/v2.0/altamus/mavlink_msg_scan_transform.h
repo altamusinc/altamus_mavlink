@@ -5,19 +5,19 @@
 
 
 typedef struct __mavlink_scan_transform_t {
+ float roll_offset; /*< [degrees] */
+ float pitch_offset; /*< [degrees] */
  float pitch_scale; /*< [%] */
  float yaw_scale; /*< [%] */
- int16_t roll_offset; /*< [mRad] */
- int16_t pitch_offset; /*< [mRad] */
 } mavlink_scan_transform_t;
 
-#define MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN 12
-#define MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN 12
-#define MAVLINK_MSG_ID_22_LEN 12
-#define MAVLINK_MSG_ID_22_MIN_LEN 12
+#define MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN 16
+#define MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN 16
+#define MAVLINK_MSG_ID_22_LEN 16
+#define MAVLINK_MSG_ID_22_MIN_LEN 16
 
-#define MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC 138
-#define MAVLINK_MSG_ID_22_CRC 138
+#define MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC 140
+#define MAVLINK_MSG_ID_22_CRC 140
 
 
 
@@ -26,20 +26,20 @@ typedef struct __mavlink_scan_transform_t {
     22, \
     "SCAN_TRANSFORM", \
     4, \
-    {  { "roll_offset", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_scan_transform_t, roll_offset) }, \
-         { "pitch_offset", NULL, MAVLINK_TYPE_INT16_T, 0, 10, offsetof(mavlink_scan_transform_t, pitch_offset) }, \
-         { "pitch_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_scan_transform_t, pitch_scale) }, \
-         { "yaw_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_scan_transform_t, yaw_scale) }, \
+    {  { "roll_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_scan_transform_t, roll_offset) }, \
+         { "pitch_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_scan_transform_t, pitch_offset) }, \
+         { "pitch_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_scan_transform_t, pitch_scale) }, \
+         { "yaw_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_scan_transform_t, yaw_scale) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_SCAN_TRANSFORM { \
     "SCAN_TRANSFORM", \
     4, \
-    {  { "roll_offset", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_scan_transform_t, roll_offset) }, \
-         { "pitch_offset", NULL, MAVLINK_TYPE_INT16_T, 0, 10, offsetof(mavlink_scan_transform_t, pitch_offset) }, \
-         { "pitch_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_scan_transform_t, pitch_scale) }, \
-         { "yaw_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_scan_transform_t, yaw_scale) }, \
+    {  { "roll_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_scan_transform_t, roll_offset) }, \
+         { "pitch_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_scan_transform_t, pitch_offset) }, \
+         { "pitch_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_scan_transform_t, pitch_scale) }, \
+         { "yaw_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_scan_transform_t, yaw_scale) }, \
          } \
 }
 #endif
@@ -50,29 +50,29 @@ typedef struct __mavlink_scan_transform_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param roll_offset [mRad] 
- * @param pitch_offset [mRad] 
+ * @param roll_offset [degrees] 
+ * @param pitch_offset [degrees] 
  * @param pitch_scale [%] 
  * @param yaw_scale [%] 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_transform_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               int16_t roll_offset, int16_t pitch_offset, float pitch_scale, float yaw_scale)
+                               float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
-    _mav_put_float(buf, 0, pitch_scale);
-    _mav_put_float(buf, 4, yaw_scale);
-    _mav_put_int16_t(buf, 8, roll_offset);
-    _mav_put_int16_t(buf, 10, pitch_offset);
+    _mav_put_float(buf, 0, roll_offset);
+    _mav_put_float(buf, 4, pitch_offset);
+    _mav_put_float(buf, 8, pitch_scale);
+    _mav_put_float(buf, 12, yaw_scale);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #else
     mavlink_scan_transform_t packet;
-    packet.pitch_scale = pitch_scale;
-    packet.yaw_scale = yaw_scale;
     packet.roll_offset = roll_offset;
     packet.pitch_offset = pitch_offset;
+    packet.pitch_scale = pitch_scale;
+    packet.yaw_scale = yaw_scale;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #endif
@@ -88,29 +88,29 @@ static inline uint16_t mavlink_msg_scan_transform_pack(uint8_t system_id, uint8_
  * @param status MAVLink status structure
  * @param msg The MAVLink message to compress the data into
  *
- * @param roll_offset [mRad] 
- * @param pitch_offset [mRad] 
+ * @param roll_offset [degrees] 
+ * @param pitch_offset [degrees] 
  * @param pitch_scale [%] 
  * @param yaw_scale [%] 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_transform_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               int16_t roll_offset, int16_t pitch_offset, float pitch_scale, float yaw_scale)
+                               float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
-    _mav_put_float(buf, 0, pitch_scale);
-    _mav_put_float(buf, 4, yaw_scale);
-    _mav_put_int16_t(buf, 8, roll_offset);
-    _mav_put_int16_t(buf, 10, pitch_offset);
+    _mav_put_float(buf, 0, roll_offset);
+    _mav_put_float(buf, 4, pitch_offset);
+    _mav_put_float(buf, 8, pitch_scale);
+    _mav_put_float(buf, 12, yaw_scale);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #else
     mavlink_scan_transform_t packet;
-    packet.pitch_scale = pitch_scale;
-    packet.yaw_scale = yaw_scale;
     packet.roll_offset = roll_offset;
     packet.pitch_offset = pitch_offset;
+    packet.pitch_scale = pitch_scale;
+    packet.yaw_scale = yaw_scale;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #endif
@@ -129,30 +129,30 @@ static inline uint16_t mavlink_msg_scan_transform_pack_status(uint8_t system_id,
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param roll_offset [mRad] 
- * @param pitch_offset [mRad] 
+ * @param roll_offset [degrees] 
+ * @param pitch_offset [degrees] 
  * @param pitch_scale [%] 
  * @param yaw_scale [%] 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_transform_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   int16_t roll_offset,int16_t pitch_offset,float pitch_scale,float yaw_scale)
+                                   float roll_offset,float pitch_offset,float pitch_scale,float yaw_scale)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
-    _mav_put_float(buf, 0, pitch_scale);
-    _mav_put_float(buf, 4, yaw_scale);
-    _mav_put_int16_t(buf, 8, roll_offset);
-    _mav_put_int16_t(buf, 10, pitch_offset);
+    _mav_put_float(buf, 0, roll_offset);
+    _mav_put_float(buf, 4, pitch_offset);
+    _mav_put_float(buf, 8, pitch_scale);
+    _mav_put_float(buf, 12, yaw_scale);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #else
     mavlink_scan_transform_t packet;
-    packet.pitch_scale = pitch_scale;
-    packet.yaw_scale = yaw_scale;
     packet.roll_offset = roll_offset;
     packet.pitch_offset = pitch_offset;
+    packet.pitch_scale = pitch_scale;
+    packet.yaw_scale = yaw_scale;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #endif
@@ -206,29 +206,29 @@ static inline uint16_t mavlink_msg_scan_transform_encode_status(uint8_t system_i
  * @brief Send a scan_transform message
  * @param chan MAVLink channel to send the message
  *
- * @param roll_offset [mRad] 
- * @param pitch_offset [mRad] 
+ * @param roll_offset [degrees] 
+ * @param pitch_offset [degrees] 
  * @param pitch_scale [%] 
  * @param yaw_scale [%] 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_scan_transform_send(mavlink_channel_t chan, int16_t roll_offset, int16_t pitch_offset, float pitch_scale, float yaw_scale)
+static inline void mavlink_msg_scan_transform_send(mavlink_channel_t chan, float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
-    _mav_put_float(buf, 0, pitch_scale);
-    _mav_put_float(buf, 4, yaw_scale);
-    _mav_put_int16_t(buf, 8, roll_offset);
-    _mav_put_int16_t(buf, 10, pitch_offset);
+    _mav_put_float(buf, 0, roll_offset);
+    _mav_put_float(buf, 4, pitch_offset);
+    _mav_put_float(buf, 8, pitch_scale);
+    _mav_put_float(buf, 12, yaw_scale);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #else
     mavlink_scan_transform_t packet;
-    packet.pitch_scale = pitch_scale;
-    packet.yaw_scale = yaw_scale;
     packet.roll_offset = roll_offset;
     packet.pitch_offset = pitch_offset;
+    packet.pitch_scale = pitch_scale;
+    packet.yaw_scale = yaw_scale;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, (const char *)&packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #endif
@@ -256,22 +256,22 @@ static inline void mavlink_msg_scan_transform_send_struct(mavlink_channel_t chan
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  int16_t roll_offset, int16_t pitch_offset, float pitch_scale, float yaw_scale)
+static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-    _mav_put_float(buf, 0, pitch_scale);
-    _mav_put_float(buf, 4, yaw_scale);
-    _mav_put_int16_t(buf, 8, roll_offset);
-    _mav_put_int16_t(buf, 10, pitch_offset);
+    _mav_put_float(buf, 0, roll_offset);
+    _mav_put_float(buf, 4, pitch_offset);
+    _mav_put_float(buf, 8, pitch_scale);
+    _mav_put_float(buf, 12, yaw_scale);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #else
     mavlink_scan_transform_t *packet = (mavlink_scan_transform_t *)msgbuf;
-    packet->pitch_scale = pitch_scale;
-    packet->yaw_scale = yaw_scale;
     packet->roll_offset = roll_offset;
     packet->pitch_offset = pitch_offset;
+    packet->pitch_scale = pitch_scale;
+    packet->yaw_scale = yaw_scale;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, (const char *)packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #endif
@@ -286,21 +286,21 @@ static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf
 /**
  * @brief Get field roll_offset from scan_transform message
  *
- * @return [mRad] 
+ * @return [degrees] 
  */
-static inline int16_t mavlink_msg_scan_transform_get_roll_offset(const mavlink_message_t* msg)
+static inline float mavlink_msg_scan_transform_get_roll_offset(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  8);
+    return _MAV_RETURN_float(msg,  0);
 }
 
 /**
  * @brief Get field pitch_offset from scan_transform message
  *
- * @return [mRad] 
+ * @return [degrees] 
  */
-static inline int16_t mavlink_msg_scan_transform_get_pitch_offset(const mavlink_message_t* msg)
+static inline float mavlink_msg_scan_transform_get_pitch_offset(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  10);
+    return _MAV_RETURN_float(msg,  4);
 }
 
 /**
@@ -310,7 +310,7 @@ static inline int16_t mavlink_msg_scan_transform_get_pitch_offset(const mavlink_
  */
 static inline float mavlink_msg_scan_transform_get_pitch_scale(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  0);
+    return _MAV_RETURN_float(msg,  8);
 }
 
 /**
@@ -320,7 +320,7 @@ static inline float mavlink_msg_scan_transform_get_pitch_scale(const mavlink_mes
  */
 static inline float mavlink_msg_scan_transform_get_yaw_scale(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_float(msg,  4);
+    return _MAV_RETURN_float(msg,  12);
 }
 
 /**
@@ -332,10 +332,10 @@ static inline float mavlink_msg_scan_transform_get_yaw_scale(const mavlink_messa
 static inline void mavlink_msg_scan_transform_decode(const mavlink_message_t* msg, mavlink_scan_transform_t* scan_transform)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    scan_transform->pitch_scale = mavlink_msg_scan_transform_get_pitch_scale(msg);
-    scan_transform->yaw_scale = mavlink_msg_scan_transform_get_yaw_scale(msg);
     scan_transform->roll_offset = mavlink_msg_scan_transform_get_roll_offset(msg);
     scan_transform->pitch_offset = mavlink_msg_scan_transform_get_pitch_offset(msg);
+    scan_transform->pitch_scale = mavlink_msg_scan_transform_get_pitch_scale(msg);
+    scan_transform->yaw_scale = mavlink_msg_scan_transform_get_yaw_scale(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN? msg->len : MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN;
         memset(scan_transform, 0, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);

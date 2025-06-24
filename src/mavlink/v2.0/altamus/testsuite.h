@@ -1186,14 +1186,14 @@ static void mavlink_test_scan_transform(uint8_t system_id, uint8_t component_id,
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_scan_transform_t packet_in = {
-        17.0,45.0,17651,17755
+        17.0,45.0,73.0,101.0
     };
     mavlink_scan_transform_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
-        packet1.pitch_scale = packet_in.pitch_scale;
-        packet1.yaw_scale = packet_in.yaw_scale;
         packet1.roll_offset = packet_in.roll_offset;
         packet1.pitch_offset = packet_in.pitch_offset;
+        packet1.pitch_scale = packet_in.pitch_scale;
+        packet1.yaw_scale = packet_in.yaw_scale;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
