@@ -135,7 +135,7 @@
             <field name="state" type="uint8_t" enum="EOS_STATE"> Current State of the Device </field>
             <field name="power_status_bitmask" type="uint16_t" enum="EOS_COMPONENT"> Bitmask of devices and their power status: 1 = on 0 = off </field>
             <field name="health_status_bitmask" type="uint16_t" enum="EOS_COMPONENT"> Bitmask of health of devices: 1 = healthy 0 = unhealthy </field>
-            <field name="uptime" type="uint16_t" units="seconds"> Device uptime in seconds </field>
+            <field name="uptime" type="uint16_t" units="seconds" invalid="-1" increment="1"> Device uptime in seconds </field>
         </message>
         <!-- messages 5 and 6 are used in common_minimal.xml -->
         <message name="IDENTIFIER" id = "7">
@@ -153,13 +153,13 @@
         </message>
         <message name="SCAN_SETTINGS" id = "9">
             <description> Settings for a space scan</description>
-            <field name="yaw_start" type="float" units="deg"> Starting yaw angle, relative to the homed position </field>
-            <field name="yaw_stop" type="float" units="deg"> Ending yaw angle, relative to the homed position</field>
-            <field name="pitch_start" type="float" units="deg"> Starting pitch angle, relative to the homed position</field>
-            <field name="pitch_stop" type="float" units="deg"> Ending pitch angle, relative to the homed position</field>
-            <field name="pitch_rest_angle" type="float" units="deg"> Angle that the pitch to should go to at end of the scan</field>
+            <field name="yaw_start" type="float" units="deg" minValue="0" maxValue="270"> Starting yaw angle, relative to the homed position </field>
+            <field name="yaw_stop" type="float" units="deg" minValue="0", maxValue="270"> Ending yaw angle, relative to the homed position</field>
+            <field name="pitch_start" type="float" units="deg" minValue="15" maxValue="348"> Starting pitch angle, relative to the homed position</field>
+            <field name="pitch_stop" type="float" units="deg" minValue="15" maxValue="348"> Ending pitch angle, relative to the homed position</field>
+            <field name="pitch_rest_angle" type="float" units="deg" minValue="0" maxValue="359"> Angle that the pitch to should go to at end of the scan</field>
             <field name="point_spacing" type="float" units="deg"> Spacing between point samples. Smaller spacing leads to denser point clouds </field>
-            <field name="scan_speed" type="float" units="rpm"> How fast, in RPM to spin the pitch motor</field>
+            <field name="scan_speed" type="float" units="rpm" maxValue="120"> How fast, in RPM to spin the pitch motor</field>
             <field name="scan_stop_reasons" type="uint16_t" display="bitmask" enum="SCAN_STOP_REASON"> Bitmask of allowed reasons for the scan to stop. 0 means that no detected errors will stop the scan. </field>
         </message>
         <message name="SCAN_STATUS" id = "10">
@@ -183,10 +183,10 @@
         <message name="POWER_INFORMATION" id = "12">
             <description> Power stats of device</description>
             <field name="type" type="uint8_t" enum="POWER_INFORMATION_TYPE"> Type of reading: instant, average, max, min</field>
-            <field name="current" type="uint16_t" units="mA"> current in Milliamps</field>
-            <field name="voltage" type="uint16_t" units="mV"> voltage in Millivolts</field>
-            <field name="power" type="uint16_t" units="mW"> power in Milliwatts</field>
-            <field name="energy_consumed" type="uint32_t" units="J"> Accumulated power since last reset in Joules</field>
+            <field name="current" type="uint16_t" units="mA" invalid="UINT16_MAX"> current in Milliamps</field>
+            <field name="voltage" type="uint16_t" units="mV" invalid="UINT16_MAX"> voltage in Millivolts</field>
+            <field name="power" type="uint16_t" units="mW" invalid="UINT16_MAX"> power in Milliwatts</field>
+            <field name="energy_consumed" type="uint32_t" units="J" invalid="UINT32_MAX"> Accumulated power since last reset in Joules</field>
         </message>
         <message name="WIFI_INFORMATION" id = "13">
             <description> Information about the WiFi connection</description>
