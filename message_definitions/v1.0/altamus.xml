@@ -55,6 +55,8 @@
             <entry value="4" name="EOS_STATE_INIT"></entry>
             <entry value="5" name="EOS_STATE_ERROR"></entry>
             <entry value="6" name="EOS_STATE_HOMING"></entry>
+            <entry value="7" name="EOS_STATE_STARTING_SCAN"></entry>
+            <entry value="8" name="EOS_STATE_STOPPING_SCAN"></entry>
         </enum>
         <enum name="MOTOR_BEHAVIOR">
             <description> Behaviors a motor can execute </description>

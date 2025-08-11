@@ -143,6 +143,8 @@ local enumEntryName = {
         [4] = "EOS_STATE_INIT",
         [5] = "EOS_STATE_ERROR",
         [6] = "EOS_STATE_HOMING",
+        [7] = "EOS_STATE_STARTING_SCAN",
+        [8] = "EOS_STATE_STOPPING_SCAN",
     },
     ["MOTOR_BEHAVIOR"] = {
         [1] = "MOTOR_BEHAVIOR_MOTOR_ENABLE",
