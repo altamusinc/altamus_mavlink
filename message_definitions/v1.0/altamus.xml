@@ -154,7 +154,7 @@
         <message name="SCAN_SETTINGS" id = "9">
             <description> Settings for a space scan</description>
             <field name="yaw_start" type="float" units="deg" minValue="0" maxValue="270"> Starting yaw angle, relative to the homed position </field>
-            <field name="yaw_stop" type="float" units="deg" minValue="0", maxValue="270"> Ending yaw angle, relative to the homed position</field>
+            <field name="yaw_stop" type="float" units="deg" minValue="0" maxValue="270"> Ending yaw angle, relative to the homed position</field>
             <field name="pitch_start" type="float" units="deg" minValue="15" maxValue="348"> Starting pitch angle, relative to the homed position</field>
             <field name="pitch_stop" type="float" units="deg" minValue="15" maxValue="348"> Ending pitch angle, relative to the homed position</field>
             <field name="pitch_rest_angle" type="float" units="deg" minValue="0" maxValue="359"> Angle that the pitch to should go to at end of the scan</field>
