@@ -1,5 +1,5 @@
 /** @file
- *  @brief MAVLink comm protocol built from common_minimal.xml
+ *  @brief MAVLink comm protocol built from titan.xml
  *  @see http://mavlink.org
  */
 #pragma once

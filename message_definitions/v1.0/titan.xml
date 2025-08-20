@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<mavlink>
+    <!-- MAVLink standard messages -->
+    <include>common_minimal.xml</include>
+    <dialect>9</dialect>
+    <enums>
+        <enum name="STATE_INPUT">
+            <description> State inputs to water tracking device </description>
+            <entry value="1" name="STATE_INPUT_BADGE_PRESENT"></entry>
+            <entry value="2" name="STATE_INPUT_BADGE_LEAVE"></entry>
+            <entry value="3" name="STATE_INPUT_PULSER_PULSE"></entry>
+            <entry value="4" name="STATE_INPUT_OVERRIDE_ON"></entry>
+            <entry value="5" name="STATE_INPUT_OVERRIDE_OFF"></entry>
+            <entry value="6" name="STATE_INPUT_ADMIN_START"></entry>
+            <entry value="7" name="STATE_INPUT_ADMIN_STOP"></entry>
+            <entry value="8" name="STATE_INPUT_UPLOAD_REQUEST"></entry>
+            <entry value="9" name="STATE_INPUT_UPLOAD_COMPLETE"></entry>
+            <entry value="10" name="STATE_INPUT_UPLOAD_RETRY"></entry>
+            <entry value="11" name="STATE_INPUT_UPLOAD_ABORT"></entry>
+            <entry value="12" name="STATE_INPUT_FILL_LIMIT"></entry>
+        </enum>
+    </enums>
+    <messages>
+        <message name="STATE_INPUT_EVENT" id="1">
+            <description>State input event</description>
+            <field name="event" type="uint8_t" enum="STATE_INPUT">the state input event</field>
+        </message>
+    </messages>
+</mavlink>

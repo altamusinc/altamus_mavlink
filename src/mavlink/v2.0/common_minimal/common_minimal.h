@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_COMMON_MINIMAL.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_COMMON_MINIMAL_XML_HASH 2546681312765734927
+#define MAVLINK_COMMON_MINIMAL_XML_HASH -5508279332409316408
 
 #ifdef __cplusplus
 extern "C" {
@@ -65,6 +65,33 @@ typedef enum MAV_FTP_ERR
 } MAV_FTP_ERR;
 #endif
 
+/** @brief MAV FTP opcodes: https://mavlink.io/en/services/ftp.html */
+#ifndef HAVE_ENUM_MAV_FTP_OPCODE
+#define HAVE_ENUM_MAV_FTP_OPCODE
+typedef enum MAV_FTP_OPCODE
+{
+   MAV_FTP_OPCODE_NONE=0, /* None. Ignored, always ACKed | */
+   MAV_FTP_OPCODE_TERMINATESESSION=1, /* TerminateSession: Terminates open Read session | */
+   MAV_FTP_OPCODE_RESETSESSION=2, /* ResetSessions: Terminates all open read sessions | */
+   MAV_FTP_OPCODE_LISTDIRECTORY=3, /* ListDirectory. List files and directories in path from offset | */
+   MAV_FTP_OPCODE_OPENFILERO=4, /* OpenFileRO: Opens file at path for reading, returns session | */
+   MAV_FTP_OPCODE_READFILE=5, /* ReadFile: Reads size bytes from offset in session | */
+   MAV_FTP_OPCODE_CREATEFILE=6, /* CreateFile: Creates file at path for writing, returns session | */
+   MAV_FTP_OPCODE_WRITEFILE=7, /* WriteFile: Writes size bytes to offset in session | */
+   MAV_FTP_OPCODE_REMOVEFILE=8, /* RemoveFile: Remove file at path | */
+   MAV_FTP_OPCODE_CREATEDIRECTORY=9, /* CreateDirectory: Creates directory at path | */
+   MAV_FTP_OPCODE_REMOVEDIRECTORY=10, /* RemoveDirectory: Removes directory at path. The directory must be empty. | */
+   MAV_FTP_OPCODE_OPENFILEWO=11, /* OpenFileWO: Opens file at path for writing, returns session | */
+   MAV_FTP_OPCODE_TRUNCATEFILE=12, /* TruncateFile: Truncate file at path to offset length | */
+   MAV_FTP_OPCODE_RENAME=13, /* Rename: Rename path1 to path2 | */
+   MAV_FTP_OPCODE_CALCFILECRC=14, /* CalcFileCRC32: Calculate CRC32 for file at path | */
+   MAV_FTP_OPCODE_BURSTREADFILE=15, /* BurstReadFile: Burst download session file | */
+   MAV_FTP_OPCODE_ACK=128, /* ACK: ACK response | */
+   MAV_FTP_OPCODE_NAK=129, /* NAK: NAK response | */
+   MAV_FTP_OPCODE_ENUM_END=130, /*  | */
+} MAV_FTP_OPCODE;
+#endif
+
 /** @brief MAVLINK component type reported in HEARTBEAT message. Flight controllers must report the type of the vehicle on which they are mounted (e.g. MAV_TYPE_OCTOROTOR). All other components must report a value appropriate for their type (e.g. a camera must use MAV_TYPE_CAMERA). */
 #ifndef HAVE_ENUM_MAV_TYPE
 #define HAVE_ENUM_MAV_TYPE
@@ -97,6 +124,17 @@ typedef enum MAV_SEVERITY
    MAV_SEVERITY_DEBUG=7, /* Useful non-operational messages that can assist in debugging. These should not occur during normal operation. | */
    MAV_SEVERITY_ENUM_END=8, /*  | */
 } MAV_SEVERITY;
+#endif
+
+/** @brief  */
+#ifndef HAVE_ENUM_MAV_CMD
+#define HAVE_ENUM_MAV_CMD
+typedef enum MAV_CMD
+{
+   MAV_CMD_SET_MESSAGE_INTERVAL=511, /* Set the interval between messages for a particular MAVLink message ID. This interface replaces REQUEST_DATA_STREAM. |The MAVLink message ID| The interval between two messages. -1: disable. 0: request default rate (which may be zero).| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Target address of message stream (if message has target address fields). 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.|  */
+   MAV_CMD_REQUEST_MESSAGE=512, /* Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL). |The MAVLink message ID of the requested message.| Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.|  */
+   MAV_CMD_ENUM_END=513, /*  | */
+} MAV_CMD;
 #endif
 
 /** @brief These flags encode the MAV mode. */
@@ -176,6 +214,36 @@ typedef enum MAV_MISSION_TYPE
    MAV_MISSION_TYPE_ALL=255, /* Only used in MISSION_CLEAR_ALL to clear all mission types. | */
    MAV_MISSION_TYPE_ENUM_END=256, /*  | */
 } MAV_MISSION_TYPE;
+#endif
+
+/** @brief Result from a MAVLink command (MAV_CMD) */
+#ifndef HAVE_ENUM_MAV_RESULT
+#define HAVE_ENUM_MAV_RESULT
+typedef enum MAV_RESULT
+{
+   MAV_RESULT_ACCEPTED=0, /* Command is valid (is supported and has valid parameters), and was
+              executed. | */
+   MAV_RESULT_TEMPORARILY_REJECTED=1, /* Command is valid, but cannot be executed at this time. This is used to
+              indicate a problem that should be fixed just by waiting (e.g. a state machine is
+              busy, can't arm because have not got GPS lock, etc.). Retrying later should
+              work. | */
+   MAV_RESULT_DENIED=2, /* Command is invalid (is supported but has invalid parameters). Retrying
+              same command and parameters will not work. | */
+   MAV_RESULT_UNSUPPORTED=3, /* Command is not supported (unknown). | */
+   MAV_RESULT_FAILED=4, /* Command is valid, but execution has failed. This is used to indicate
+              any non-temporary or unexpected problem, i.e. any problem that must be fixed
+              before the command can succeed/be retried. For example, attempting to write a
+              file when out of memory, attempting to arm when sensors are not calibrated, etc. | */
+   MAV_RESULT_IN_PROGRESS=5, /* Command is valid and is being executed. This will be followed by
+              further progress updates, i.e. the component may send further COMMAND_ACK
+              messages with result MAV_RESULT_IN_PROGRESS (at a rate decided by the
+              implementation), and must terminate by sending a COMMAND_ACK message with final
+              result of the operation. The COMMAND_ACK.progress field can be used to indicate
+              the progress of the operation. | */
+   MAV_RESULT_CANCELLED=6, /* Command has been cancelled (as a result of receiving a COMMAND_CANCEL
+              message). | */
+   MAV_RESULT_ENUM_END=7, /*  | */
+} MAV_RESULT;
 #endif
 
 /** @brief Coordinate frames used by MAVLink. Not all frames are supported by all

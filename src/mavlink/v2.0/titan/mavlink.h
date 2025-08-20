@@ -1,12 +1,12 @@
 /** @file
- *  @brief MAVLink comm protocol built from common_minimal.xml
+ *  @brief MAVLink comm protocol built from titan.xml
  *  @see http://mavlink.org
  */
 #pragma once
 #ifndef MAVLINK_H
 #define MAVLINK_H
 
-#define MAVLINK_PRIMARY_XML_HASH -5508279332409316408
+#define MAVLINK_PRIMARY_XML_HASH -1747016807321763889
 
 #ifndef MAVLINK_STX
 #define MAVLINK_STX 253
@@ -29,6 +29,6 @@
 #endif
 
 #include "version.h"
-#include "common_minimal.h"
+#include "titan.h"
 
 #endif // MAVLINK_H
