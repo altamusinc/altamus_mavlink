@@ -25,5 +25,16 @@
             <description>State input event</description>
             <field name="event" type="uint8_t" enum="STATE_INPUT">the state input event</field>
         </message>
+        <message name="IDENTIFIER" id="2">
+            <description> Indentifiying information about the EOS device </description>
+            <field name="particle_id" type="char[24]"> Particle ID of device. Unique and unchangable </field>
+            <field name="local_ip" type="uint8_t[4]"> local IPV4 Address of the device</field>
+            <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
+            <field name="name" type="char[20]">Friendly name of device i.e. P2-123456</field>
+            <field name="site_friendly_name" type="char[30]"> Friendly name for the site it's at,
+                i.e. "57 Rock West"</field>
+            <field name="site_name" type="char[30]"> Name of the site where the scanner is located,
+                i.e. "Gainesville Plant"</field>
+        </message>
     </messages>
 </mavlink>
