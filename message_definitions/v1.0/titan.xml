@@ -4,6 +4,17 @@
     <include>common_minimal.xml</include>
     <dialect>9</dialect>
     <enums>
+        <enum name="SYSTEM_STATE">
+            <description>State of the water tracking device</description>
+            <entry value="1" name="SYSTEM_STATE_INITALIZING"></entry>
+            <entry value="2" name="SYSTEM_STATE_READY"></entry>
+            <entry value="3" name="SYSTEM_STATE_FILLING_IDENTIFIED"></entry>
+            <entry value="4" name="SYSTEM_STATE_FILLING_UNIDENTIFIED"></entry>
+            <entry value="5" name="SYSTEM_STATE_PAUSE"></entry>
+            <entry value="6" name="SYSTEM_STATE_UPLOADING"></entry>
+            <entry value="7" name="SYSTEM_STATE_OVERRIDE_ON"></entry>
+            <entry value="8" name="SYSTEM_STATE_ERROR"></entry>
+        </enum>
         <enum name="STATE_INPUT">
             <description> State inputs to water tracking device </description>
             <entry value="1" name="STATE_INPUT_BADGE_PRESENT"></entry>

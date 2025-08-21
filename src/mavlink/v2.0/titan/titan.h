@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_TITAN.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_TITAN_XML_HASH -2372652509030014065
+#define MAVLINK_TITAN_XML_HASH -7214565956728657384
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,6 +32,23 @@ extern "C" {
 
 // ENUM DEFINITIONS
 
+
+/** @brief State of the water tracking device */
+#ifndef HAVE_ENUM_SYSTEM_STATE
+#define HAVE_ENUM_SYSTEM_STATE
+typedef enum SYSTEM_STATE
+{
+   SYSTEM_STATE_INITALIZING=1, /*  | */
+   SYSTEM_STATE_READY=2, /*  | */
+   SYSTEM_STATE_FILLING_IDENTIFIED=3, /*  | */
+   SYSTEM_STATE_FILLING_UNIDENTIFIED=4, /*  | */
+   SYSTEM_STATE_PAUSE=5, /*  | */
+   SYSTEM_STATE_UPLOADING=6, /*  | */
+   SYSTEM_STATE_OVERRIDE_ON=7, /*  | */
+   SYSTEM_STATE_ERROR=8, /*  | */
+   SYSTEM_STATE_ENUM_END=9, /*  | */
+} SYSTEM_STATE;
+#endif
 
 /** @brief  State inputs to water tracking device  */
 #ifndef HAVE_ENUM_STATE_INPUT
