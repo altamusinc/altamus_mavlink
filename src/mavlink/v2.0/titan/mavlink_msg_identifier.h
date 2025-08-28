@@ -9,8 +9,7 @@ typedef struct __mavlink_identifier_t {
  uint8_t local_ip[4]; /*<   local IPV4 Address of the device*/
  uint8_t mac[6]; /*<   MAC address of the device*/
  char name[20]; /*<  Friendly name of device i.e. P2-123456*/
- char site_friendly_name[30]; /*<   Friendly name for the site it's at,
-                i.e. "57 Rock West"*/
+ char site_friendly_name[30]; /*<   Friendly name for the site it's at, i.e. "57 Rock West"*/
  char site_name[30]; /*<   Name of the site where the scanner is located,
                 i.e. "Gainesville Plant"*/
 } mavlink_identifier_t;
@@ -67,8 +66,7 @@ typedef struct __mavlink_identifier_t {
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
- * @param site_friendly_name   Friendly name for the site it's at,
-                i.e. "57 Rock West"
+ * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
  * @param site_name   Name of the site where the scanner is located,
                 i.e. "Gainesville Plant"
  * @return length of the message in bytes (excluding serial stream start sign)
@@ -113,8 +111,7 @@ static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t co
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
- * @param site_friendly_name   Friendly name for the site it's at,
-                i.e. "57 Rock West"
+ * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
  * @param site_name   Name of the site where the scanner is located,
                 i.e. "Gainesville Plant"
  * @return length of the message in bytes (excluding serial stream start sign)
@@ -162,8 +159,7 @@ static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uin
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
- * @param site_friendly_name   Friendly name for the site it's at,
-                i.e. "57 Rock West"
+ * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
  * @param site_name   Name of the site where the scanner is located,
                 i.e. "Gainesville Plant"
  * @return length of the message in bytes (excluding serial stream start sign)
@@ -247,8 +243,7 @@ static inline uint16_t mavlink_msg_identifier_encode_status(uint8_t system_id, u
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
- * @param site_friendly_name   Friendly name for the site it's at,
-                i.e. "57 Rock West"
+ * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
  * @param site_name   Name of the site where the scanner is located,
                 i.e. "Gainesville Plant"
  */
@@ -375,8 +370,7 @@ static inline uint16_t mavlink_msg_identifier_get_name(const mavlink_message_t* 
 /**
  * @brief Get field site_friendly_name from identifier message
  *
- * @return   Friendly name for the site it's at,
-                i.e. "57 Rock West"
+ * @return   Friendly name for the site it's at, i.e. "57 Rock West"
  */
 static inline uint16_t mavlink_msg_identifier_get_site_friendly_name(const mavlink_message_t* msg, char *site_friendly_name)
 {

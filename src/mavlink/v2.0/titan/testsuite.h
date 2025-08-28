@@ -148,10 +148,78 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
 #endif
 }
 
+static void mavlink_test_water_transaction(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_WATER_TRANSACTION >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_water_transaction_t packet_in = {
+        93372036854775807ULL,93372036854776311ULL,93372036854776815ULL,963498712,963498920,18899,"IJKLMNOPQRSTUVWXYZA",39,106
+    };
+    mavlink_water_transaction_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.badge_id_int = packet_in.badge_id_int;
+        packet1.start_time_utc = packet_in.start_time_utc;
+        packet1.stop_time_utc = packet_in.stop_time_utc;
+        packet1.dispensed_ml = packet_in.dispensed_ml;
+        packet1.limit_ml = packet_in.limit_ml;
+        packet1.pulses = packet_in.pulses;
+        packet1.start_reason = packet_in.start_reason;
+        packet1.stop_reason = packet_in.stop_reason;
+        
+        mav_array_memcpy(packet1.truck_name, packet_in.truck_name, sizeof(char)*20);
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_WATER_TRANSACTION_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_WATER_TRANSACTION_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_water_transaction_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_water_transaction_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_water_transaction_pack(system_id, component_id, &msg , packet1.badge_id_int , packet1.truck_name , packet1.pulses , packet1.dispensed_ml , packet1.limit_ml , packet1.start_reason , packet1.stop_reason , packet1.start_time_utc , packet1.stop_time_utc );
+    mavlink_msg_water_transaction_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_water_transaction_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.badge_id_int , packet1.truck_name , packet1.pulses , packet1.dispensed_ml , packet1.limit_ml , packet1.start_reason , packet1.stop_reason , packet1.start_time_utc , packet1.stop_time_utc );
+    mavlink_msg_water_transaction_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_water_transaction_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_water_transaction_send(MAVLINK_COMM_1 , packet1.badge_id_int , packet1.truck_name , packet1.pulses , packet1.dispensed_ml , packet1.limit_ml , packet1.start_reason , packet1.stop_reason , packet1.start_time_utc , packet1.stop_time_utc );
+    mavlink_msg_water_transaction_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+#ifdef MAVLINK_HAVE_GET_MESSAGE_INFO
+    MAVLINK_ASSERT(mavlink_get_message_info_by_name("WATER_TRANSACTION") != NULL);
+    MAVLINK_ASSERT(mavlink_get_message_info_by_id(MAVLINK_MSG_ID_WATER_TRANSACTION) != NULL);
+#endif
+}
+
 static void mavlink_test_titan(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
     mavlink_test_state_input_event(system_id, component_id, last_msg);
     mavlink_test_identifier(system_id, component_id, last_msg);
+    mavlink_test_water_transaction(system_id, component_id, last_msg);
 }
 
 #ifdef __cplusplus

@@ -42,10 +42,21 @@
             <field name="local_ip" type="uint8_t[4]"> local IPV4 Address of the device</field>
             <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
             <field name="name" type="char[20]">Friendly name of device i.e. P2-123456</field>
-            <field name="site_friendly_name" type="char[30]"> Friendly name for the site it's at,
-                i.e. "57 Rock West"</field>
+            <field name="site_friendly_name" type="char[30]"> Friendly name for the site it's at, i.e. "57 Rock West"</field>
             <field name="site_name" type="char[30]"> Name of the site where the scanner is located,
                 i.e. "Gainesville Plant"</field>
+        </message>
+        <message name="WATER_TRANSACTION" id="3">
+            <description>Water transaction information</description>
+            <field name="badge_id_int" type="uint64_t"> badge ID as int</field>
+            <field name="truck_name" type="char[20]"> Truck name associated with badge ID</field>
+            <field name="pulses" type="uint16_t"> Number of pulses in current transaction</field>
+            <field name="dispensed_ml" type="uint32_t" units="mL"> Number of ML dispensed in currenttransaction</field>
+            <field name="limit_ml" type="uint32_t" units="mL"> Limit for this transaction </field>
+            <field name="start_reason" type="uint8_t" enum="STATE_INPUT"> Reason the transaction began </field>
+            <field name="stop_reason" type="uint8_t" enum="STATE_INPUT"> Reason the transaction stopped </field>
+            <field name="start_time_utc" type="uint64_t" units="s"> unix start time of the transaction in seconds</field>
+            <field name="stop_time_utc" type="uint64_t" units="s"> unix stop time of the transaction in seconds</field>
         </message>
     </messages>
 </mavlink>
