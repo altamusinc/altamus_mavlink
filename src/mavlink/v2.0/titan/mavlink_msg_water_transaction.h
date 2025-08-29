@@ -6,23 +6,23 @@
 
 typedef struct __mavlink_water_transaction_t {
  uint64_t badge_id_int; /*<   badge ID as int*/
- uint64_t start_time_utc; /*< [s]  unix start time of the transaction in seconds*/
- uint64_t stop_time_utc; /*< [s]  unix stop time of the transaction in seconds*/
  uint32_t dispensed_ml; /*< [mL]  Number of ML dispensed in currenttransaction*/
  uint32_t limit_ml; /*< [mL]  Limit for this transaction */
+ uint32_t start_time_utc; /*< [s]  unix start time of the transaction in seconds*/
+ uint32_t stop_time_utc; /*< [s]  unix stop time of the transaction in seconds*/
  uint16_t pulses; /*<   Number of pulses in current transaction*/
  char truck_name[20]; /*<   Truck name associated with badge ID*/
  uint8_t start_reason; /*<   Reason the transaction began */
- uint8_t stop_reason; /*<   Reason the transaction stopped */
+ uint8_t stop_reason; /*<   Reason the transaction stopped. 0 if transaction still running */
 } mavlink_water_transaction_t;
 
-#define MAVLINK_MSG_ID_WATER_TRANSACTION_LEN 56
-#define MAVLINK_MSG_ID_WATER_TRANSACTION_MIN_LEN 56
-#define MAVLINK_MSG_ID_3_LEN 56
-#define MAVLINK_MSG_ID_3_MIN_LEN 56
+#define MAVLINK_MSG_ID_WATER_TRANSACTION_LEN 48
+#define MAVLINK_MSG_ID_WATER_TRANSACTION_MIN_LEN 48
+#define MAVLINK_MSG_ID_3_LEN 48
+#define MAVLINK_MSG_ID_3_MIN_LEN 48
 
-#define MAVLINK_MSG_ID_WATER_TRANSACTION_CRC 98
-#define MAVLINK_MSG_ID_3_CRC 98
+#define MAVLINK_MSG_ID_WATER_TRANSACTION_CRC 28
+#define MAVLINK_MSG_ID_3_CRC 28
 
 #define MAVLINK_MSG_WATER_TRANSACTION_FIELD_TRUCK_NAME_LEN 20
 
@@ -32,14 +32,14 @@ typedef struct __mavlink_water_transaction_t {
     "WATER_TRANSACTION", \
     9, \
     {  { "badge_id_int", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_water_transaction_t, badge_id_int) }, \
-         { "truck_name", NULL, MAVLINK_TYPE_CHAR, 20, 34, offsetof(mavlink_water_transaction_t, truck_name) }, \
-         { "pulses", NULL, MAVLINK_TYPE_UINT16_T, 0, 32, offsetof(mavlink_water_transaction_t, pulses) }, \
-         { "dispensed_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 24, offsetof(mavlink_water_transaction_t, dispensed_ml) }, \
-         { "limit_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 28, offsetof(mavlink_water_transaction_t, limit_ml) }, \
-         { "start_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 54, offsetof(mavlink_water_transaction_t, start_reason) }, \
-         { "stop_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 55, offsetof(mavlink_water_transaction_t, stop_reason) }, \
-         { "start_time_utc", NULL, MAVLINK_TYPE_UINT64_T, 0, 8, offsetof(mavlink_water_transaction_t, start_time_utc) }, \
-         { "stop_time_utc", NULL, MAVLINK_TYPE_UINT64_T, 0, 16, offsetof(mavlink_water_transaction_t, stop_time_utc) }, \
+         { "truck_name", NULL, MAVLINK_TYPE_CHAR, 20, 26, offsetof(mavlink_water_transaction_t, truck_name) }, \
+         { "pulses", NULL, MAVLINK_TYPE_UINT16_T, 0, 24, offsetof(mavlink_water_transaction_t, pulses) }, \
+         { "dispensed_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_water_transaction_t, dispensed_ml) }, \
+         { "limit_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 12, offsetof(mavlink_water_transaction_t, limit_ml) }, \
+         { "start_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 46, offsetof(mavlink_water_transaction_t, start_reason) }, \
+         { "stop_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 47, offsetof(mavlink_water_transaction_t, stop_reason) }, \
+         { "start_time_utc", NULL, MAVLINK_TYPE_UINT32_T, 0, 16, offsetof(mavlink_water_transaction_t, start_time_utc) }, \
+         { "stop_time_utc", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_water_transaction_t, stop_time_utc) }, \
          } \
 }
 #else
@@ -47,14 +47,14 @@ typedef struct __mavlink_water_transaction_t {
     "WATER_TRANSACTION", \
     9, \
     {  { "badge_id_int", NULL, MAVLINK_TYPE_UINT64_T, 0, 0, offsetof(mavlink_water_transaction_t, badge_id_int) }, \
-         { "truck_name", NULL, MAVLINK_TYPE_CHAR, 20, 34, offsetof(mavlink_water_transaction_t, truck_name) }, \
-         { "pulses", NULL, MAVLINK_TYPE_UINT16_T, 0, 32, offsetof(mavlink_water_transaction_t, pulses) }, \
-         { "dispensed_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 24, offsetof(mavlink_water_transaction_t, dispensed_ml) }, \
-         { "limit_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 28, offsetof(mavlink_water_transaction_t, limit_ml) }, \
-         { "start_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 54, offsetof(mavlink_water_transaction_t, start_reason) }, \
-         { "stop_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 55, offsetof(mavlink_water_transaction_t, stop_reason) }, \
-         { "start_time_utc", NULL, MAVLINK_TYPE_UINT64_T, 0, 8, offsetof(mavlink_water_transaction_t, start_time_utc) }, \
-         { "stop_time_utc", NULL, MAVLINK_TYPE_UINT64_T, 0, 16, offsetof(mavlink_water_transaction_t, stop_time_utc) }, \
+         { "truck_name", NULL, MAVLINK_TYPE_CHAR, 20, 26, offsetof(mavlink_water_transaction_t, truck_name) }, \
+         { "pulses", NULL, MAVLINK_TYPE_UINT16_T, 0, 24, offsetof(mavlink_water_transaction_t, pulses) }, \
+         { "dispensed_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_water_transaction_t, dispensed_ml) }, \
+         { "limit_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 12, offsetof(mavlink_water_transaction_t, limit_ml) }, \
+         { "start_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 46, offsetof(mavlink_water_transaction_t, start_reason) }, \
+         { "stop_reason", NULL, MAVLINK_TYPE_UINT8_T, 0, 47, offsetof(mavlink_water_transaction_t, stop_reason) }, \
+         { "start_time_utc", NULL, MAVLINK_TYPE_UINT32_T, 0, 16, offsetof(mavlink_water_transaction_t, start_time_utc) }, \
+         { "stop_time_utc", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_water_transaction_t, stop_time_utc) }, \
          } \
 }
 #endif
@@ -71,33 +71,33 @@ typedef struct __mavlink_water_transaction_t {
  * @param dispensed_ml [mL]  Number of ML dispensed in currenttransaction
  * @param limit_ml [mL]  Limit for this transaction 
  * @param start_reason   Reason the transaction began 
- * @param stop_reason   Reason the transaction stopped 
+ * @param stop_reason   Reason the transaction stopped. 0 if transaction still running 
  * @param start_time_utc [s]  unix start time of the transaction in seconds
  * @param stop_time_utc [s]  unix stop time of the transaction in seconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_water_transaction_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint64_t start_time_utc, uint64_t stop_time_utc)
+                               uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint32_t start_time_utc, uint32_t stop_time_utc)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WATER_TRANSACTION_LEN];
     _mav_put_uint64_t(buf, 0, badge_id_int);
-    _mav_put_uint64_t(buf, 8, start_time_utc);
-    _mav_put_uint64_t(buf, 16, stop_time_utc);
-    _mav_put_uint32_t(buf, 24, dispensed_ml);
-    _mav_put_uint32_t(buf, 28, limit_ml);
-    _mav_put_uint16_t(buf, 32, pulses);
-    _mav_put_uint8_t(buf, 54, start_reason);
-    _mav_put_uint8_t(buf, 55, stop_reason);
-    _mav_put_char_array(buf, 34, truck_name, 20);
+    _mav_put_uint32_t(buf, 8, dispensed_ml);
+    _mav_put_uint32_t(buf, 12, limit_ml);
+    _mav_put_uint32_t(buf, 16, start_time_utc);
+    _mav_put_uint32_t(buf, 20, stop_time_utc);
+    _mav_put_uint16_t(buf, 24, pulses);
+    _mav_put_uint8_t(buf, 46, start_reason);
+    _mav_put_uint8_t(buf, 47, stop_reason);
+    _mav_put_char_array(buf, 26, truck_name, 20);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_WATER_TRANSACTION_LEN);
 #else
     mavlink_water_transaction_t packet;
     packet.badge_id_int = badge_id_int;
-    packet.start_time_utc = start_time_utc;
-    packet.stop_time_utc = stop_time_utc;
     packet.dispensed_ml = dispensed_ml;
     packet.limit_ml = limit_ml;
+    packet.start_time_utc = start_time_utc;
+    packet.stop_time_utc = stop_time_utc;
     packet.pulses = pulses;
     packet.start_reason = start_reason;
     packet.stop_reason = stop_reason;
@@ -122,33 +122,33 @@ static inline uint16_t mavlink_msg_water_transaction_pack(uint8_t system_id, uin
  * @param dispensed_ml [mL]  Number of ML dispensed in currenttransaction
  * @param limit_ml [mL]  Limit for this transaction 
  * @param start_reason   Reason the transaction began 
- * @param stop_reason   Reason the transaction stopped 
+ * @param stop_reason   Reason the transaction stopped. 0 if transaction still running 
  * @param start_time_utc [s]  unix start time of the transaction in seconds
  * @param stop_time_utc [s]  unix stop time of the transaction in seconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_water_transaction_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint64_t start_time_utc, uint64_t stop_time_utc)
+                               uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint32_t start_time_utc, uint32_t stop_time_utc)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WATER_TRANSACTION_LEN];
     _mav_put_uint64_t(buf, 0, badge_id_int);
-    _mav_put_uint64_t(buf, 8, start_time_utc);
-    _mav_put_uint64_t(buf, 16, stop_time_utc);
-    _mav_put_uint32_t(buf, 24, dispensed_ml);
-    _mav_put_uint32_t(buf, 28, limit_ml);
-    _mav_put_uint16_t(buf, 32, pulses);
-    _mav_put_uint8_t(buf, 54, start_reason);
-    _mav_put_uint8_t(buf, 55, stop_reason);
-    _mav_put_char_array(buf, 34, truck_name, 20);
+    _mav_put_uint32_t(buf, 8, dispensed_ml);
+    _mav_put_uint32_t(buf, 12, limit_ml);
+    _mav_put_uint32_t(buf, 16, start_time_utc);
+    _mav_put_uint32_t(buf, 20, stop_time_utc);
+    _mav_put_uint16_t(buf, 24, pulses);
+    _mav_put_uint8_t(buf, 46, start_reason);
+    _mav_put_uint8_t(buf, 47, stop_reason);
+    _mav_put_char_array(buf, 26, truck_name, 20);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_WATER_TRANSACTION_LEN);
 #else
     mavlink_water_transaction_t packet;
     packet.badge_id_int = badge_id_int;
-    packet.start_time_utc = start_time_utc;
-    packet.stop_time_utc = stop_time_utc;
     packet.dispensed_ml = dispensed_ml;
     packet.limit_ml = limit_ml;
+    packet.start_time_utc = start_time_utc;
+    packet.stop_time_utc = stop_time_utc;
     packet.pulses = pulses;
     packet.start_reason = start_reason;
     packet.stop_reason = stop_reason;
@@ -176,34 +176,34 @@ static inline uint16_t mavlink_msg_water_transaction_pack_status(uint8_t system_
  * @param dispensed_ml [mL]  Number of ML dispensed in currenttransaction
  * @param limit_ml [mL]  Limit for this transaction 
  * @param start_reason   Reason the transaction began 
- * @param stop_reason   Reason the transaction stopped 
+ * @param stop_reason   Reason the transaction stopped. 0 if transaction still running 
  * @param start_time_utc [s]  unix start time of the transaction in seconds
  * @param stop_time_utc [s]  unix stop time of the transaction in seconds
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_water_transaction_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint64_t badge_id_int,const char *truck_name,uint16_t pulses,uint32_t dispensed_ml,uint32_t limit_ml,uint8_t start_reason,uint8_t stop_reason,uint64_t start_time_utc,uint64_t stop_time_utc)
+                                   uint64_t badge_id_int,const char *truck_name,uint16_t pulses,uint32_t dispensed_ml,uint32_t limit_ml,uint8_t start_reason,uint8_t stop_reason,uint32_t start_time_utc,uint32_t stop_time_utc)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WATER_TRANSACTION_LEN];
     _mav_put_uint64_t(buf, 0, badge_id_int);
-    _mav_put_uint64_t(buf, 8, start_time_utc);
-    _mav_put_uint64_t(buf, 16, stop_time_utc);
-    _mav_put_uint32_t(buf, 24, dispensed_ml);
-    _mav_put_uint32_t(buf, 28, limit_ml);
-    _mav_put_uint16_t(buf, 32, pulses);
-    _mav_put_uint8_t(buf, 54, start_reason);
-    _mav_put_uint8_t(buf, 55, stop_reason);
-    _mav_put_char_array(buf, 34, truck_name, 20);
+    _mav_put_uint32_t(buf, 8, dispensed_ml);
+    _mav_put_uint32_t(buf, 12, limit_ml);
+    _mav_put_uint32_t(buf, 16, start_time_utc);
+    _mav_put_uint32_t(buf, 20, stop_time_utc);
+    _mav_put_uint16_t(buf, 24, pulses);
+    _mav_put_uint8_t(buf, 46, start_reason);
+    _mav_put_uint8_t(buf, 47, stop_reason);
+    _mav_put_char_array(buf, 26, truck_name, 20);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_WATER_TRANSACTION_LEN);
 #else
     mavlink_water_transaction_t packet;
     packet.badge_id_int = badge_id_int;
-    packet.start_time_utc = start_time_utc;
-    packet.stop_time_utc = stop_time_utc;
     packet.dispensed_ml = dispensed_ml;
     packet.limit_ml = limit_ml;
+    packet.start_time_utc = start_time_utc;
+    packet.stop_time_utc = stop_time_utc;
     packet.pulses = pulses;
     packet.start_reason = start_reason;
     packet.stop_reason = stop_reason;
@@ -266,33 +266,33 @@ static inline uint16_t mavlink_msg_water_transaction_encode_status(uint8_t syste
  * @param dispensed_ml [mL]  Number of ML dispensed in currenttransaction
  * @param limit_ml [mL]  Limit for this transaction 
  * @param start_reason   Reason the transaction began 
- * @param stop_reason   Reason the transaction stopped 
+ * @param stop_reason   Reason the transaction stopped. 0 if transaction still running 
  * @param start_time_utc [s]  unix start time of the transaction in seconds
  * @param stop_time_utc [s]  unix stop time of the transaction in seconds
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_water_transaction_send(mavlink_channel_t chan, uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint64_t start_time_utc, uint64_t stop_time_utc)
+static inline void mavlink_msg_water_transaction_send(mavlink_channel_t chan, uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint32_t start_time_utc, uint32_t stop_time_utc)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_WATER_TRANSACTION_LEN];
     _mav_put_uint64_t(buf, 0, badge_id_int);
-    _mav_put_uint64_t(buf, 8, start_time_utc);
-    _mav_put_uint64_t(buf, 16, stop_time_utc);
-    _mav_put_uint32_t(buf, 24, dispensed_ml);
-    _mav_put_uint32_t(buf, 28, limit_ml);
-    _mav_put_uint16_t(buf, 32, pulses);
-    _mav_put_uint8_t(buf, 54, start_reason);
-    _mav_put_uint8_t(buf, 55, stop_reason);
-    _mav_put_char_array(buf, 34, truck_name, 20);
+    _mav_put_uint32_t(buf, 8, dispensed_ml);
+    _mav_put_uint32_t(buf, 12, limit_ml);
+    _mav_put_uint32_t(buf, 16, start_time_utc);
+    _mav_put_uint32_t(buf, 20, stop_time_utc);
+    _mav_put_uint16_t(buf, 24, pulses);
+    _mav_put_uint8_t(buf, 46, start_reason);
+    _mav_put_uint8_t(buf, 47, stop_reason);
+    _mav_put_char_array(buf, 26, truck_name, 20);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WATER_TRANSACTION, buf, MAVLINK_MSG_ID_WATER_TRANSACTION_MIN_LEN, MAVLINK_MSG_ID_WATER_TRANSACTION_LEN, MAVLINK_MSG_ID_WATER_TRANSACTION_CRC);
 #else
     mavlink_water_transaction_t packet;
     packet.badge_id_int = badge_id_int;
-    packet.start_time_utc = start_time_utc;
-    packet.stop_time_utc = stop_time_utc;
     packet.dispensed_ml = dispensed_ml;
     packet.limit_ml = limit_ml;
+    packet.start_time_utc = start_time_utc;
+    packet.stop_time_utc = stop_time_utc;
     packet.pulses = pulses;
     packet.start_reason = start_reason;
     packet.stop_reason = stop_reason;
@@ -323,27 +323,27 @@ static inline void mavlink_msg_water_transaction_send_struct(mavlink_channel_t c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_water_transaction_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint64_t start_time_utc, uint64_t stop_time_utc)
+static inline void mavlink_msg_water_transaction_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint64_t badge_id_int, const char *truck_name, uint16_t pulses, uint32_t dispensed_ml, uint32_t limit_ml, uint8_t start_reason, uint8_t stop_reason, uint32_t start_time_utc, uint32_t stop_time_utc)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_uint64_t(buf, 0, badge_id_int);
-    _mav_put_uint64_t(buf, 8, start_time_utc);
-    _mav_put_uint64_t(buf, 16, stop_time_utc);
-    _mav_put_uint32_t(buf, 24, dispensed_ml);
-    _mav_put_uint32_t(buf, 28, limit_ml);
-    _mav_put_uint16_t(buf, 32, pulses);
-    _mav_put_uint8_t(buf, 54, start_reason);
-    _mav_put_uint8_t(buf, 55, stop_reason);
-    _mav_put_char_array(buf, 34, truck_name, 20);
+    _mav_put_uint32_t(buf, 8, dispensed_ml);
+    _mav_put_uint32_t(buf, 12, limit_ml);
+    _mav_put_uint32_t(buf, 16, start_time_utc);
+    _mav_put_uint32_t(buf, 20, stop_time_utc);
+    _mav_put_uint16_t(buf, 24, pulses);
+    _mav_put_uint8_t(buf, 46, start_reason);
+    _mav_put_uint8_t(buf, 47, stop_reason);
+    _mav_put_char_array(buf, 26, truck_name, 20);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_WATER_TRANSACTION, buf, MAVLINK_MSG_ID_WATER_TRANSACTION_MIN_LEN, MAVLINK_MSG_ID_WATER_TRANSACTION_LEN, MAVLINK_MSG_ID_WATER_TRANSACTION_CRC);
 #else
     mavlink_water_transaction_t *packet = (mavlink_water_transaction_t *)msgbuf;
     packet->badge_id_int = badge_id_int;
-    packet->start_time_utc = start_time_utc;
-    packet->stop_time_utc = stop_time_utc;
     packet->dispensed_ml = dispensed_ml;
     packet->limit_ml = limit_ml;
+    packet->start_time_utc = start_time_utc;
+    packet->stop_time_utc = stop_time_utc;
     packet->pulses = pulses;
     packet->start_reason = start_reason;
     packet->stop_reason = stop_reason;
@@ -375,7 +375,7 @@ static inline uint64_t mavlink_msg_water_transaction_get_badge_id_int(const mavl
  */
 static inline uint16_t mavlink_msg_water_transaction_get_truck_name(const mavlink_message_t* msg, char *truck_name)
 {
-    return _MAV_RETURN_char_array(msg, truck_name, 20,  34);
+    return _MAV_RETURN_char_array(msg, truck_name, 20,  26);
 }
 
 /**
@@ -385,7 +385,7 @@ static inline uint16_t mavlink_msg_water_transaction_get_truck_name(const mavlin
  */
 static inline uint16_t mavlink_msg_water_transaction_get_pulses(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint16_t(msg,  32);
+    return _MAV_RETURN_uint16_t(msg,  24);
 }
 
 /**
@@ -395,7 +395,7 @@ static inline uint16_t mavlink_msg_water_transaction_get_pulses(const mavlink_me
  */
 static inline uint32_t mavlink_msg_water_transaction_get_dispensed_ml(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint32_t(msg,  24);
+    return _MAV_RETURN_uint32_t(msg,  8);
 }
 
 /**
@@ -405,7 +405,7 @@ static inline uint32_t mavlink_msg_water_transaction_get_dispensed_ml(const mavl
  */
 static inline uint32_t mavlink_msg_water_transaction_get_limit_ml(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint32_t(msg,  28);
+    return _MAV_RETURN_uint32_t(msg,  12);
 }
 
 /**
@@ -415,17 +415,17 @@ static inline uint32_t mavlink_msg_water_transaction_get_limit_ml(const mavlink_
  */
 static inline uint8_t mavlink_msg_water_transaction_get_start_reason(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  54);
+    return _MAV_RETURN_uint8_t(msg,  46);
 }
 
 /**
  * @brief Get field stop_reason from water_transaction message
  *
- * @return   Reason the transaction stopped 
+ * @return   Reason the transaction stopped. 0 if transaction still running 
  */
 static inline uint8_t mavlink_msg_water_transaction_get_stop_reason(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  55);
+    return _MAV_RETURN_uint8_t(msg,  47);
 }
 
 /**
@@ -433,9 +433,9 @@ static inline uint8_t mavlink_msg_water_transaction_get_stop_reason(const mavlin
  *
  * @return [s]  unix start time of the transaction in seconds
  */
-static inline uint64_t mavlink_msg_water_transaction_get_start_time_utc(const mavlink_message_t* msg)
+static inline uint32_t mavlink_msg_water_transaction_get_start_time_utc(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint64_t(msg,  8);
+    return _MAV_RETURN_uint32_t(msg,  16);
 }
 
 /**
@@ -443,9 +443,9 @@ static inline uint64_t mavlink_msg_water_transaction_get_start_time_utc(const ma
  *
  * @return [s]  unix stop time of the transaction in seconds
  */
-static inline uint64_t mavlink_msg_water_transaction_get_stop_time_utc(const mavlink_message_t* msg)
+static inline uint32_t mavlink_msg_water_transaction_get_stop_time_utc(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint64_t(msg,  16);
+    return _MAV_RETURN_uint32_t(msg,  20);
 }
 
 /**
@@ -458,10 +458,10 @@ static inline void mavlink_msg_water_transaction_decode(const mavlink_message_t*
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     water_transaction->badge_id_int = mavlink_msg_water_transaction_get_badge_id_int(msg);
-    water_transaction->start_time_utc = mavlink_msg_water_transaction_get_start_time_utc(msg);
-    water_transaction->stop_time_utc = mavlink_msg_water_transaction_get_stop_time_utc(msg);
     water_transaction->dispensed_ml = mavlink_msg_water_transaction_get_dispensed_ml(msg);
     water_transaction->limit_ml = mavlink_msg_water_transaction_get_limit_ml(msg);
+    water_transaction->start_time_utc = mavlink_msg_water_transaction_get_start_time_utc(msg);
+    water_transaction->stop_time_utc = mavlink_msg_water_transaction_get_stop_time_utc(msg);
     water_transaction->pulses = mavlink_msg_water_transaction_get_pulses(msg);
     mavlink_msg_water_transaction_get_truck_name(msg, water_transaction->truck_name);
     water_transaction->start_reason = mavlink_msg_water_transaction_get_start_reason(msg);

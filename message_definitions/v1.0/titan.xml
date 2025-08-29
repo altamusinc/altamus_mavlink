@@ -54,9 +54,18 @@
             <field name="dispensed_ml" type="uint32_t" units="mL"> Number of ML dispensed in currenttransaction</field>
             <field name="limit_ml" type="uint32_t" units="mL"> Limit for this transaction </field>
             <field name="start_reason" type="uint8_t" enum="STATE_INPUT"> Reason the transaction began </field>
-            <field name="stop_reason" type="uint8_t" enum="STATE_INPUT"> Reason the transaction stopped </field>
-            <field name="start_time_utc" type="uint64_t" units="s"> unix start time of the transaction in seconds</field>
-            <field name="stop_time_utc" type="uint64_t" units="s"> unix stop time of the transaction in seconds</field>
+            <field name="stop_reason" type="uint8_t" enum="STATE_INPUT"> Reason the transaction stopped. 0 if transaction still running </field>
+            <field name="start_time_utc" type="uint32_t" units="s"> unix start time of the transaction in seconds</field>
+            <field name="stop_time_utc" type="uint32_t" units="s"> unix stop time of the transaction in seconds</field>
+        </message>
+        <message name="STATION_STATE" id="4">
+            <description> State of the water filling station </description>
+            <field name="system_state" type="uint8_t" enum="SYSTEM_STATE"> Current state of the station </field>
+            <field name="solenoid_state" type="uint8_t"> State of the solenoid: 0 closed 1 open</field>
+            <field name="untracked_pulses" type="uint32_t"> number of untracked pulses received </field>
+            <field name="system_time" type="uint32_t" units="s"> System time in Unix time</field>
+            <field name="detected_badges_count" type="uint8_t"> number of badges current registered by the RFID reader</field>
+            <field name="internet_connectivity" type="uint8_t"> if the station is connected to the internet, 0 false, 1 true</field>
         </message>
     </messages>
 </mavlink>
