@@ -68,5 +68,15 @@
             <field name="internet_connectivity" type="uint8_t"> if the station is connected to the internet, 0 false, 1 true</field>
             <field name="stored_transactions_count" type="uint16_t"> number of transactions stored in memory, will be uploaded when internet returns</field>
         </message>
+        <message name="STATION_SETTINGS" id="7">
+            <description> Station Settings </description>
+            <field name="badge_present_timeout" type="uint32_t" units="ms"> Timeout before a present badge is no longer considered present</field>
+            <field name="badge_present_threshold" type="uint32_t" units="ms"> How long a new badge needs to be seen for before it's considered present</field>
+            <field name="upload_attempt_timeout" type="uint32_t" units="ms"> How often the system should re-attempt uploading files after the last failure </field>
+            <field name="server_reply_timeout" type="uint32_t" units="ms"> How long the system should wait for the server to confirm that it received the transaction before deleting from memory </field>
+            <field name="fill_limit_ml" type="uint32_t" units="mL"> Default fill limit for each transaction</field>
+            <field name="ml_per_pulse" type="uint32_t" units="mL"> How many mL are registered per pulse of the measuring device</field>
+            <field name="station_timezone" type="int8_t"> Timezone of the station </field>
+        </message>
     </messages>
 </mavlink>

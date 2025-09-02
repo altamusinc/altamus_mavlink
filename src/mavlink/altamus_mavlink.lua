@@ -47,6 +47,7 @@ messageName = {
     [2] = 'IDENTIFIER',
     [3] = 'WATER_TRANSACTION',
     [4] = 'STATION_STATE',
+    [7] = 'STATION_SETTINGS',
     [0] = 'HEARTBEAT',
     [5] = 'CHANGE_OPERATOR_CONTROL',
     [6] = 'CHANGE_OPERATOR_CONTROL_ACK',
@@ -284,6 +285,14 @@ f.STATION_STATE_system_time = ProtoField.new("system_time (uint32_t) [s]", "mavl
 f.STATION_STATE_detected_badges_count = ProtoField.new("detected_badges_count (uint8_t)", "mavlink_proto.STATION_STATE_detected_badges_count", ftypes.UINT8, nil)
 f.STATION_STATE_internet_connectivity = ProtoField.new("internet_connectivity (uint8_t)", "mavlink_proto.STATION_STATE_internet_connectivity", ftypes.UINT8, nil)
 f.STATION_STATE_stored_transactions_count = ProtoField.new("stored_transactions_count (uint16_t)", "mavlink_proto.STATION_STATE_stored_transactions_count", ftypes.UINT16, nil)
+
+f.STATION_SETTINGS_badge_present_timeout = ProtoField.new("badge_present_timeout (uint32_t) [ms]", "mavlink_proto.STATION_SETTINGS_badge_present_timeout", ftypes.UINT32, nil)
+f.STATION_SETTINGS_badge_present_threshold = ProtoField.new("badge_present_threshold (uint32_t) [ms]", "mavlink_proto.STATION_SETTINGS_badge_present_threshold", ftypes.UINT32, nil)
+f.STATION_SETTINGS_upload_attempt_timeout = ProtoField.new("upload_attempt_timeout (uint32_t) [ms]", "mavlink_proto.STATION_SETTINGS_upload_attempt_timeout", ftypes.UINT32, nil)
+f.STATION_SETTINGS_server_reply_timeout = ProtoField.new("server_reply_timeout (uint32_t) [ms]", "mavlink_proto.STATION_SETTINGS_server_reply_timeout", ftypes.UINT32, nil)
+f.STATION_SETTINGS_fill_limit_ml = ProtoField.new("fill_limit_ml (uint32_t) [mL]", "mavlink_proto.STATION_SETTINGS_fill_limit_ml", ftypes.UINT32, nil)
+f.STATION_SETTINGS_ml_per_pulse = ProtoField.new("ml_per_pulse (uint32_t) [mL]", "mavlink_proto.STATION_SETTINGS_ml_per_pulse", ftypes.UINT32, nil)
+f.STATION_SETTINGS_station_timezone = ProtoField.new("station_timezone (int8_t)", "mavlink_proto.STATION_SETTINGS_station_timezone", ftypes.INT8, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -802,6 +811,31 @@ function payload_fns.payload_4(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.STATION_STATE_internet_connectivity, tvbrange)
     tvbrange = padded(offset + 8, 2)
     subtree = tree:add_le(f.STATION_STATE_stored_transactions_count, tvbrange)
+end
+-- dissect payload of message type STATION_SETTINGS
+function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 25 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 25)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.STATION_SETTINGS_badge_present_timeout, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.STATION_SETTINGS_badge_present_threshold, tvbrange)
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.STATION_SETTINGS_upload_attempt_timeout, tvbrange)
+    tvbrange = padded(offset + 12, 4)
+    subtree = tree:add_le(f.STATION_SETTINGS_server_reply_timeout, tvbrange)
+    tvbrange = padded(offset + 16, 4)
+    subtree = tree:add_le(f.STATION_SETTINGS_fill_limit_ml, tvbrange)
+    tvbrange = padded(offset + 20, 4)
+    subtree = tree:add_le(f.STATION_SETTINGS_ml_per_pulse, tvbrange)
+    tvbrange = padded(offset + 24, 1)
+    subtree = tree:add_le(f.STATION_SETTINGS_station_timezone, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
