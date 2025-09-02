@@ -7,19 +7,20 @@
 typedef struct __mavlink_station_state_t {
  uint32_t untracked_pulses; /*<   number of untracked pulses received */
  uint32_t system_time; /*< [s]  System time in Unix time*/
+ uint16_t stored_transactions_count; /*<   number of transactions stored in memory, will be uploaded when internet returns*/
  uint8_t system_state; /*<   Current state of the station */
  uint8_t solenoid_state; /*<   State of the solenoid: 0 closed 1 open*/
  uint8_t detected_badges_count; /*<   number of badges current registered by the RFID reader*/
  uint8_t internet_connectivity; /*<   if the station is connected to the internet, 0 false, 1 true*/
 } mavlink_station_state_t;
 
-#define MAVLINK_MSG_ID_STATION_STATE_LEN 12
-#define MAVLINK_MSG_ID_STATION_STATE_MIN_LEN 12
-#define MAVLINK_MSG_ID_4_LEN 12
-#define MAVLINK_MSG_ID_4_MIN_LEN 12
+#define MAVLINK_MSG_ID_STATION_STATE_LEN 14
+#define MAVLINK_MSG_ID_STATION_STATE_MIN_LEN 14
+#define MAVLINK_MSG_ID_4_LEN 14
+#define MAVLINK_MSG_ID_4_MIN_LEN 14
 
-#define MAVLINK_MSG_ID_STATION_STATE_CRC 57
-#define MAVLINK_MSG_ID_4_CRC 57
+#define MAVLINK_MSG_ID_STATION_STATE_CRC 158
+#define MAVLINK_MSG_ID_4_CRC 158
 
 
 
@@ -27,25 +28,27 @@ typedef struct __mavlink_station_state_t {
 #define MAVLINK_MESSAGE_INFO_STATION_STATE { \
     4, \
     "STATION_STATE", \
-    6, \
-    {  { "system_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 8, offsetof(mavlink_station_state_t, system_state) }, \
-         { "solenoid_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 9, offsetof(mavlink_station_state_t, solenoid_state) }, \
+    7, \
+    {  { "system_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 10, offsetof(mavlink_station_state_t, system_state) }, \
+         { "solenoid_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 11, offsetof(mavlink_station_state_t, solenoid_state) }, \
          { "untracked_pulses", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_station_state_t, untracked_pulses) }, \
          { "system_time", NULL, MAVLINK_TYPE_UINT32_T, 0, 4, offsetof(mavlink_station_state_t, system_time) }, \
-         { "detected_badges_count", NULL, MAVLINK_TYPE_UINT8_T, 0, 10, offsetof(mavlink_station_state_t, detected_badges_count) }, \
-         { "internet_connectivity", NULL, MAVLINK_TYPE_UINT8_T, 0, 11, offsetof(mavlink_station_state_t, internet_connectivity) }, \
+         { "detected_badges_count", NULL, MAVLINK_TYPE_UINT8_T, 0, 12, offsetof(mavlink_station_state_t, detected_badges_count) }, \
+         { "internet_connectivity", NULL, MAVLINK_TYPE_UINT8_T, 0, 13, offsetof(mavlink_station_state_t, internet_connectivity) }, \
+         { "stored_transactions_count", NULL, MAVLINK_TYPE_UINT16_T, 0, 8, offsetof(mavlink_station_state_t, stored_transactions_count) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_STATION_STATE { \
     "STATION_STATE", \
-    6, \
-    {  { "system_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 8, offsetof(mavlink_station_state_t, system_state) }, \
-         { "solenoid_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 9, offsetof(mavlink_station_state_t, solenoid_state) }, \
+    7, \
+    {  { "system_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 10, offsetof(mavlink_station_state_t, system_state) }, \
+         { "solenoid_state", NULL, MAVLINK_TYPE_UINT8_T, 0, 11, offsetof(mavlink_station_state_t, solenoid_state) }, \
          { "untracked_pulses", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_station_state_t, untracked_pulses) }, \
          { "system_time", NULL, MAVLINK_TYPE_UINT32_T, 0, 4, offsetof(mavlink_station_state_t, system_time) }, \
-         { "detected_badges_count", NULL, MAVLINK_TYPE_UINT8_T, 0, 10, offsetof(mavlink_station_state_t, detected_badges_count) }, \
-         { "internet_connectivity", NULL, MAVLINK_TYPE_UINT8_T, 0, 11, offsetof(mavlink_station_state_t, internet_connectivity) }, \
+         { "detected_badges_count", NULL, MAVLINK_TYPE_UINT8_T, 0, 12, offsetof(mavlink_station_state_t, detected_badges_count) }, \
+         { "internet_connectivity", NULL, MAVLINK_TYPE_UINT8_T, 0, 13, offsetof(mavlink_station_state_t, internet_connectivity) }, \
+         { "stored_transactions_count", NULL, MAVLINK_TYPE_UINT16_T, 0, 8, offsetof(mavlink_station_state_t, stored_transactions_count) }, \
          } \
 }
 #endif
@@ -62,25 +65,28 @@ typedef struct __mavlink_station_state_t {
  * @param system_time [s]  System time in Unix time
  * @param detected_badges_count   number of badges current registered by the RFID reader
  * @param internet_connectivity   if the station is connected to the internet, 0 false, 1 true
+ * @param stored_transactions_count   number of transactions stored in memory, will be uploaded when internet returns
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_station_state_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity)
+                               uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity, uint16_t stored_transactions_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_STATE_LEN];
     _mav_put_uint32_t(buf, 0, untracked_pulses);
     _mav_put_uint32_t(buf, 4, system_time);
-    _mav_put_uint8_t(buf, 8, system_state);
-    _mav_put_uint8_t(buf, 9, solenoid_state);
-    _mav_put_uint8_t(buf, 10, detected_badges_count);
-    _mav_put_uint8_t(buf, 11, internet_connectivity);
+    _mav_put_uint16_t(buf, 8, stored_transactions_count);
+    _mav_put_uint8_t(buf, 10, system_state);
+    _mav_put_uint8_t(buf, 11, solenoid_state);
+    _mav_put_uint8_t(buf, 12, detected_badges_count);
+    _mav_put_uint8_t(buf, 13, internet_connectivity);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_STATION_STATE_LEN);
 #else
     mavlink_station_state_t packet;
     packet.untracked_pulses = untracked_pulses;
     packet.system_time = system_time;
+    packet.stored_transactions_count = stored_transactions_count;
     packet.system_state = system_state;
     packet.solenoid_state = solenoid_state;
     packet.detected_badges_count = detected_badges_count;
@@ -106,25 +112,28 @@ static inline uint16_t mavlink_msg_station_state_pack(uint8_t system_id, uint8_t
  * @param system_time [s]  System time in Unix time
  * @param detected_badges_count   number of badges current registered by the RFID reader
  * @param internet_connectivity   if the station is connected to the internet, 0 false, 1 true
+ * @param stored_transactions_count   number of transactions stored in memory, will be uploaded when internet returns
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_station_state_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity)
+                               uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity, uint16_t stored_transactions_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_STATE_LEN];
     _mav_put_uint32_t(buf, 0, untracked_pulses);
     _mav_put_uint32_t(buf, 4, system_time);
-    _mav_put_uint8_t(buf, 8, system_state);
-    _mav_put_uint8_t(buf, 9, solenoid_state);
-    _mav_put_uint8_t(buf, 10, detected_badges_count);
-    _mav_put_uint8_t(buf, 11, internet_connectivity);
+    _mav_put_uint16_t(buf, 8, stored_transactions_count);
+    _mav_put_uint8_t(buf, 10, system_state);
+    _mav_put_uint8_t(buf, 11, solenoid_state);
+    _mav_put_uint8_t(buf, 12, detected_badges_count);
+    _mav_put_uint8_t(buf, 13, internet_connectivity);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_STATION_STATE_LEN);
 #else
     mavlink_station_state_t packet;
     packet.untracked_pulses = untracked_pulses;
     packet.system_time = system_time;
+    packet.stored_transactions_count = stored_transactions_count;
     packet.system_state = system_state;
     packet.solenoid_state = solenoid_state;
     packet.detected_badges_count = detected_badges_count;
@@ -153,26 +162,29 @@ static inline uint16_t mavlink_msg_station_state_pack_status(uint8_t system_id, 
  * @param system_time [s]  System time in Unix time
  * @param detected_badges_count   number of badges current registered by the RFID reader
  * @param internet_connectivity   if the station is connected to the internet, 0 false, 1 true
+ * @param stored_transactions_count   number of transactions stored in memory, will be uploaded when internet returns
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_station_state_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t system_state,uint8_t solenoid_state,uint32_t untracked_pulses,uint32_t system_time,uint8_t detected_badges_count,uint8_t internet_connectivity)
+                                   uint8_t system_state,uint8_t solenoid_state,uint32_t untracked_pulses,uint32_t system_time,uint8_t detected_badges_count,uint8_t internet_connectivity,uint16_t stored_transactions_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_STATE_LEN];
     _mav_put_uint32_t(buf, 0, untracked_pulses);
     _mav_put_uint32_t(buf, 4, system_time);
-    _mav_put_uint8_t(buf, 8, system_state);
-    _mav_put_uint8_t(buf, 9, solenoid_state);
-    _mav_put_uint8_t(buf, 10, detected_badges_count);
-    _mav_put_uint8_t(buf, 11, internet_connectivity);
+    _mav_put_uint16_t(buf, 8, stored_transactions_count);
+    _mav_put_uint8_t(buf, 10, system_state);
+    _mav_put_uint8_t(buf, 11, solenoid_state);
+    _mav_put_uint8_t(buf, 12, detected_badges_count);
+    _mav_put_uint8_t(buf, 13, internet_connectivity);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_STATION_STATE_LEN);
 #else
     mavlink_station_state_t packet;
     packet.untracked_pulses = untracked_pulses;
     packet.system_time = system_time;
+    packet.stored_transactions_count = stored_transactions_count;
     packet.system_state = system_state;
     packet.solenoid_state = solenoid_state;
     packet.detected_badges_count = detected_badges_count;
@@ -195,7 +207,7 @@ static inline uint16_t mavlink_msg_station_state_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_station_state_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_station_state_t* station_state)
 {
-    return mavlink_msg_station_state_pack(system_id, component_id, msg, station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity);
+    return mavlink_msg_station_state_pack(system_id, component_id, msg, station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity, station_state->stored_transactions_count);
 }
 
 /**
@@ -209,7 +221,7 @@ static inline uint16_t mavlink_msg_station_state_encode(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_station_state_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_station_state_t* station_state)
 {
-    return mavlink_msg_station_state_pack_chan(system_id, component_id, chan, msg, station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity);
+    return mavlink_msg_station_state_pack_chan(system_id, component_id, chan, msg, station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity, station_state->stored_transactions_count);
 }
 
 /**
@@ -223,7 +235,7 @@ static inline uint16_t mavlink_msg_station_state_encode_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_station_state_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_station_state_t* station_state)
 {
-    return mavlink_msg_station_state_pack_status(system_id, component_id, _status, msg,  station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity);
+    return mavlink_msg_station_state_pack_status(system_id, component_id, _status, msg,  station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity, station_state->stored_transactions_count);
 }
 
 /**
@@ -236,25 +248,28 @@ static inline uint16_t mavlink_msg_station_state_encode_status(uint8_t system_id
  * @param system_time [s]  System time in Unix time
  * @param detected_badges_count   number of badges current registered by the RFID reader
  * @param internet_connectivity   if the station is connected to the internet, 0 false, 1 true
+ * @param stored_transactions_count   number of transactions stored in memory, will be uploaded when internet returns
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_station_state_send(mavlink_channel_t chan, uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity)
+static inline void mavlink_msg_station_state_send(mavlink_channel_t chan, uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity, uint16_t stored_transactions_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_STATE_LEN];
     _mav_put_uint32_t(buf, 0, untracked_pulses);
     _mav_put_uint32_t(buf, 4, system_time);
-    _mav_put_uint8_t(buf, 8, system_state);
-    _mav_put_uint8_t(buf, 9, solenoid_state);
-    _mav_put_uint8_t(buf, 10, detected_badges_count);
-    _mav_put_uint8_t(buf, 11, internet_connectivity);
+    _mav_put_uint16_t(buf, 8, stored_transactions_count);
+    _mav_put_uint8_t(buf, 10, system_state);
+    _mav_put_uint8_t(buf, 11, solenoid_state);
+    _mav_put_uint8_t(buf, 12, detected_badges_count);
+    _mav_put_uint8_t(buf, 13, internet_connectivity);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_STATE, buf, MAVLINK_MSG_ID_STATION_STATE_MIN_LEN, MAVLINK_MSG_ID_STATION_STATE_LEN, MAVLINK_MSG_ID_STATION_STATE_CRC);
 #else
     mavlink_station_state_t packet;
     packet.untracked_pulses = untracked_pulses;
     packet.system_time = system_time;
+    packet.stored_transactions_count = stored_transactions_count;
     packet.system_state = system_state;
     packet.solenoid_state = solenoid_state;
     packet.detected_badges_count = detected_badges_count;
@@ -272,7 +287,7 @@ static inline void mavlink_msg_station_state_send(mavlink_channel_t chan, uint8_
 static inline void mavlink_msg_station_state_send_struct(mavlink_channel_t chan, const mavlink_station_state_t* station_state)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_station_state_send(chan, station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity);
+    mavlink_msg_station_state_send(chan, station_state->system_state, station_state->solenoid_state, station_state->untracked_pulses, station_state->system_time, station_state->detected_badges_count, station_state->internet_connectivity, station_state->stored_transactions_count);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_STATE, (const char *)station_state, MAVLINK_MSG_ID_STATION_STATE_MIN_LEN, MAVLINK_MSG_ID_STATION_STATE_LEN, MAVLINK_MSG_ID_STATION_STATE_CRC);
 #endif
@@ -286,22 +301,24 @@ static inline void mavlink_msg_station_state_send_struct(mavlink_channel_t chan,
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_station_state_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity)
+static inline void mavlink_msg_station_state_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t system_state, uint8_t solenoid_state, uint32_t untracked_pulses, uint32_t system_time, uint8_t detected_badges_count, uint8_t internet_connectivity, uint16_t stored_transactions_count)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_uint32_t(buf, 0, untracked_pulses);
     _mav_put_uint32_t(buf, 4, system_time);
-    _mav_put_uint8_t(buf, 8, system_state);
-    _mav_put_uint8_t(buf, 9, solenoid_state);
-    _mav_put_uint8_t(buf, 10, detected_badges_count);
-    _mav_put_uint8_t(buf, 11, internet_connectivity);
+    _mav_put_uint16_t(buf, 8, stored_transactions_count);
+    _mav_put_uint8_t(buf, 10, system_state);
+    _mav_put_uint8_t(buf, 11, solenoid_state);
+    _mav_put_uint8_t(buf, 12, detected_badges_count);
+    _mav_put_uint8_t(buf, 13, internet_connectivity);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_STATE, buf, MAVLINK_MSG_ID_STATION_STATE_MIN_LEN, MAVLINK_MSG_ID_STATION_STATE_LEN, MAVLINK_MSG_ID_STATION_STATE_CRC);
 #else
     mavlink_station_state_t *packet = (mavlink_station_state_t *)msgbuf;
     packet->untracked_pulses = untracked_pulses;
     packet->system_time = system_time;
+    packet->stored_transactions_count = stored_transactions_count;
     packet->system_state = system_state;
     packet->solenoid_state = solenoid_state;
     packet->detected_badges_count = detected_badges_count;
@@ -324,7 +341,7 @@ static inline void mavlink_msg_station_state_send_buf(mavlink_message_t *msgbuf,
  */
 static inline uint8_t mavlink_msg_station_state_get_system_state(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  8);
+    return _MAV_RETURN_uint8_t(msg,  10);
 }
 
 /**
@@ -334,7 +351,7 @@ static inline uint8_t mavlink_msg_station_state_get_system_state(const mavlink_m
  */
 static inline uint8_t mavlink_msg_station_state_get_solenoid_state(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  9);
+    return _MAV_RETURN_uint8_t(msg,  11);
 }
 
 /**
@@ -364,7 +381,7 @@ static inline uint32_t mavlink_msg_station_state_get_system_time(const mavlink_m
  */
 static inline uint8_t mavlink_msg_station_state_get_detected_badges_count(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  10);
+    return _MAV_RETURN_uint8_t(msg,  12);
 }
 
 /**
@@ -374,7 +391,17 @@ static inline uint8_t mavlink_msg_station_state_get_detected_badges_count(const 
  */
 static inline uint8_t mavlink_msg_station_state_get_internet_connectivity(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  11);
+    return _MAV_RETURN_uint8_t(msg,  13);
+}
+
+/**
+ * @brief Get field stored_transactions_count from station_state message
+ *
+ * @return   number of transactions stored in memory, will be uploaded when internet returns
+ */
+static inline uint16_t mavlink_msg_station_state_get_stored_transactions_count(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  8);
 }
 
 /**
@@ -388,6 +415,7 @@ static inline void mavlink_msg_station_state_decode(const mavlink_message_t* msg
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     station_state->untracked_pulses = mavlink_msg_station_state_get_untracked_pulses(msg);
     station_state->system_time = mavlink_msg_station_state_get_system_time(msg);
+    station_state->stored_transactions_count = mavlink_msg_station_state_get_stored_transactions_count(msg);
     station_state->system_state = mavlink_msg_station_state_get_system_state(msg);
     station_state->solenoid_state = mavlink_msg_station_state_get_solenoid_state(msg);
     station_state->detected_badges_count = mavlink_msg_station_state_get_detected_badges_count(msg);

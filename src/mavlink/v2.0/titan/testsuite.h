@@ -227,12 +227,13 @@ static void mavlink_test_station_state(uint8_t system_id, uint8_t component_id, 
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_station_state_t packet_in = {
-        963497464,963497672,29,96,163,230
+        963497464,963497672,17651,163,230,41,108
     };
     mavlink_station_state_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.untracked_pulses = packet_in.untracked_pulses;
         packet1.system_time = packet_in.system_time;
+        packet1.stored_transactions_count = packet_in.stored_transactions_count;
         packet1.system_state = packet_in.system_state;
         packet1.solenoid_state = packet_in.solenoid_state;
         packet1.detected_badges_count = packet_in.detected_badges_count;
@@ -251,12 +252,12 @@ static void mavlink_test_station_state(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_station_state_pack(system_id, component_id, &msg , packet1.system_state , packet1.solenoid_state , packet1.untracked_pulses , packet1.system_time , packet1.detected_badges_count , packet1.internet_connectivity );
+    mavlink_msg_station_state_pack(system_id, component_id, &msg , packet1.system_state , packet1.solenoid_state , packet1.untracked_pulses , packet1.system_time , packet1.detected_badges_count , packet1.internet_connectivity , packet1.stored_transactions_count );
     mavlink_msg_station_state_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_station_state_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.system_state , packet1.solenoid_state , packet1.untracked_pulses , packet1.system_time , packet1.detected_badges_count , packet1.internet_connectivity );
+    mavlink_msg_station_state_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.system_state , packet1.solenoid_state , packet1.untracked_pulses , packet1.system_time , packet1.detected_badges_count , packet1.internet_connectivity , packet1.stored_transactions_count );
     mavlink_msg_station_state_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -269,7 +270,7 @@ static void mavlink_test_station_state(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_station_state_send(MAVLINK_COMM_1 , packet1.system_state , packet1.solenoid_state , packet1.untracked_pulses , packet1.system_time , packet1.detected_badges_count , packet1.internet_connectivity );
+    mavlink_msg_station_state_send(MAVLINK_COMM_1 , packet1.system_state , packet1.solenoid_state , packet1.untracked_pulses , packet1.system_time , packet1.detected_badges_count , packet1.internet_connectivity , packet1.stored_transactions_count );
     mavlink_msg_station_state_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

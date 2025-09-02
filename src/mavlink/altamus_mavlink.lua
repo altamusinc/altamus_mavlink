@@ -283,6 +283,7 @@ f.STATION_STATE_untracked_pulses = ProtoField.new("untracked_pulses (uint32_t)",
 f.STATION_STATE_system_time = ProtoField.new("system_time (uint32_t) [s]", "mavlink_proto.STATION_STATE_system_time", ftypes.UINT32, nil)
 f.STATION_STATE_detected_badges_count = ProtoField.new("detected_badges_count (uint8_t)", "mavlink_proto.STATION_STATE_detected_badges_count", ftypes.UINT8, nil)
 f.STATION_STATE_internet_connectivity = ProtoField.new("internet_connectivity (uint8_t)", "mavlink_proto.STATION_STATE_internet_connectivity", ftypes.UINT8, nil)
+f.STATION_STATE_stored_transactions_count = ProtoField.new("stored_transactions_count (uint16_t)", "mavlink_proto.STATION_STATE_stored_transactions_count", ftypes.UINT16, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -780,25 +781,27 @@ end
 -- dissect payload of message type STATION_STATE
 function payload_fns.payload_4(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 12 > limit) then
+    if (offset + 14 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 12)
+        padded:set_size(offset + 14)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
-    tvbrange = padded(offset + 8, 1)
+    tvbrange = padded(offset + 10, 1)
     subtree = tree:add_le(f.STATION_STATE_system_state, tvbrange)
-    tvbrange = padded(offset + 9, 1)
+    tvbrange = padded(offset + 11, 1)
     subtree = tree:add_le(f.STATION_STATE_solenoid_state, tvbrange)
     tvbrange = padded(offset + 0, 4)
     subtree = tree:add_le(f.STATION_STATE_untracked_pulses, tvbrange)
     tvbrange = padded(offset + 4, 4)
     subtree = tree:add_le(f.STATION_STATE_system_time, tvbrange)
-    tvbrange = padded(offset + 10, 1)
+    tvbrange = padded(offset + 12, 1)
     subtree = tree:add_le(f.STATION_STATE_detected_badges_count, tvbrange)
-    tvbrange = padded(offset + 11, 1)
+    tvbrange = padded(offset + 13, 1)
     subtree = tree:add_le(f.STATION_STATE_internet_connectivity, tvbrange)
+    tvbrange = padded(offset + 8, 2)
+    subtree = tree:add_le(f.STATION_STATE_stored_transactions_count, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)

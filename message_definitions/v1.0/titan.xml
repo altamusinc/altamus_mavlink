@@ -66,6 +66,7 @@
             <field name="system_time" type="uint32_t" units="s"> System time in Unix time</field>
             <field name="detected_badges_count" type="uint8_t"> number of badges current registered by the RFID reader</field>
             <field name="internet_connectivity" type="uint8_t"> if the station is connected to the internet, 0 false, 1 true</field>
+            <field name="stored_transactions_count" type="uint16_t"> number of transactions stored in memory, will be uploaded when internet returns</field>
         </message>
     </messages>
 </mavlink>
