@@ -77,6 +77,7 @@
             <field name="fill_limit_ml" type="uint32_t" units="mL"> Default fill limit for each transaction</field>
             <field name="ml_per_pulse" type="uint32_t" units="mL"> How many mL are registered per pulse of the measuring device</field>
             <field name="station_timezone" type="int8_t"> Timezone of the station </field>
+            <field name="rssi_threshold" type="int8_t"> min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired</field>
         </message>
     </messages>
 </mavlink>

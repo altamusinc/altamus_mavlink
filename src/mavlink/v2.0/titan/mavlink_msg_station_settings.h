@@ -12,15 +12,16 @@ typedef struct __mavlink_station_settings_t {
  uint32_t fill_limit_ml; /*< [mL]  Default fill limit for each transaction*/
  uint32_t ml_per_pulse; /*< [mL]  How many mL are registered per pulse of the measuring device*/
  int8_t station_timezone; /*<   Timezone of the station */
+ int8_t rssi_threshold; /*<   min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired*/
 } mavlink_station_settings_t;
 
-#define MAVLINK_MSG_ID_STATION_SETTINGS_LEN 25
-#define MAVLINK_MSG_ID_STATION_SETTINGS_MIN_LEN 25
-#define MAVLINK_MSG_ID_7_LEN 25
-#define MAVLINK_MSG_ID_7_MIN_LEN 25
+#define MAVLINK_MSG_ID_STATION_SETTINGS_LEN 26
+#define MAVLINK_MSG_ID_STATION_SETTINGS_MIN_LEN 26
+#define MAVLINK_MSG_ID_7_LEN 26
+#define MAVLINK_MSG_ID_7_MIN_LEN 26
 
-#define MAVLINK_MSG_ID_STATION_SETTINGS_CRC 167
-#define MAVLINK_MSG_ID_7_CRC 167
+#define MAVLINK_MSG_ID_STATION_SETTINGS_CRC 254
+#define MAVLINK_MSG_ID_7_CRC 254
 
 
 
@@ -28,7 +29,7 @@ typedef struct __mavlink_station_settings_t {
 #define MAVLINK_MESSAGE_INFO_STATION_SETTINGS { \
     7, \
     "STATION_SETTINGS", \
-    7, \
+    8, \
     {  { "badge_present_timeout", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_station_settings_t, badge_present_timeout) }, \
          { "badge_present_threshold", NULL, MAVLINK_TYPE_UINT32_T, 0, 4, offsetof(mavlink_station_settings_t, badge_present_threshold) }, \
          { "upload_attempt_timeout", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_station_settings_t, upload_attempt_timeout) }, \
@@ -36,12 +37,13 @@ typedef struct __mavlink_station_settings_t {
          { "fill_limit_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 16, offsetof(mavlink_station_settings_t, fill_limit_ml) }, \
          { "ml_per_pulse", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_station_settings_t, ml_per_pulse) }, \
          { "station_timezone", NULL, MAVLINK_TYPE_INT8_T, 0, 24, offsetof(mavlink_station_settings_t, station_timezone) }, \
+         { "rssi_threshold", NULL, MAVLINK_TYPE_INT8_T, 0, 25, offsetof(mavlink_station_settings_t, rssi_threshold) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_STATION_SETTINGS { \
     "STATION_SETTINGS", \
-    7, \
+    8, \
     {  { "badge_present_timeout", NULL, MAVLINK_TYPE_UINT32_T, 0, 0, offsetof(mavlink_station_settings_t, badge_present_timeout) }, \
          { "badge_present_threshold", NULL, MAVLINK_TYPE_UINT32_T, 0, 4, offsetof(mavlink_station_settings_t, badge_present_threshold) }, \
          { "upload_attempt_timeout", NULL, MAVLINK_TYPE_UINT32_T, 0, 8, offsetof(mavlink_station_settings_t, upload_attempt_timeout) }, \
@@ -49,6 +51,7 @@ typedef struct __mavlink_station_settings_t {
          { "fill_limit_ml", NULL, MAVLINK_TYPE_UINT32_T, 0, 16, offsetof(mavlink_station_settings_t, fill_limit_ml) }, \
          { "ml_per_pulse", NULL, MAVLINK_TYPE_UINT32_T, 0, 20, offsetof(mavlink_station_settings_t, ml_per_pulse) }, \
          { "station_timezone", NULL, MAVLINK_TYPE_INT8_T, 0, 24, offsetof(mavlink_station_settings_t, station_timezone) }, \
+         { "rssi_threshold", NULL, MAVLINK_TYPE_INT8_T, 0, 25, offsetof(mavlink_station_settings_t, rssi_threshold) }, \
          } \
 }
 #endif
@@ -66,10 +69,11 @@ typedef struct __mavlink_station_settings_t {
  * @param fill_limit_ml [mL]  Default fill limit for each transaction
  * @param ml_per_pulse [mL]  How many mL are registered per pulse of the measuring device
  * @param station_timezone   Timezone of the station 
+ * @param rssi_threshold   min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_station_settings_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone)
+                               uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone, int8_t rssi_threshold)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_SETTINGS_LEN];
@@ -80,6 +84,7 @@ static inline uint16_t mavlink_msg_station_settings_pack(uint8_t system_id, uint
     _mav_put_uint32_t(buf, 16, fill_limit_ml);
     _mav_put_uint32_t(buf, 20, ml_per_pulse);
     _mav_put_int8_t(buf, 24, station_timezone);
+    _mav_put_int8_t(buf, 25, rssi_threshold);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_STATION_SETTINGS_LEN);
 #else
@@ -91,6 +96,7 @@ static inline uint16_t mavlink_msg_station_settings_pack(uint8_t system_id, uint
     packet.fill_limit_ml = fill_limit_ml;
     packet.ml_per_pulse = ml_per_pulse;
     packet.station_timezone = station_timezone;
+    packet.rssi_threshold = rssi_threshold;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_STATION_SETTINGS_LEN);
 #endif
@@ -113,10 +119,11 @@ static inline uint16_t mavlink_msg_station_settings_pack(uint8_t system_id, uint
  * @param fill_limit_ml [mL]  Default fill limit for each transaction
  * @param ml_per_pulse [mL]  How many mL are registered per pulse of the measuring device
  * @param station_timezone   Timezone of the station 
+ * @param rssi_threshold   min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_station_settings_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone)
+                               uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone, int8_t rssi_threshold)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_SETTINGS_LEN];
@@ -127,6 +134,7 @@ static inline uint16_t mavlink_msg_station_settings_pack_status(uint8_t system_i
     _mav_put_uint32_t(buf, 16, fill_limit_ml);
     _mav_put_uint32_t(buf, 20, ml_per_pulse);
     _mav_put_int8_t(buf, 24, station_timezone);
+    _mav_put_int8_t(buf, 25, rssi_threshold);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_STATION_SETTINGS_LEN);
 #else
@@ -138,6 +146,7 @@ static inline uint16_t mavlink_msg_station_settings_pack_status(uint8_t system_i
     packet.fill_limit_ml = fill_limit_ml;
     packet.ml_per_pulse = ml_per_pulse;
     packet.station_timezone = station_timezone;
+    packet.rssi_threshold = rssi_threshold;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_STATION_SETTINGS_LEN);
 #endif
@@ -163,11 +172,12 @@ static inline uint16_t mavlink_msg_station_settings_pack_status(uint8_t system_i
  * @param fill_limit_ml [mL]  Default fill limit for each transaction
  * @param ml_per_pulse [mL]  How many mL are registered per pulse of the measuring device
  * @param station_timezone   Timezone of the station 
+ * @param rssi_threshold   min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_station_settings_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint32_t badge_present_timeout,uint32_t badge_present_threshold,uint32_t upload_attempt_timeout,uint32_t server_reply_timeout,uint32_t fill_limit_ml,uint32_t ml_per_pulse,int8_t station_timezone)
+                                   uint32_t badge_present_timeout,uint32_t badge_present_threshold,uint32_t upload_attempt_timeout,uint32_t server_reply_timeout,uint32_t fill_limit_ml,uint32_t ml_per_pulse,int8_t station_timezone,int8_t rssi_threshold)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_SETTINGS_LEN];
@@ -178,6 +188,7 @@ static inline uint16_t mavlink_msg_station_settings_pack_chan(uint8_t system_id,
     _mav_put_uint32_t(buf, 16, fill_limit_ml);
     _mav_put_uint32_t(buf, 20, ml_per_pulse);
     _mav_put_int8_t(buf, 24, station_timezone);
+    _mav_put_int8_t(buf, 25, rssi_threshold);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_STATION_SETTINGS_LEN);
 #else
@@ -189,6 +200,7 @@ static inline uint16_t mavlink_msg_station_settings_pack_chan(uint8_t system_id,
     packet.fill_limit_ml = fill_limit_ml;
     packet.ml_per_pulse = ml_per_pulse;
     packet.station_timezone = station_timezone;
+    packet.rssi_threshold = rssi_threshold;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_STATION_SETTINGS_LEN);
 #endif
@@ -207,7 +219,7 @@ static inline uint16_t mavlink_msg_station_settings_pack_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_station_settings_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_station_settings_t* station_settings)
 {
-    return mavlink_msg_station_settings_pack(system_id, component_id, msg, station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone);
+    return mavlink_msg_station_settings_pack(system_id, component_id, msg, station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone, station_settings->rssi_threshold);
 }
 
 /**
@@ -221,7 +233,7 @@ static inline uint16_t mavlink_msg_station_settings_encode(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_station_settings_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_station_settings_t* station_settings)
 {
-    return mavlink_msg_station_settings_pack_chan(system_id, component_id, chan, msg, station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone);
+    return mavlink_msg_station_settings_pack_chan(system_id, component_id, chan, msg, station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone, station_settings->rssi_threshold);
 }
 
 /**
@@ -235,7 +247,7 @@ static inline uint16_t mavlink_msg_station_settings_encode_chan(uint8_t system_i
  */
 static inline uint16_t mavlink_msg_station_settings_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_station_settings_t* station_settings)
 {
-    return mavlink_msg_station_settings_pack_status(system_id, component_id, _status, msg,  station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone);
+    return mavlink_msg_station_settings_pack_status(system_id, component_id, _status, msg,  station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone, station_settings->rssi_threshold);
 }
 
 /**
@@ -249,10 +261,11 @@ static inline uint16_t mavlink_msg_station_settings_encode_status(uint8_t system
  * @param fill_limit_ml [mL]  Default fill limit for each transaction
  * @param ml_per_pulse [mL]  How many mL are registered per pulse of the measuring device
  * @param station_timezone   Timezone of the station 
+ * @param rssi_threshold   min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_station_settings_send(mavlink_channel_t chan, uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone)
+static inline void mavlink_msg_station_settings_send(mavlink_channel_t chan, uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone, int8_t rssi_threshold)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_STATION_SETTINGS_LEN];
@@ -263,6 +276,7 @@ static inline void mavlink_msg_station_settings_send(mavlink_channel_t chan, uin
     _mav_put_uint32_t(buf, 16, fill_limit_ml);
     _mav_put_uint32_t(buf, 20, ml_per_pulse);
     _mav_put_int8_t(buf, 24, station_timezone);
+    _mav_put_int8_t(buf, 25, rssi_threshold);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_SETTINGS, buf, MAVLINK_MSG_ID_STATION_SETTINGS_MIN_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_CRC);
 #else
@@ -274,6 +288,7 @@ static inline void mavlink_msg_station_settings_send(mavlink_channel_t chan, uin
     packet.fill_limit_ml = fill_limit_ml;
     packet.ml_per_pulse = ml_per_pulse;
     packet.station_timezone = station_timezone;
+    packet.rssi_threshold = rssi_threshold;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_SETTINGS, (const char *)&packet, MAVLINK_MSG_ID_STATION_SETTINGS_MIN_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_CRC);
 #endif
@@ -287,7 +302,7 @@ static inline void mavlink_msg_station_settings_send(mavlink_channel_t chan, uin
 static inline void mavlink_msg_station_settings_send_struct(mavlink_channel_t chan, const mavlink_station_settings_t* station_settings)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_station_settings_send(chan, station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone);
+    mavlink_msg_station_settings_send(chan, station_settings->badge_present_timeout, station_settings->badge_present_threshold, station_settings->upload_attempt_timeout, station_settings->server_reply_timeout, station_settings->fill_limit_ml, station_settings->ml_per_pulse, station_settings->station_timezone, station_settings->rssi_threshold);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_SETTINGS, (const char *)station_settings, MAVLINK_MSG_ID_STATION_SETTINGS_MIN_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_CRC);
 #endif
@@ -301,7 +316,7 @@ static inline void mavlink_msg_station_settings_send_struct(mavlink_channel_t ch
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_station_settings_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone)
+static inline void mavlink_msg_station_settings_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint32_t badge_present_timeout, uint32_t badge_present_threshold, uint32_t upload_attempt_timeout, uint32_t server_reply_timeout, uint32_t fill_limit_ml, uint32_t ml_per_pulse, int8_t station_timezone, int8_t rssi_threshold)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -312,6 +327,7 @@ static inline void mavlink_msg_station_settings_send_buf(mavlink_message_t *msgb
     _mav_put_uint32_t(buf, 16, fill_limit_ml);
     _mav_put_uint32_t(buf, 20, ml_per_pulse);
     _mav_put_int8_t(buf, 24, station_timezone);
+    _mav_put_int8_t(buf, 25, rssi_threshold);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_SETTINGS, buf, MAVLINK_MSG_ID_STATION_SETTINGS_MIN_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_CRC);
 #else
@@ -323,6 +339,7 @@ static inline void mavlink_msg_station_settings_send_buf(mavlink_message_t *msgb
     packet->fill_limit_ml = fill_limit_ml;
     packet->ml_per_pulse = ml_per_pulse;
     packet->station_timezone = station_timezone;
+    packet->rssi_threshold = rssi_threshold;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_STATION_SETTINGS, (const char *)packet, MAVLINK_MSG_ID_STATION_SETTINGS_MIN_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_LEN, MAVLINK_MSG_ID_STATION_SETTINGS_CRC);
 #endif
@@ -405,6 +422,16 @@ static inline int8_t mavlink_msg_station_settings_get_station_timezone(const mav
 }
 
 /**
+ * @brief Get field rssi_threshold from station_settings message
+ *
+ * @return   min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired
+ */
+static inline int8_t mavlink_msg_station_settings_get_rssi_threshold(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_int8_t(msg,  25);
+}
+
+/**
  * @brief Decode a station_settings message into a struct
  *
  * @param msg The message to decode
@@ -420,6 +447,7 @@ static inline void mavlink_msg_station_settings_decode(const mavlink_message_t* 
     station_settings->fill_limit_ml = mavlink_msg_station_settings_get_fill_limit_ml(msg);
     station_settings->ml_per_pulse = mavlink_msg_station_settings_get_ml_per_pulse(msg);
     station_settings->station_timezone = mavlink_msg_station_settings_get_station_timezone(msg);
+    station_settings->rssi_threshold = mavlink_msg_station_settings_get_rssi_threshold(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_STATION_SETTINGS_LEN? msg->len : MAVLINK_MSG_ID_STATION_SETTINGS_LEN;
         memset(station_settings, 0, MAVLINK_MSG_ID_STATION_SETTINGS_LEN);

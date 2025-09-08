@@ -293,6 +293,7 @@ f.STATION_SETTINGS_server_reply_timeout = ProtoField.new("server_reply_timeout (
 f.STATION_SETTINGS_fill_limit_ml = ProtoField.new("fill_limit_ml (uint32_t) [mL]", "mavlink_proto.STATION_SETTINGS_fill_limit_ml", ftypes.UINT32, nil)
 f.STATION_SETTINGS_ml_per_pulse = ProtoField.new("ml_per_pulse (uint32_t) [mL]", "mavlink_proto.STATION_SETTINGS_ml_per_pulse", ftypes.UINT32, nil)
 f.STATION_SETTINGS_station_timezone = ProtoField.new("station_timezone (int8_t)", "mavlink_proto.STATION_SETTINGS_station_timezone", ftypes.INT8, nil)
+f.STATION_SETTINGS_rssi_threshold = ProtoField.new("rssi_threshold (int8_t)", "mavlink_proto.STATION_SETTINGS_rssi_threshold", ftypes.INT8, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -815,9 +816,9 @@ end
 -- dissect payload of message type STATION_SETTINGS
 function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 25 > limit) then
+    if (offset + 26 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 25)
+        padded:set_size(offset + 26)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -836,6 +837,8 @@ function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.STATION_SETTINGS_ml_per_pulse, tvbrange)
     tvbrange = padded(offset + 24, 1)
     subtree = tree:add_le(f.STATION_SETTINGS_station_timezone, tvbrange)
+    tvbrange = padded(offset + 25, 1)
+    subtree = tree:add_le(f.STATION_SETTINGS_rssi_threshold, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)

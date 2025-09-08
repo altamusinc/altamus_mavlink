@@ -292,7 +292,7 @@ static void mavlink_test_station_settings(uint8_t system_id, uint8_t component_i
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_station_settings_t packet_in = {
-        963497464,963497672,963497880,963498088,963498296,963498504,77
+        963497464,963497672,963497880,963498088,963498296,963498504,77,144
     };
     mavlink_station_settings_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -303,6 +303,7 @@ static void mavlink_test_station_settings(uint8_t system_id, uint8_t component_i
         packet1.fill_limit_ml = packet_in.fill_limit_ml;
         packet1.ml_per_pulse = packet_in.ml_per_pulse;
         packet1.station_timezone = packet_in.station_timezone;
+        packet1.rssi_threshold = packet_in.rssi_threshold;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -317,12 +318,12 @@ static void mavlink_test_station_settings(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_station_settings_pack(system_id, component_id, &msg , packet1.badge_present_timeout , packet1.badge_present_threshold , packet1.upload_attempt_timeout , packet1.server_reply_timeout , packet1.fill_limit_ml , packet1.ml_per_pulse , packet1.station_timezone );
+    mavlink_msg_station_settings_pack(system_id, component_id, &msg , packet1.badge_present_timeout , packet1.badge_present_threshold , packet1.upload_attempt_timeout , packet1.server_reply_timeout , packet1.fill_limit_ml , packet1.ml_per_pulse , packet1.station_timezone , packet1.rssi_threshold );
     mavlink_msg_station_settings_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_station_settings_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.badge_present_timeout , packet1.badge_present_threshold , packet1.upload_attempt_timeout , packet1.server_reply_timeout , packet1.fill_limit_ml , packet1.ml_per_pulse , packet1.station_timezone );
+    mavlink_msg_station_settings_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.badge_present_timeout , packet1.badge_present_threshold , packet1.upload_attempt_timeout , packet1.server_reply_timeout , packet1.fill_limit_ml , packet1.ml_per_pulse , packet1.station_timezone , packet1.rssi_threshold );
     mavlink_msg_station_settings_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -335,7 +336,7 @@ static void mavlink_test_station_settings(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_station_settings_send(MAVLINK_COMM_1 , packet1.badge_present_timeout , packet1.badge_present_threshold , packet1.upload_attempt_timeout , packet1.server_reply_timeout , packet1.fill_limit_ml , packet1.ml_per_pulse , packet1.station_timezone );
+    mavlink_msg_station_settings_send(MAVLINK_COMM_1 , packet1.badge_present_timeout , packet1.badge_present_threshold , packet1.upload_attempt_timeout , packet1.server_reply_timeout , packet1.fill_limit_ml , packet1.ml_per_pulse , packet1.station_timezone , packet1.rssi_threshold );
     mavlink_msg_station_settings_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
