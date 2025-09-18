@@ -142,6 +142,7 @@
         <!-- messages 5 and 6 are used in common_minimal.xml -->
         <message name="IDENTIFIER" id = "7">
             <description> Indentifiying information about the EOS device </description>
+            <field name="fw_version" type="uint8_t">Particle FW version</field>
             <field name="particle_id" type="char[24]"> Particle ID of device. Unique and unchangable </field>
             <field name="local_ip" type="uint8_t[4]"> local IPV4 Address of the device</field>
             <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
@@ -198,6 +199,9 @@
             <field name="rssi_percent" type="uint8_t"> RSSI of the signal, expressed as a percentage</field>
             <field name="snr" type="uint8_t"> SNR of the wifi. expressed as positive dB</field>
             <field name="snr_percent" type="uint8_t">SNR of the wifi, expreseed as a percentage</field>
+            <field name="internet_connected" type="uint8_t"> Connected to internet. 0 = false, 1 = true</field>
+            <field name="local_ip" type="uint8_t[4]"> local IPV4 Address of the device</field>
+            <field name="gateway_ip" type="uint8_t[4]"> gateway IPV4 Address </field>
         </message>
         <message name="UPLOAD_STATUS" id = "14">
             <description> Status of an upload</description>

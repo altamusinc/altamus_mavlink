@@ -5,6 +5,7 @@
 
 
 typedef struct __mavlink_identifier_t {
+ uint8_t fw_version; /*<  Particle FW version*/
  char particle_id[24]; /*<   Particle ID of device. Unique and unchangable */
  uint8_t local_ip[4]; /*<   local IPV4 Address of the device*/
  uint8_t mac[6]; /*<   MAC address of the device*/
@@ -13,13 +14,13 @@ typedef struct __mavlink_identifier_t {
  char site_name[30]; /*<   Name of the site where the scanner is located, i.e. "Gainesville Plant"*/
 } mavlink_identifier_t;
 
-#define MAVLINK_MSG_ID_IDENTIFIER_LEN 114
-#define MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN 114
-#define MAVLINK_MSG_ID_7_LEN 114
-#define MAVLINK_MSG_ID_7_MIN_LEN 114
+#define MAVLINK_MSG_ID_IDENTIFIER_LEN 115
+#define MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN 115
+#define MAVLINK_MSG_ID_7_LEN 115
+#define MAVLINK_MSG_ID_7_MIN_LEN 115
 
-#define MAVLINK_MSG_ID_IDENTIFIER_CRC 88
-#define MAVLINK_MSG_ID_7_CRC 88
+#define MAVLINK_MSG_ID_IDENTIFIER_CRC 98
+#define MAVLINK_MSG_ID_7_CRC 98
 
 #define MAVLINK_MSG_IDENTIFIER_FIELD_PARTICLE_ID_LEN 24
 #define MAVLINK_MSG_IDENTIFIER_FIELD_LOCAL_IP_LEN 4
@@ -32,25 +33,27 @@ typedef struct __mavlink_identifier_t {
 #define MAVLINK_MESSAGE_INFO_IDENTIFIER { \
     7, \
     "IDENTIFIER", \
-    6, \
-    {  { "particle_id", NULL, MAVLINK_TYPE_CHAR, 24, 0, offsetof(mavlink_identifier_t, particle_id) }, \
-         { "local_ip", NULL, MAVLINK_TYPE_UINT8_T, 4, 24, offsetof(mavlink_identifier_t, local_ip) }, \
-         { "mac", NULL, MAVLINK_TYPE_UINT8_T, 6, 28, offsetof(mavlink_identifier_t, mac) }, \
-         { "name", NULL, MAVLINK_TYPE_CHAR, 20, 34, offsetof(mavlink_identifier_t, name) }, \
-         { "site_friendly_name", NULL, MAVLINK_TYPE_CHAR, 30, 54, offsetof(mavlink_identifier_t, site_friendly_name) }, \
-         { "site_name", NULL, MAVLINK_TYPE_CHAR, 30, 84, offsetof(mavlink_identifier_t, site_name) }, \
+    7, \
+    {  { "fw_version", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_identifier_t, fw_version) }, \
+         { "particle_id", NULL, MAVLINK_TYPE_CHAR, 24, 1, offsetof(mavlink_identifier_t, particle_id) }, \
+         { "local_ip", NULL, MAVLINK_TYPE_UINT8_T, 4, 25, offsetof(mavlink_identifier_t, local_ip) }, \
+         { "mac", NULL, MAVLINK_TYPE_UINT8_T, 6, 29, offsetof(mavlink_identifier_t, mac) }, \
+         { "name", NULL, MAVLINK_TYPE_CHAR, 20, 35, offsetof(mavlink_identifier_t, name) }, \
+         { "site_friendly_name", NULL, MAVLINK_TYPE_CHAR, 30, 55, offsetof(mavlink_identifier_t, site_friendly_name) }, \
+         { "site_name", NULL, MAVLINK_TYPE_CHAR, 30, 85, offsetof(mavlink_identifier_t, site_name) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_IDENTIFIER { \
     "IDENTIFIER", \
-    6, \
-    {  { "particle_id", NULL, MAVLINK_TYPE_CHAR, 24, 0, offsetof(mavlink_identifier_t, particle_id) }, \
-         { "local_ip", NULL, MAVLINK_TYPE_UINT8_T, 4, 24, offsetof(mavlink_identifier_t, local_ip) }, \
-         { "mac", NULL, MAVLINK_TYPE_UINT8_T, 6, 28, offsetof(mavlink_identifier_t, mac) }, \
-         { "name", NULL, MAVLINK_TYPE_CHAR, 20, 34, offsetof(mavlink_identifier_t, name) }, \
-         { "site_friendly_name", NULL, MAVLINK_TYPE_CHAR, 30, 54, offsetof(mavlink_identifier_t, site_friendly_name) }, \
-         { "site_name", NULL, MAVLINK_TYPE_CHAR, 30, 84, offsetof(mavlink_identifier_t, site_name) }, \
+    7, \
+    {  { "fw_version", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_identifier_t, fw_version) }, \
+         { "particle_id", NULL, MAVLINK_TYPE_CHAR, 24, 1, offsetof(mavlink_identifier_t, particle_id) }, \
+         { "local_ip", NULL, MAVLINK_TYPE_UINT8_T, 4, 25, offsetof(mavlink_identifier_t, local_ip) }, \
+         { "mac", NULL, MAVLINK_TYPE_UINT8_T, 6, 29, offsetof(mavlink_identifier_t, mac) }, \
+         { "name", NULL, MAVLINK_TYPE_CHAR, 20, 35, offsetof(mavlink_identifier_t, name) }, \
+         { "site_friendly_name", NULL, MAVLINK_TYPE_CHAR, 30, 55, offsetof(mavlink_identifier_t, site_friendly_name) }, \
+         { "site_name", NULL, MAVLINK_TYPE_CHAR, 30, 85, offsetof(mavlink_identifier_t, site_name) }, \
          } \
 }
 #endif
@@ -61,6 +64,7 @@ typedef struct __mavlink_identifier_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
+ * @param fw_version  Particle FW version
  * @param particle_id   Particle ID of device. Unique and unchangable 
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
@@ -70,21 +74,21 @@ typedef struct __mavlink_identifier_t {
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
+                               uint8_t fw_version, const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
-
-    _mav_put_char_array(buf, 0, particle_id, 24);
-    _mav_put_uint8_t_array(buf, 24, local_ip, 4);
-    _mav_put_uint8_t_array(buf, 28, mac, 6);
-    _mav_put_char_array(buf, 34, name, 20);
-    _mav_put_char_array(buf, 54, site_friendly_name, 30);
-    _mav_put_char_array(buf, 84, site_name, 30);
+    _mav_put_uint8_t(buf, 0, fw_version);
+    _mav_put_char_array(buf, 1, particle_id, 24);
+    _mav_put_uint8_t_array(buf, 25, local_ip, 4);
+    _mav_put_uint8_t_array(buf, 29, mac, 6);
+    _mav_put_char_array(buf, 35, name, 20);
+    _mav_put_char_array(buf, 55, site_friendly_name, 30);
+    _mav_put_char_array(buf, 85, site_name, 30);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_IDENTIFIER_LEN);
 #else
     mavlink_identifier_t packet;
-
+    packet.fw_version = fw_version;
     mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
@@ -105,6 +109,7 @@ static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t co
  * @param status MAVLink status structure
  * @param msg The MAVLink message to compress the data into
  *
+ * @param fw_version  Particle FW version
  * @param particle_id   Particle ID of device. Unique and unchangable 
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
@@ -114,21 +119,21 @@ static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t co
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
+                               uint8_t fw_version, const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
-
-    _mav_put_char_array(buf, 0, particle_id, 24);
-    _mav_put_uint8_t_array(buf, 24, local_ip, 4);
-    _mav_put_uint8_t_array(buf, 28, mac, 6);
-    _mav_put_char_array(buf, 34, name, 20);
-    _mav_put_char_array(buf, 54, site_friendly_name, 30);
-    _mav_put_char_array(buf, 84, site_name, 30);
+    _mav_put_uint8_t(buf, 0, fw_version);
+    _mav_put_char_array(buf, 1, particle_id, 24);
+    _mav_put_uint8_t_array(buf, 25, local_ip, 4);
+    _mav_put_uint8_t_array(buf, 29, mac, 6);
+    _mav_put_char_array(buf, 35, name, 20);
+    _mav_put_char_array(buf, 55, site_friendly_name, 30);
+    _mav_put_char_array(buf, 85, site_name, 30);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_IDENTIFIER_LEN);
 #else
     mavlink_identifier_t packet;
-
+    packet.fw_version = fw_version;
     mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
@@ -152,6 +157,7 @@ static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uin
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
+ * @param fw_version  Particle FW version
  * @param particle_id   Particle ID of device. Unique and unchangable 
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
@@ -162,21 +168,21 @@ static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_identifier_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   const char *particle_id,const uint8_t *local_ip,const uint8_t *mac,const char *name,const char *site_friendly_name,const char *site_name)
+                                   uint8_t fw_version,const char *particle_id,const uint8_t *local_ip,const uint8_t *mac,const char *name,const char *site_friendly_name,const char *site_name)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
-
-    _mav_put_char_array(buf, 0, particle_id, 24);
-    _mav_put_uint8_t_array(buf, 24, local_ip, 4);
-    _mav_put_uint8_t_array(buf, 28, mac, 6);
-    _mav_put_char_array(buf, 34, name, 20);
-    _mav_put_char_array(buf, 54, site_friendly_name, 30);
-    _mav_put_char_array(buf, 84, site_name, 30);
+    _mav_put_uint8_t(buf, 0, fw_version);
+    _mav_put_char_array(buf, 1, particle_id, 24);
+    _mav_put_uint8_t_array(buf, 25, local_ip, 4);
+    _mav_put_uint8_t_array(buf, 29, mac, 6);
+    _mav_put_char_array(buf, 35, name, 20);
+    _mav_put_char_array(buf, 55, site_friendly_name, 30);
+    _mav_put_char_array(buf, 85, site_name, 30);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_IDENTIFIER_LEN);
 #else
     mavlink_identifier_t packet;
-
+    packet.fw_version = fw_version;
     mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
@@ -200,7 +206,7 @@ static inline uint16_t mavlink_msg_identifier_pack_chan(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_identifier_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_identifier_t* identifier)
 {
-    return mavlink_msg_identifier_pack(system_id, component_id, msg, identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
+    return mavlink_msg_identifier_pack(system_id, component_id, msg, identifier->fw_version, identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
 }
 
 /**
@@ -214,7 +220,7 @@ static inline uint16_t mavlink_msg_identifier_encode(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_identifier_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_identifier_t* identifier)
 {
-    return mavlink_msg_identifier_pack_chan(system_id, component_id, chan, msg, identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
+    return mavlink_msg_identifier_pack_chan(system_id, component_id, chan, msg, identifier->fw_version, identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
 }
 
 /**
@@ -228,13 +234,14 @@ static inline uint16_t mavlink_msg_identifier_encode_chan(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_identifier_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_identifier_t* identifier)
 {
-    return mavlink_msg_identifier_pack_status(system_id, component_id, _status, msg,  identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
+    return mavlink_msg_identifier_pack_status(system_id, component_id, _status, msg,  identifier->fw_version, identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
 }
 
 /**
  * @brief Send a identifier message
  * @param chan MAVLink channel to send the message
  *
+ * @param fw_version  Particle FW version
  * @param particle_id   Particle ID of device. Unique and unchangable 
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
@@ -244,21 +251,21 @@ static inline uint16_t mavlink_msg_identifier_encode_status(uint8_t system_id, u
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_identifier_send(mavlink_channel_t chan, const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
+static inline void mavlink_msg_identifier_send(mavlink_channel_t chan, uint8_t fw_version, const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
-
-    _mav_put_char_array(buf, 0, particle_id, 24);
-    _mav_put_uint8_t_array(buf, 24, local_ip, 4);
-    _mav_put_uint8_t_array(buf, 28, mac, 6);
-    _mav_put_char_array(buf, 34, name, 20);
-    _mav_put_char_array(buf, 54, site_friendly_name, 30);
-    _mav_put_char_array(buf, 84, site_name, 30);
+    _mav_put_uint8_t(buf, 0, fw_version);
+    _mav_put_char_array(buf, 1, particle_id, 24);
+    _mav_put_uint8_t_array(buf, 25, local_ip, 4);
+    _mav_put_uint8_t_array(buf, 29, mac, 6);
+    _mav_put_char_array(buf, 35, name, 20);
+    _mav_put_char_array(buf, 55, site_friendly_name, 30);
+    _mav_put_char_array(buf, 85, site_name, 30);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, buf, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
 #else
     mavlink_identifier_t packet;
-
+    packet.fw_version = fw_version;
     mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
@@ -277,7 +284,7 @@ static inline void mavlink_msg_identifier_send(mavlink_channel_t chan, const cha
 static inline void mavlink_msg_identifier_send_struct(mavlink_channel_t chan, const mavlink_identifier_t* identifier)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_identifier_send(chan, identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
+    mavlink_msg_identifier_send(chan, identifier->fw_version, identifier->particle_id, identifier->local_ip, identifier->mac, identifier->name, identifier->site_friendly_name, identifier->site_name);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, (const char *)identifier, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
 #endif
@@ -291,21 +298,21 @@ static inline void mavlink_msg_identifier_send_struct(mavlink_channel_t chan, co
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_identifier_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
+static inline void mavlink_msg_identifier_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t fw_version, const char *particle_id, const uint8_t *local_ip, const uint8_t *mac, const char *name, const char *site_friendly_name, const char *site_name)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
-
-    _mav_put_char_array(buf, 0, particle_id, 24);
-    _mav_put_uint8_t_array(buf, 24, local_ip, 4);
-    _mav_put_uint8_t_array(buf, 28, mac, 6);
-    _mav_put_char_array(buf, 34, name, 20);
-    _mav_put_char_array(buf, 54, site_friendly_name, 30);
-    _mav_put_char_array(buf, 84, site_name, 30);
+    _mav_put_uint8_t(buf, 0, fw_version);
+    _mav_put_char_array(buf, 1, particle_id, 24);
+    _mav_put_uint8_t_array(buf, 25, local_ip, 4);
+    _mav_put_uint8_t_array(buf, 29, mac, 6);
+    _mav_put_char_array(buf, 35, name, 20);
+    _mav_put_char_array(buf, 55, site_friendly_name, 30);
+    _mav_put_char_array(buf, 85, site_name, 30);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, buf, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
 #else
     mavlink_identifier_t *packet = (mavlink_identifier_t *)msgbuf;
-
+    packet->fw_version = fw_version;
     mav_array_memcpy(packet->particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet->local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet->mac, mac, sizeof(uint8_t)*6);
@@ -323,13 +330,23 @@ static inline void mavlink_msg_identifier_send_buf(mavlink_message_t *msgbuf, ma
 
 
 /**
+ * @brief Get field fw_version from identifier message
+ *
+ * @return  Particle FW version
+ */
+static inline uint8_t mavlink_msg_identifier_get_fw_version(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint8_t(msg,  0);
+}
+
+/**
  * @brief Get field particle_id from identifier message
  *
  * @return   Particle ID of device. Unique and unchangable 
  */
 static inline uint16_t mavlink_msg_identifier_get_particle_id(const mavlink_message_t* msg, char *particle_id)
 {
-    return _MAV_RETURN_char_array(msg, particle_id, 24,  0);
+    return _MAV_RETURN_char_array(msg, particle_id, 24,  1);
 }
 
 /**
@@ -339,7 +356,7 @@ static inline uint16_t mavlink_msg_identifier_get_particle_id(const mavlink_mess
  */
 static inline uint16_t mavlink_msg_identifier_get_local_ip(const mavlink_message_t* msg, uint8_t *local_ip)
 {
-    return _MAV_RETURN_uint8_t_array(msg, local_ip, 4,  24);
+    return _MAV_RETURN_uint8_t_array(msg, local_ip, 4,  25);
 }
 
 /**
@@ -349,7 +366,7 @@ static inline uint16_t mavlink_msg_identifier_get_local_ip(const mavlink_message
  */
 static inline uint16_t mavlink_msg_identifier_get_mac(const mavlink_message_t* msg, uint8_t *mac)
 {
-    return _MAV_RETURN_uint8_t_array(msg, mac, 6,  28);
+    return _MAV_RETURN_uint8_t_array(msg, mac, 6,  29);
 }
 
 /**
@@ -359,7 +376,7 @@ static inline uint16_t mavlink_msg_identifier_get_mac(const mavlink_message_t* m
  */
 static inline uint16_t mavlink_msg_identifier_get_name(const mavlink_message_t* msg, char *name)
 {
-    return _MAV_RETURN_char_array(msg, name, 20,  34);
+    return _MAV_RETURN_char_array(msg, name, 20,  35);
 }
 
 /**
@@ -369,7 +386,7 @@ static inline uint16_t mavlink_msg_identifier_get_name(const mavlink_message_t* 
  */
 static inline uint16_t mavlink_msg_identifier_get_site_friendly_name(const mavlink_message_t* msg, char *site_friendly_name)
 {
-    return _MAV_RETURN_char_array(msg, site_friendly_name, 30,  54);
+    return _MAV_RETURN_char_array(msg, site_friendly_name, 30,  55);
 }
 
 /**
@@ -379,7 +396,7 @@ static inline uint16_t mavlink_msg_identifier_get_site_friendly_name(const mavli
  */
 static inline uint16_t mavlink_msg_identifier_get_site_name(const mavlink_message_t* msg, char *site_name)
 {
-    return _MAV_RETURN_char_array(msg, site_name, 30,  84);
+    return _MAV_RETURN_char_array(msg, site_name, 30,  85);
 }
 
 /**
@@ -391,6 +408,7 @@ static inline uint16_t mavlink_msg_identifier_get_site_name(const mavlink_messag
 static inline void mavlink_msg_identifier_decode(const mavlink_message_t* msg, mavlink_identifier_t* identifier)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
+    identifier->fw_version = mavlink_msg_identifier_get_fw_version(msg);
     mavlink_msg_identifier_get_particle_id(msg, identifier->particle_id);
     mavlink_msg_identifier_get_local_ip(msg, identifier->local_ip);
     mavlink_msg_identifier_get_mac(msg, identifier->mac);
