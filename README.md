@@ -1,4 +1,4 @@
-After changing definitions run this:
+After changing definitions to generate C files run this:
 
 ```bash
 python -m pymavlink.tools.mavgen --lang=C --wire-protocol=2.0 --output=src/mavlink/v2.0 message_definitions/v1.0/altamus.xml
