@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <mavlink>
     <include>common_minimal.xml</include>
-    <version>1</version>
+    <version>4</version>
     <dialect>8</dialect>
     <enums>
         <enum name="MAV_RESULT">
