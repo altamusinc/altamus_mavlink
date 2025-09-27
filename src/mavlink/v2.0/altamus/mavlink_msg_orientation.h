@@ -11,19 +11,21 @@ typedef struct __mavlink_orientation_t {
  float heading; /*< [rad] heading angle (-pi..+pi). Comes from Compass*/
  int32_t lat; /*< [degE7] Latitude (WGS84, EGM96 ellipsoid)*/
  int32_t lon; /*< [degE7] Longitude (WGS84, EGM96 ellipsoid)*/
+ float h_acc; /*< [m]  Horizontal accuracy of lat/lon*/
+ float v_acc; /*< [m]  Vertical accuracy of lat/lon */
  int32_t alt; /*< [mm] Altitude (MSL). Positive for up.*/
  int16_t xmag; /*< [mgauss] X magnetic field strength. Comes from compass */
  int16_t ymag; /*< [mgauss] Y magnetic field strength. Comes from compass */
  int16_t zmag; /*< [mgauss] Z magnetic field strength. Comes from compass */
 } mavlink_orientation_t;
 
-#define MAVLINK_MSG_ID_ORIENTATION_LEN 34
-#define MAVLINK_MSG_ID_ORIENTATION_MIN_LEN 34
-#define MAVLINK_MSG_ID_18_LEN 34
-#define MAVLINK_MSG_ID_18_MIN_LEN 34
+#define MAVLINK_MSG_ID_ORIENTATION_LEN 42
+#define MAVLINK_MSG_ID_ORIENTATION_MIN_LEN 42
+#define MAVLINK_MSG_ID_18_LEN 42
+#define MAVLINK_MSG_ID_18_MIN_LEN 42
 
-#define MAVLINK_MSG_ID_ORIENTATION_CRC 78
-#define MAVLINK_MSG_ID_18_CRC 78
+#define MAVLINK_MSG_ID_ORIENTATION_CRC 178
+#define MAVLINK_MSG_ID_18_CRC 178
 
 
 
@@ -31,33 +33,37 @@ typedef struct __mavlink_orientation_t {
 #define MAVLINK_MESSAGE_INFO_ORIENTATION { \
     18, \
     "ORIENTATION", \
-    10, \
+    12, \
     {  { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_orientation_t, roll) }, \
          { "pitch", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_orientation_t, pitch) }, \
          { "temp", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_orientation_t, temp) }, \
-         { "xmag", NULL, MAVLINK_TYPE_INT16_T, 0, 28, offsetof(mavlink_orientation_t, xmag) }, \
-         { "ymag", NULL, MAVLINK_TYPE_INT16_T, 0, 30, offsetof(mavlink_orientation_t, ymag) }, \
-         { "zmag", NULL, MAVLINK_TYPE_INT16_T, 0, 32, offsetof(mavlink_orientation_t, zmag) }, \
+         { "xmag", NULL, MAVLINK_TYPE_INT16_T, 0, 36, offsetof(mavlink_orientation_t, xmag) }, \
+         { "ymag", NULL, MAVLINK_TYPE_INT16_T, 0, 38, offsetof(mavlink_orientation_t, ymag) }, \
+         { "zmag", NULL, MAVLINK_TYPE_INT16_T, 0, 40, offsetof(mavlink_orientation_t, zmag) }, \
          { "heading", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_orientation_t, heading) }, \
          { "lat", NULL, MAVLINK_TYPE_INT32_T, 0, 16, offsetof(mavlink_orientation_t, lat) }, \
          { "lon", NULL, MAVLINK_TYPE_INT32_T, 0, 20, offsetof(mavlink_orientation_t, lon) }, \
-         { "alt", NULL, MAVLINK_TYPE_INT32_T, 0, 24, offsetof(mavlink_orientation_t, alt) }, \
+         { "h_acc", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_orientation_t, h_acc) }, \
+         { "v_acc", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_orientation_t, v_acc) }, \
+         { "alt", NULL, MAVLINK_TYPE_INT32_T, 0, 32, offsetof(mavlink_orientation_t, alt) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_ORIENTATION { \
     "ORIENTATION", \
-    10, \
+    12, \
     {  { "roll", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_orientation_t, roll) }, \
          { "pitch", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_orientation_t, pitch) }, \
          { "temp", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_orientation_t, temp) }, \
-         { "xmag", NULL, MAVLINK_TYPE_INT16_T, 0, 28, offsetof(mavlink_orientation_t, xmag) }, \
-         { "ymag", NULL, MAVLINK_TYPE_INT16_T, 0, 30, offsetof(mavlink_orientation_t, ymag) }, \
-         { "zmag", NULL, MAVLINK_TYPE_INT16_T, 0, 32, offsetof(mavlink_orientation_t, zmag) }, \
+         { "xmag", NULL, MAVLINK_TYPE_INT16_T, 0, 36, offsetof(mavlink_orientation_t, xmag) }, \
+         { "ymag", NULL, MAVLINK_TYPE_INT16_T, 0, 38, offsetof(mavlink_orientation_t, ymag) }, \
+         { "zmag", NULL, MAVLINK_TYPE_INT16_T, 0, 40, offsetof(mavlink_orientation_t, zmag) }, \
          { "heading", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_orientation_t, heading) }, \
          { "lat", NULL, MAVLINK_TYPE_INT32_T, 0, 16, offsetof(mavlink_orientation_t, lat) }, \
          { "lon", NULL, MAVLINK_TYPE_INT32_T, 0, 20, offsetof(mavlink_orientation_t, lon) }, \
-         { "alt", NULL, MAVLINK_TYPE_INT32_T, 0, 24, offsetof(mavlink_orientation_t, alt) }, \
+         { "h_acc", NULL, MAVLINK_TYPE_FLOAT, 0, 24, offsetof(mavlink_orientation_t, h_acc) }, \
+         { "v_acc", NULL, MAVLINK_TYPE_FLOAT, 0, 28, offsetof(mavlink_orientation_t, v_acc) }, \
+         { "alt", NULL, MAVLINK_TYPE_INT32_T, 0, 32, offsetof(mavlink_orientation_t, alt) }, \
          } \
 }
 #endif
@@ -77,11 +83,13 @@ typedef struct __mavlink_orientation_t {
  * @param heading [rad] heading angle (-pi..+pi). Comes from Compass
  * @param lat [degE7] Latitude (WGS84, EGM96 ellipsoid)
  * @param lon [degE7] Longitude (WGS84, EGM96 ellipsoid)
+ * @param h_acc [m]  Horizontal accuracy of lat/lon
+ * @param v_acc [m]  Vertical accuracy of lat/lon 
  * @param alt [mm] Altitude (MSL). Positive for up.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_orientation_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, int32_t alt)
+                               float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, float h_acc, float v_acc, int32_t alt)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ORIENTATION_LEN];
@@ -91,10 +99,12 @@ static inline uint16_t mavlink_msg_orientation_pack(uint8_t system_id, uint8_t c
     _mav_put_float(buf, 12, heading);
     _mav_put_int32_t(buf, 16, lat);
     _mav_put_int32_t(buf, 20, lon);
-    _mav_put_int32_t(buf, 24, alt);
-    _mav_put_int16_t(buf, 28, xmag);
-    _mav_put_int16_t(buf, 30, ymag);
-    _mav_put_int16_t(buf, 32, zmag);
+    _mav_put_float(buf, 24, h_acc);
+    _mav_put_float(buf, 28, v_acc);
+    _mav_put_int32_t(buf, 32, alt);
+    _mav_put_int16_t(buf, 36, xmag);
+    _mav_put_int16_t(buf, 38, ymag);
+    _mav_put_int16_t(buf, 40, zmag);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ORIENTATION_LEN);
 #else
@@ -105,6 +115,8 @@ static inline uint16_t mavlink_msg_orientation_pack(uint8_t system_id, uint8_t c
     packet.heading = heading;
     packet.lat = lat;
     packet.lon = lon;
+    packet.h_acc = h_acc;
+    packet.v_acc = v_acc;
     packet.alt = alt;
     packet.xmag = xmag;
     packet.ymag = ymag;
@@ -133,11 +145,13 @@ static inline uint16_t mavlink_msg_orientation_pack(uint8_t system_id, uint8_t c
  * @param heading [rad] heading angle (-pi..+pi). Comes from Compass
  * @param lat [degE7] Latitude (WGS84, EGM96 ellipsoid)
  * @param lon [degE7] Longitude (WGS84, EGM96 ellipsoid)
+ * @param h_acc [m]  Horizontal accuracy of lat/lon
+ * @param v_acc [m]  Vertical accuracy of lat/lon 
  * @param alt [mm] Altitude (MSL). Positive for up.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_orientation_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, int32_t alt)
+                               float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, float h_acc, float v_acc, int32_t alt)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ORIENTATION_LEN];
@@ -147,10 +161,12 @@ static inline uint16_t mavlink_msg_orientation_pack_status(uint8_t system_id, ui
     _mav_put_float(buf, 12, heading);
     _mav_put_int32_t(buf, 16, lat);
     _mav_put_int32_t(buf, 20, lon);
-    _mav_put_int32_t(buf, 24, alt);
-    _mav_put_int16_t(buf, 28, xmag);
-    _mav_put_int16_t(buf, 30, ymag);
-    _mav_put_int16_t(buf, 32, zmag);
+    _mav_put_float(buf, 24, h_acc);
+    _mav_put_float(buf, 28, v_acc);
+    _mav_put_int32_t(buf, 32, alt);
+    _mav_put_int16_t(buf, 36, xmag);
+    _mav_put_int16_t(buf, 38, ymag);
+    _mav_put_int16_t(buf, 40, zmag);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ORIENTATION_LEN);
 #else
@@ -161,6 +177,8 @@ static inline uint16_t mavlink_msg_orientation_pack_status(uint8_t system_id, ui
     packet.heading = heading;
     packet.lat = lat;
     packet.lon = lon;
+    packet.h_acc = h_acc;
+    packet.v_acc = v_acc;
     packet.alt = alt;
     packet.xmag = xmag;
     packet.ymag = ymag;
@@ -192,12 +210,14 @@ static inline uint16_t mavlink_msg_orientation_pack_status(uint8_t system_id, ui
  * @param heading [rad] heading angle (-pi..+pi). Comes from Compass
  * @param lat [degE7] Latitude (WGS84, EGM96 ellipsoid)
  * @param lon [degE7] Longitude (WGS84, EGM96 ellipsoid)
+ * @param h_acc [m]  Horizontal accuracy of lat/lon
+ * @param v_acc [m]  Vertical accuracy of lat/lon 
  * @param alt [mm] Altitude (MSL). Positive for up.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_orientation_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float roll,float pitch,float temp,int16_t xmag,int16_t ymag,int16_t zmag,float heading,int32_t lat,int32_t lon,int32_t alt)
+                                   float roll,float pitch,float temp,int16_t xmag,int16_t ymag,int16_t zmag,float heading,int32_t lat,int32_t lon,float h_acc,float v_acc,int32_t alt)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ORIENTATION_LEN];
@@ -207,10 +227,12 @@ static inline uint16_t mavlink_msg_orientation_pack_chan(uint8_t system_id, uint
     _mav_put_float(buf, 12, heading);
     _mav_put_int32_t(buf, 16, lat);
     _mav_put_int32_t(buf, 20, lon);
-    _mav_put_int32_t(buf, 24, alt);
-    _mav_put_int16_t(buf, 28, xmag);
-    _mav_put_int16_t(buf, 30, ymag);
-    _mav_put_int16_t(buf, 32, zmag);
+    _mav_put_float(buf, 24, h_acc);
+    _mav_put_float(buf, 28, v_acc);
+    _mav_put_int32_t(buf, 32, alt);
+    _mav_put_int16_t(buf, 36, xmag);
+    _mav_put_int16_t(buf, 38, ymag);
+    _mav_put_int16_t(buf, 40, zmag);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_ORIENTATION_LEN);
 #else
@@ -221,6 +243,8 @@ static inline uint16_t mavlink_msg_orientation_pack_chan(uint8_t system_id, uint
     packet.heading = heading;
     packet.lat = lat;
     packet.lon = lon;
+    packet.h_acc = h_acc;
+    packet.v_acc = v_acc;
     packet.alt = alt;
     packet.xmag = xmag;
     packet.ymag = ymag;
@@ -243,7 +267,7 @@ static inline uint16_t mavlink_msg_orientation_pack_chan(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_orientation_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_orientation_t* orientation)
 {
-    return mavlink_msg_orientation_pack(system_id, component_id, msg, orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->alt);
+    return mavlink_msg_orientation_pack(system_id, component_id, msg, orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->h_acc, orientation->v_acc, orientation->alt);
 }
 
 /**
@@ -257,7 +281,7 @@ static inline uint16_t mavlink_msg_orientation_encode(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_orientation_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_orientation_t* orientation)
 {
-    return mavlink_msg_orientation_pack_chan(system_id, component_id, chan, msg, orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->alt);
+    return mavlink_msg_orientation_pack_chan(system_id, component_id, chan, msg, orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->h_acc, orientation->v_acc, orientation->alt);
 }
 
 /**
@@ -271,7 +295,7 @@ static inline uint16_t mavlink_msg_orientation_encode_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_orientation_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_orientation_t* orientation)
 {
-    return mavlink_msg_orientation_pack_status(system_id, component_id, _status, msg,  orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->alt);
+    return mavlink_msg_orientation_pack_status(system_id, component_id, _status, msg,  orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->h_acc, orientation->v_acc, orientation->alt);
 }
 
 /**
@@ -287,11 +311,13 @@ static inline uint16_t mavlink_msg_orientation_encode_status(uint8_t system_id, 
  * @param heading [rad] heading angle (-pi..+pi). Comes from Compass
  * @param lat [degE7] Latitude (WGS84, EGM96 ellipsoid)
  * @param lon [degE7] Longitude (WGS84, EGM96 ellipsoid)
+ * @param h_acc [m]  Horizontal accuracy of lat/lon
+ * @param v_acc [m]  Vertical accuracy of lat/lon 
  * @param alt [mm] Altitude (MSL). Positive for up.
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_orientation_send(mavlink_channel_t chan, float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, int32_t alt)
+static inline void mavlink_msg_orientation_send(mavlink_channel_t chan, float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, float h_acc, float v_acc, int32_t alt)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_ORIENTATION_LEN];
@@ -301,10 +327,12 @@ static inline void mavlink_msg_orientation_send(mavlink_channel_t chan, float ro
     _mav_put_float(buf, 12, heading);
     _mav_put_int32_t(buf, 16, lat);
     _mav_put_int32_t(buf, 20, lon);
-    _mav_put_int32_t(buf, 24, alt);
-    _mav_put_int16_t(buf, 28, xmag);
-    _mav_put_int16_t(buf, 30, ymag);
-    _mav_put_int16_t(buf, 32, zmag);
+    _mav_put_float(buf, 24, h_acc);
+    _mav_put_float(buf, 28, v_acc);
+    _mav_put_int32_t(buf, 32, alt);
+    _mav_put_int16_t(buf, 36, xmag);
+    _mav_put_int16_t(buf, 38, ymag);
+    _mav_put_int16_t(buf, 40, zmag);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ORIENTATION, buf, MAVLINK_MSG_ID_ORIENTATION_MIN_LEN, MAVLINK_MSG_ID_ORIENTATION_LEN, MAVLINK_MSG_ID_ORIENTATION_CRC);
 #else
@@ -315,6 +343,8 @@ static inline void mavlink_msg_orientation_send(mavlink_channel_t chan, float ro
     packet.heading = heading;
     packet.lat = lat;
     packet.lon = lon;
+    packet.h_acc = h_acc;
+    packet.v_acc = v_acc;
     packet.alt = alt;
     packet.xmag = xmag;
     packet.ymag = ymag;
@@ -332,7 +362,7 @@ static inline void mavlink_msg_orientation_send(mavlink_channel_t chan, float ro
 static inline void mavlink_msg_orientation_send_struct(mavlink_channel_t chan, const mavlink_orientation_t* orientation)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_orientation_send(chan, orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->alt);
+    mavlink_msg_orientation_send(chan, orientation->roll, orientation->pitch, orientation->temp, orientation->xmag, orientation->ymag, orientation->zmag, orientation->heading, orientation->lat, orientation->lon, orientation->h_acc, orientation->v_acc, orientation->alt);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ORIENTATION, (const char *)orientation, MAVLINK_MSG_ID_ORIENTATION_MIN_LEN, MAVLINK_MSG_ID_ORIENTATION_LEN, MAVLINK_MSG_ID_ORIENTATION_CRC);
 #endif
@@ -346,7 +376,7 @@ static inline void mavlink_msg_orientation_send_struct(mavlink_channel_t chan, c
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_orientation_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, int32_t alt)
+static inline void mavlink_msg_orientation_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float roll, float pitch, float temp, int16_t xmag, int16_t ymag, int16_t zmag, float heading, int32_t lat, int32_t lon, float h_acc, float v_acc, int32_t alt)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -356,10 +386,12 @@ static inline void mavlink_msg_orientation_send_buf(mavlink_message_t *msgbuf, m
     _mav_put_float(buf, 12, heading);
     _mav_put_int32_t(buf, 16, lat);
     _mav_put_int32_t(buf, 20, lon);
-    _mav_put_int32_t(buf, 24, alt);
-    _mav_put_int16_t(buf, 28, xmag);
-    _mav_put_int16_t(buf, 30, ymag);
-    _mav_put_int16_t(buf, 32, zmag);
+    _mav_put_float(buf, 24, h_acc);
+    _mav_put_float(buf, 28, v_acc);
+    _mav_put_int32_t(buf, 32, alt);
+    _mav_put_int16_t(buf, 36, xmag);
+    _mav_put_int16_t(buf, 38, ymag);
+    _mav_put_int16_t(buf, 40, zmag);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_ORIENTATION, buf, MAVLINK_MSG_ID_ORIENTATION_MIN_LEN, MAVLINK_MSG_ID_ORIENTATION_LEN, MAVLINK_MSG_ID_ORIENTATION_CRC);
 #else
@@ -370,6 +402,8 @@ static inline void mavlink_msg_orientation_send_buf(mavlink_message_t *msgbuf, m
     packet->heading = heading;
     packet->lat = lat;
     packet->lon = lon;
+    packet->h_acc = h_acc;
+    packet->v_acc = v_acc;
     packet->alt = alt;
     packet->xmag = xmag;
     packet->ymag = ymag;
@@ -422,7 +456,7 @@ static inline float mavlink_msg_orientation_get_temp(const mavlink_message_t* ms
  */
 static inline int16_t mavlink_msg_orientation_get_xmag(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  28);
+    return _MAV_RETURN_int16_t(msg,  36);
 }
 
 /**
@@ -432,7 +466,7 @@ static inline int16_t mavlink_msg_orientation_get_xmag(const mavlink_message_t* 
  */
 static inline int16_t mavlink_msg_orientation_get_ymag(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  30);
+    return _MAV_RETURN_int16_t(msg,  38);
 }
 
 /**
@@ -442,7 +476,7 @@ static inline int16_t mavlink_msg_orientation_get_ymag(const mavlink_message_t* 
  */
 static inline int16_t mavlink_msg_orientation_get_zmag(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int16_t(msg,  32);
+    return _MAV_RETURN_int16_t(msg,  40);
 }
 
 /**
@@ -476,13 +510,33 @@ static inline int32_t mavlink_msg_orientation_get_lon(const mavlink_message_t* m
 }
 
 /**
+ * @brief Get field h_acc from orientation message
+ *
+ * @return [m]  Horizontal accuracy of lat/lon
+ */
+static inline float mavlink_msg_orientation_get_h_acc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  24);
+}
+
+/**
+ * @brief Get field v_acc from orientation message
+ *
+ * @return [m]  Vertical accuracy of lat/lon 
+ */
+static inline float mavlink_msg_orientation_get_v_acc(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  28);
+}
+
+/**
  * @brief Get field alt from orientation message
  *
  * @return [mm] Altitude (MSL). Positive for up.
  */
 static inline int32_t mavlink_msg_orientation_get_alt(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_int32_t(msg,  24);
+    return _MAV_RETURN_int32_t(msg,  32);
 }
 
 /**
@@ -500,6 +554,8 @@ static inline void mavlink_msg_orientation_decode(const mavlink_message_t* msg, 
     orientation->heading = mavlink_msg_orientation_get_heading(msg);
     orientation->lat = mavlink_msg_orientation_get_lat(msg);
     orientation->lon = mavlink_msg_orientation_get_lon(msg);
+    orientation->h_acc = mavlink_msg_orientation_get_h_acc(msg);
+    orientation->v_acc = mavlink_msg_orientation_get_v_acc(msg);
     orientation->alt = mavlink_msg_orientation_get_alt(msg);
     orientation->xmag = mavlink_msg_orientation_get_xmag(msg);
     orientation->ymag = mavlink_msg_orientation_get_ymag(msg);

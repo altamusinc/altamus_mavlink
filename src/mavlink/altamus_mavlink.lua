@@ -146,6 +146,14 @@ local enumEntryName = {
         [7] = "EOS_STATE_STARTING_SCAN",
         [8] = "EOS_STATE_STOPPING_SCAN",
     },
+    ["EOS_STATE_FLAGS"] = {
+        [1] = "EOS_STATE_FLAG_LOCAL_CONTROL",
+        [2] = "EOS_STATE_FLAG_HYPERION_AUTHORIZED",
+        [4] = "EOS_STATE_FLAG_INTERNET_CONNECTED",
+        [8] = "EOS_STATE_FLAG_LAST_SCAN_HEALTHY",
+        [16] = "EOS_STATE_FLAG_BLE_CONNECTED",
+        [32] = "EOS_STATE_FLAG_WIFI_CONNECTED",
+    },
     ["MOTOR_BEHAVIOR"] = {
         [1] = "MOTOR_BEHAVIOR_MOTOR_ENABLE",
         [2] = "MOTOR_BEHAVIOR_MOTOR_DISABLE",
@@ -414,9 +422,12 @@ f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_PORT_EXPANDER = ProtoFie
 f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_FLASH = ProtoField.bool("mavlink_proto.SYSTEM_STATUS_health_status_bitmask.EOS_COMPONENT_FLASH", "EOS_COMPONENT_FLASH", 16, nil, 2048)
 f.SYSTEM_STATUS_health_status_bitmask_flagEOS_COMPONENT_ALL = ProtoField.bool("mavlink_proto.SYSTEM_STATUS_health_status_bitmask.EOS_COMPONENT_ALL", "EOS_COMPONENT_ALL", 16, nil, 4096)
 f.SYSTEM_STATUS_uptime = ProtoField.new("uptime (uint16_t) [seconds]", "mavlink_proto.SYSTEM_STATUS_uptime", ftypes.UINT16, nil)
+f.SYSTEM_STATUS_flags = ProtoField.new("flags (EOS_STATE_FLAGS)", "mavlink_proto.SYSTEM_STATUS_flags", ftypes.UINT16, enumEntryName.EOS_STATE_FLAGS)
 
 f.IDENTIFIER_fw_version = ProtoField.new("fw_version (uint8_t)", "mavlink_proto.IDENTIFIER_fw_version", ftypes.UINT8, nil)
-f.IDENTIFIER_particle_id = ProtoField.new("particle_id (char)", "mavlink_proto.IDENTIFIER_particle_id", ftypes.STRING, nil)
+f.IDENTIFIER_particle_id_full = ProtoField.new("particle_id_full (char)", "mavlink_proto.IDENTIFIER_particle_id_full", ftypes.STRING, nil)
+f.IDENTIFIER_device_id = ProtoField.new("device_id (char)", "mavlink_proto.IDENTIFIER_device_id", ftypes.STRING, nil)
+f.IDENTIFIER_device_name = ProtoField.new("device_name (char)", "mavlink_proto.IDENTIFIER_device_name", ftypes.STRING, nil)
 f.IDENTIFIER_local_ip_0 = ProtoField.new("local_ip[0] (uint8_t)", "mavlink_proto.IDENTIFIER_local_ip_0", ftypes.UINT8, nil)
 f.IDENTIFIER_local_ip_1 = ProtoField.new("local_ip[1] (uint8_t)", "mavlink_proto.IDENTIFIER_local_ip_1", ftypes.UINT8, nil)
 f.IDENTIFIER_local_ip_2 = ProtoField.new("local_ip[2] (uint8_t)", "mavlink_proto.IDENTIFIER_local_ip_2", ftypes.UINT8, nil)
@@ -427,9 +438,6 @@ f.IDENTIFIER_mac_2 = ProtoField.new("mac[2] (uint8_t)", "mavlink_proto.IDENTIFIE
 f.IDENTIFIER_mac_3 = ProtoField.new("mac[3] (uint8_t)", "mavlink_proto.IDENTIFIER_mac_3", ftypes.UINT8, nil)
 f.IDENTIFIER_mac_4 = ProtoField.new("mac[4] (uint8_t)", "mavlink_proto.IDENTIFIER_mac_4", ftypes.UINT8, nil)
 f.IDENTIFIER_mac_5 = ProtoField.new("mac[5] (uint8_t)", "mavlink_proto.IDENTIFIER_mac_5", ftypes.UINT8, nil)
-f.IDENTIFIER_name = ProtoField.new("name (char)", "mavlink_proto.IDENTIFIER_name", ftypes.STRING, nil)
-f.IDENTIFIER_site_friendly_name = ProtoField.new("site_friendly_name (char)", "mavlink_proto.IDENTIFIER_site_friendly_name", ftypes.STRING, nil)
-f.IDENTIFIER_site_name = ProtoField.new("site_name (char)", "mavlink_proto.IDENTIFIER_site_name", ftypes.STRING, nil)
 
 f.COMPONENT_HEALTH_TEST_component = ProtoField.new("component (EOS_COMPONENT)", "mavlink_proto.COMPONENT_HEALTH_TEST_component", ftypes.UINT32, nil, base.HEX_DEC)
 f.COMPONENT_HEALTH_TEST_component_flagEOS_COMPONENT_LIDAR = ProtoField.bool("mavlink_proto.COMPONENT_HEALTH_TEST_component.EOS_COMPONENT_LIDAR", "EOS_COMPONENT_LIDAR", 16, nil, 1)
@@ -558,8 +566,8 @@ f.MOTOR_SETTINGS_gearing_ratio = ProtoField.new("gearing_ratio (float)", "mavlin
 f.MOTOR_SETTINGS_spread_cycle = ProtoField.new("spread_cycle (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_spread_cycle", ftypes.UINT8, nil)
 f.MOTOR_SETTINGS_pwm_autoscale = ProtoField.new("pwm_autoscale (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_pwm_autoscale", ftypes.UINT8, nil)
 f.MOTOR_SETTINGS_pwm_autograd = ProtoField.new("pwm_autograd (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_pwm_autograd", ftypes.UINT8, nil)
-f.MOTOR_SETTINGS_min_steps_to_next_index = ProtoField.new("min_steps_to_next_index (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_min_steps_to_next_index", ftypes.UINT8, nil)
 f.MOTOR_SETTINGS_home_offset_steps = ProtoField.new("home_offset_steps (int16_t)", "mavlink_proto.MOTOR_SETTINGS_home_offset_steps", ftypes.INT16, nil)
+f.MOTOR_SETTINGS_enforce_minimum_steps = ProtoField.new("enforce_minimum_steps (uint8_t)", "mavlink_proto.MOTOR_SETTINGS_enforce_minimum_steps", ftypes.UINT8, nil)
 f.MOTOR_SETTINGS_steps_to_next_index = ProtoField.new("steps_to_next_index (uint16_t)", "mavlink_proto.MOTOR_SETTINGS_steps_to_next_index", ftypes.UINT16, nil)
 f.MOTOR_SETTINGS_usteps_rate = ProtoField.new("usteps_rate (float) [Hz]", "mavlink_proto.MOTOR_SETTINGS_usteps_rate", ftypes.FLOAT, nil)
 f.MOTOR_SETTINGS_ustep_angle = ProtoField.new("ustep_angle (float) [deg]", "mavlink_proto.MOTOR_SETTINGS_ustep_angle", ftypes.FLOAT, nil)
@@ -596,6 +604,8 @@ f.ORIENTATION_zmag = ProtoField.new("zmag (int16_t) [mgauss]", "mavlink_proto.OR
 f.ORIENTATION_heading = ProtoField.new("heading (float) [rad]", "mavlink_proto.ORIENTATION_heading", ftypes.FLOAT, nil)
 f.ORIENTATION_lat = ProtoField.new("lat (int32_t) [degE7]", "mavlink_proto.ORIENTATION_lat", ftypes.INT32, nil)
 f.ORIENTATION_lon = ProtoField.new("lon (int32_t) [degE7]", "mavlink_proto.ORIENTATION_lon", ftypes.INT32, nil)
+f.ORIENTATION_h_acc = ProtoField.new("h_acc (float) [m]", "mavlink_proto.ORIENTATION_h_acc", ftypes.FLOAT, nil)
+f.ORIENTATION_v_acc = ProtoField.new("v_acc (float) [m]", "mavlink_proto.ORIENTATION_v_acc", ftypes.FLOAT, nil)
 f.ORIENTATION_alt = ProtoField.new("alt (int32_t) [mm]", "mavlink_proto.ORIENTATION_alt", ftypes.INT32, nil)
 
 f.WIFI_CREDENTIALS_behavior = ProtoField.new("behavior (WIFI_CREDIENTIALS_BEHAVIOR)", "mavlink_proto.WIFI_CREDENTIALS_behavior", ftypes.UINT8, enumEntryName.WIFI_CREDIENTIALS_BEHAVIOR)
@@ -1183,14 +1193,14 @@ end
 -- dissect payload of message type SYSTEM_STATUS
 function payload_fns.payload_3(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 7 > limit) then
+    if (offset + 9 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 7)
+        padded:set_size(offset + 9)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
     end
-    tvbrange = padded(offset + 6, 1)
+    tvbrange = padded(offset + 8, 1)
     subtree = tree:add_le(f.SYSTEM_STATUS_state, tvbrange)
     tvbrange = padded(offset + 0, 2)
     subtree = tree:add_le(f.SYSTEM_STATUS_power_status_bitmask, tvbrange)
@@ -1202,13 +1212,15 @@ function payload_fns.payload_3(buffer, tree, msgid, offset, limit, pinfo)
     dissect_flags_EOS_COMPONENT(subtree, "SYSTEM_STATUS_health_status_bitmask", tvbrange, value)
     tvbrange = padded(offset + 4, 2)
     subtree = tree:add_le(f.SYSTEM_STATUS_uptime, tvbrange)
+    tvbrange = padded(offset + 6, 2)
+    subtree = tree:add_le(f.SYSTEM_STATUS_flags, tvbrange)
 end
 -- dissect payload of message type IDENTIFIER
 function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 115 > limit) then
+    if (offset + 85 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 115)
+        padded:set_size(offset + 85)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -1216,33 +1228,31 @@ function payload_fns.payload_7(buffer, tree, msgid, offset, limit, pinfo)
     tvbrange = padded(offset + 0, 1)
     subtree = tree:add_le(f.IDENTIFIER_fw_version, tvbrange)
     tvbrange = padded(offset + 1, 24)
-    subtree = tree:add_le(f.IDENTIFIER_particle_id, tvbrange)
-    tvbrange = padded(offset + 25, 1)
+    subtree = tree:add_le(f.IDENTIFIER_particle_id_full, tvbrange)
+    tvbrange = padded(offset + 25, 20)
+    subtree = tree:add_le(f.IDENTIFIER_device_id, tvbrange)
+    tvbrange = padded(offset + 45, 30)
+    subtree = tree:add_le(f.IDENTIFIER_device_name, tvbrange)
+    tvbrange = padded(offset + 75, 1)
     subtree = tree:add_le(f.IDENTIFIER_local_ip_0, tvbrange)
-    tvbrange = padded(offset + 26, 1)
+    tvbrange = padded(offset + 76, 1)
     subtree = tree:add_le(f.IDENTIFIER_local_ip_1, tvbrange)
-    tvbrange = padded(offset + 27, 1)
+    tvbrange = padded(offset + 77, 1)
     subtree = tree:add_le(f.IDENTIFIER_local_ip_2, tvbrange)
-    tvbrange = padded(offset + 28, 1)
+    tvbrange = padded(offset + 78, 1)
     subtree = tree:add_le(f.IDENTIFIER_local_ip_3, tvbrange)
-    tvbrange = padded(offset + 29, 1)
+    tvbrange = padded(offset + 79, 1)
     subtree = tree:add_le(f.IDENTIFIER_mac_0, tvbrange)
-    tvbrange = padded(offset + 30, 1)
+    tvbrange = padded(offset + 80, 1)
     subtree = tree:add_le(f.IDENTIFIER_mac_1, tvbrange)
-    tvbrange = padded(offset + 31, 1)
+    tvbrange = padded(offset + 81, 1)
     subtree = tree:add_le(f.IDENTIFIER_mac_2, tvbrange)
-    tvbrange = padded(offset + 32, 1)
+    tvbrange = padded(offset + 82, 1)
     subtree = tree:add_le(f.IDENTIFIER_mac_3, tvbrange)
-    tvbrange = padded(offset + 33, 1)
+    tvbrange = padded(offset + 83, 1)
     subtree = tree:add_le(f.IDENTIFIER_mac_4, tvbrange)
-    tvbrange = padded(offset + 34, 1)
+    tvbrange = padded(offset + 84, 1)
     subtree = tree:add_le(f.IDENTIFIER_mac_5, tvbrange)
-    tvbrange = padded(offset + 35, 20)
-    subtree = tree:add_le(f.IDENTIFIER_name, tvbrange)
-    tvbrange = padded(offset + 55, 30)
-    subtree = tree:add_le(f.IDENTIFIER_site_friendly_name, tvbrange)
-    tvbrange = padded(offset + 85, 30)
-    subtree = tree:add_le(f.IDENTIFIER_site_name, tvbrange)
 end
 -- dissect payload of message type COMPONENT_HEALTH_TEST
 function payload_fns.payload_8(buffer, tree, msgid, offset, limit, pinfo)
@@ -1482,10 +1492,10 @@ function payload_fns.payload_16(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.MOTOR_SETTINGS_pwm_autoscale, tvbrange)
     tvbrange = padded(offset + 22, 1)
     subtree = tree:add_le(f.MOTOR_SETTINGS_pwm_autograd, tvbrange)
-    tvbrange = padded(offset + 23, 1)
-    subtree = tree:add_le(f.MOTOR_SETTINGS_min_steps_to_next_index, tvbrange)
     tvbrange = padded(offset + 14, 2)
     subtree = tree:add_le(f.MOTOR_SETTINGS_home_offset_steps, tvbrange)
+    tvbrange = padded(offset + 23, 1)
+    subtree = tree:add_le(f.MOTOR_SETTINGS_enforce_minimum_steps, tvbrange)
     tvbrange = padded(offset + 16, 2)
     subtree = tree:add_le(f.MOTOR_SETTINGS_steps_to_next_index, tvbrange)
     tvbrange = padded(offset + 4, 4)
@@ -1527,9 +1537,9 @@ end
 -- dissect payload of message type ORIENTATION
 function payload_fns.payload_18(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 34 > limit) then
+    if (offset + 42 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 34)
+        padded:set_size(offset + 42)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -1544,11 +1554,11 @@ function payload_fns.payload_18(buffer, tree, msgid, offset, limit, pinfo)
     subtree:append_text(string.format(" (%g deg)",value*180/math.pi))
     tvbrange = padded(offset + 8, 4)
     subtree = tree:add_le(f.ORIENTATION_temp, tvbrange)
-    tvbrange = padded(offset + 28, 2)
+    tvbrange = padded(offset + 36, 2)
     subtree = tree:add_le(f.ORIENTATION_xmag, tvbrange)
-    tvbrange = padded(offset + 30, 2)
+    tvbrange = padded(offset + 38, 2)
     subtree = tree:add_le(f.ORIENTATION_ymag, tvbrange)
-    tvbrange = padded(offset + 32, 2)
+    tvbrange = padded(offset + 40, 2)
     subtree = tree:add_le(f.ORIENTATION_zmag, tvbrange)
     tvbrange = padded(offset + 12, 4)
     subtree = tree:add_le(f.ORIENTATION_heading, tvbrange)
@@ -1563,6 +1573,10 @@ function payload_fns.payload_18(buffer, tree, msgid, offset, limit, pinfo)
     value = tvbrange:le_int()
     subtree:append_text(string.format(" (%.7f deg)",value/1E7))
     tvbrange = padded(offset + 24, 4)
+    subtree = tree:add_le(f.ORIENTATION_h_acc, tvbrange)
+    tvbrange = padded(offset + 28, 4)
+    subtree = tree:add_le(f.ORIENTATION_v_acc, tvbrange)
+    tvbrange = padded(offset + 32, 4)
     subtree = tree:add_le(f.ORIENTATION_alt, tvbrange)
 end
 -- dissect payload of message type WIFI_CREDENTIALS
