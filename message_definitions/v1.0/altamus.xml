@@ -65,7 +65,8 @@
             <entry value="2**2" name="EOS_STATE_FLAG_INTERNET_CONNECTED"></entry> 
             <entry value="2**3" name="EOS_STATE_FLAG_LAST_SCAN_HEALTHY"></entry> 
             <entry value="2**4" name="EOS_STATE_FLAG_BLE_CONNECTED"></entry> 
-            <entry value="2**5" name="EOS_STATE_FLAG_WIFI_CONNECTED"></entry> 
+            <entry value="2**5" name="EOS_STATE_FLAG_WIFI_CONNECTED"></entry>
+            <entry value="2**6" name="EOS_STATE_FLAG_IDENTIFYING"></entry> 
         </enum>
         <enum name="MOTOR_BEHAVIOR">
             <description> Behaviors a motor can execute </description>

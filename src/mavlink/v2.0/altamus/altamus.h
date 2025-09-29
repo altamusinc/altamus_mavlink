@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_ALTAMUS.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_ALTAMUS_XML_HASH 739930323412178479
+#define MAVLINK_ALTAMUS_XML_HASH -6661730718312108134
 
 #ifdef __cplusplus
 extern "C" {
@@ -158,7 +158,8 @@ typedef enum EOS_STATE_FLAGS
    EOS_STATE_FLAG_LAST_SCAN_HEALTHY=8, /*  | */
    EOS_STATE_FLAG_BLE_CONNECTED=16, /*  | */
    EOS_STATE_FLAG_WIFI_CONNECTED=32, /*  | */
-   EOS_STATE_FLAGS_ENUM_END=33, /*  | */
+   EOS_STATE_FLAG_IDENTIFYING=64, /*  | */
+   EOS_STATE_FLAGS_ENUM_END=65, /*  | */
 } EOS_STATE_FLAGS;
 #endif
 

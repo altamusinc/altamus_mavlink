@@ -153,6 +153,7 @@ local enumEntryName = {
         [8] = "EOS_STATE_FLAG_LAST_SCAN_HEALTHY",
         [16] = "EOS_STATE_FLAG_BLE_CONNECTED",
         [32] = "EOS_STATE_FLAG_WIFI_CONNECTED",
+        [64] = "EOS_STATE_FLAG_IDENTIFYING",
     },
     ["MOTOR_BEHAVIOR"] = {
         [1] = "MOTOR_BEHAVIOR_MOTOR_ENABLE",
