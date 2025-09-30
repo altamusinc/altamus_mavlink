@@ -154,9 +154,9 @@
         <message name="IDENTIFIER" id = "7">
             <description> Indentifiying information about the EOS device </description>
             <field name="fw_version" type="uint8_t">Particle FW version</field>
-            <field name="particle_id_full" type="char[24]"> Particle ID of device. Read Only. </field>
+            <field name="particle_id" type="char[24]"> Particle ID of device. Read Only. </field>
             <field name="device_id" type="char[20]">Device id of scanner matching manufacturing sticker. i.e. P2-ABC123. Read only</field>
-            <field name="device_name" type="char[30]"> Friendly name of device. E.g. "57 Rock West". User settable</field>
+            <field name="name" type="char[30]"> Friendly name of device. E.g. "57 Rock West". User settable</field>
             <field name="local_ip" type="uint8_t[4]"> local IPV4 Address of the device</field>
             <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
         </message>

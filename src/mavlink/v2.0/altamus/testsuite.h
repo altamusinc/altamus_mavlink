@@ -225,9 +225,9 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
         memset(&packet1, 0, sizeof(packet1));
         packet1.fw_version = packet_in.fw_version;
         
-        mav_array_memcpy(packet1.particle_id_full, packet_in.particle_id_full, sizeof(char)*24);
+        mav_array_memcpy(packet1.particle_id, packet_in.particle_id, sizeof(char)*24);
         mav_array_memcpy(packet1.device_id, packet_in.device_id, sizeof(char)*20);
-        mav_array_memcpy(packet1.device_name, packet_in.device_name, sizeof(char)*30);
+        mav_array_memcpy(packet1.name, packet_in.name, sizeof(char)*30);
         mav_array_memcpy(packet1.local_ip, packet_in.local_ip, sizeof(uint8_t)*4);
         mav_array_memcpy(packet1.mac, packet_in.mac, sizeof(uint8_t)*6);
         
@@ -243,12 +243,12 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_identifier_pack(system_id, component_id, &msg , packet1.fw_version , packet1.particle_id_full , packet1.device_id , packet1.device_name , packet1.local_ip , packet1.mac );
+    mavlink_msg_identifier_pack(system_id, component_id, &msg , packet1.fw_version , packet1.particle_id , packet1.device_id , packet1.name , packet1.local_ip , packet1.mac );
     mavlink_msg_identifier_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_identifier_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.fw_version , packet1.particle_id_full , packet1.device_id , packet1.device_name , packet1.local_ip , packet1.mac );
+    mavlink_msg_identifier_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.fw_version , packet1.particle_id , packet1.device_id , packet1.name , packet1.local_ip , packet1.mac );
     mavlink_msg_identifier_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -261,7 +261,7 @@ static void mavlink_test_identifier(uint8_t system_id, uint8_t component_id, mav
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_identifier_send(MAVLINK_COMM_1 , packet1.fw_version , packet1.particle_id_full , packet1.device_id , packet1.device_name , packet1.local_ip , packet1.mac );
+    mavlink_msg_identifier_send(MAVLINK_COMM_1 , packet1.fw_version , packet1.particle_id , packet1.device_id , packet1.name , packet1.local_ip , packet1.mac );
     mavlink_msg_identifier_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

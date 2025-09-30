@@ -6,9 +6,9 @@
 
 typedef struct __mavlink_identifier_t {
  uint8_t fw_version; /*<  Particle FW version*/
- char particle_id_full[24]; /*<   Particle ID of device. Read Only. */
+ char particle_id[24]; /*<   Particle ID of device. Read Only. */
  char device_id[20]; /*<  Device id of scanner matching manufacturing sticker. i.e. P2-ABC123. Read only*/
- char device_name[30]; /*<   Friendly name of device. E.g. "57 Rock West". User settable*/
+ char name[30]; /*<   Friendly name of device. E.g. "57 Rock West". User settable*/
  uint8_t local_ip[4]; /*<   local IPV4 Address of the device*/
  uint8_t mac[6]; /*<   MAC address of the device*/
 } mavlink_identifier_t;
@@ -18,12 +18,12 @@ typedef struct __mavlink_identifier_t {
 #define MAVLINK_MSG_ID_7_LEN 85
 #define MAVLINK_MSG_ID_7_MIN_LEN 85
 
-#define MAVLINK_MSG_ID_IDENTIFIER_CRC 86
-#define MAVLINK_MSG_ID_7_CRC 86
+#define MAVLINK_MSG_ID_IDENTIFIER_CRC 193
+#define MAVLINK_MSG_ID_7_CRC 193
 
-#define MAVLINK_MSG_IDENTIFIER_FIELD_PARTICLE_ID_FULL_LEN 24
+#define MAVLINK_MSG_IDENTIFIER_FIELD_PARTICLE_ID_LEN 24
 #define MAVLINK_MSG_IDENTIFIER_FIELD_DEVICE_ID_LEN 20
-#define MAVLINK_MSG_IDENTIFIER_FIELD_DEVICE_NAME_LEN 30
+#define MAVLINK_MSG_IDENTIFIER_FIELD_NAME_LEN 30
 #define MAVLINK_MSG_IDENTIFIER_FIELD_LOCAL_IP_LEN 4
 #define MAVLINK_MSG_IDENTIFIER_FIELD_MAC_LEN 6
 
@@ -33,9 +33,9 @@ typedef struct __mavlink_identifier_t {
     "IDENTIFIER", \
     6, \
     {  { "fw_version", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_identifier_t, fw_version) }, \
-         { "particle_id_full", NULL, MAVLINK_TYPE_CHAR, 24, 1, offsetof(mavlink_identifier_t, particle_id_full) }, \
+         { "particle_id", NULL, MAVLINK_TYPE_CHAR, 24, 1, offsetof(mavlink_identifier_t, particle_id) }, \
          { "device_id", NULL, MAVLINK_TYPE_CHAR, 20, 25, offsetof(mavlink_identifier_t, device_id) }, \
-         { "device_name", NULL, MAVLINK_TYPE_CHAR, 30, 45, offsetof(mavlink_identifier_t, device_name) }, \
+         { "name", NULL, MAVLINK_TYPE_CHAR, 30, 45, offsetof(mavlink_identifier_t, name) }, \
          { "local_ip", NULL, MAVLINK_TYPE_UINT8_T, 4, 75, offsetof(mavlink_identifier_t, local_ip) }, \
          { "mac", NULL, MAVLINK_TYPE_UINT8_T, 6, 79, offsetof(mavlink_identifier_t, mac) }, \
          } \
@@ -45,9 +45,9 @@ typedef struct __mavlink_identifier_t {
     "IDENTIFIER", \
     6, \
     {  { "fw_version", NULL, MAVLINK_TYPE_UINT8_T, 0, 0, offsetof(mavlink_identifier_t, fw_version) }, \
-         { "particle_id_full", NULL, MAVLINK_TYPE_CHAR, 24, 1, offsetof(mavlink_identifier_t, particle_id_full) }, \
+         { "particle_id", NULL, MAVLINK_TYPE_CHAR, 24, 1, offsetof(mavlink_identifier_t, particle_id) }, \
          { "device_id", NULL, MAVLINK_TYPE_CHAR, 20, 25, offsetof(mavlink_identifier_t, device_id) }, \
-         { "device_name", NULL, MAVLINK_TYPE_CHAR, 30, 45, offsetof(mavlink_identifier_t, device_name) }, \
+         { "name", NULL, MAVLINK_TYPE_CHAR, 30, 45, offsetof(mavlink_identifier_t, name) }, \
          { "local_ip", NULL, MAVLINK_TYPE_UINT8_T, 4, 75, offsetof(mavlink_identifier_t, local_ip) }, \
          { "mac", NULL, MAVLINK_TYPE_UINT8_T, 6, 79, offsetof(mavlink_identifier_t, mac) }, \
          } \
@@ -61,31 +61,31 @@ typedef struct __mavlink_identifier_t {
  * @param msg The MAVLink message to compress the data into
  *
  * @param fw_version  Particle FW version
- * @param particle_id_full   Particle ID of device. Read Only. 
+ * @param particle_id   Particle ID of device. Read Only. 
  * @param device_id  Device id of scanner matching manufacturing sticker. i.e. P2-ABC123. Read only
- * @param device_name   Friendly name of device. E.g. "57 Rock West". User settable
+ * @param name   Friendly name of device. E.g. "57 Rock West". User settable
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t fw_version, const char *particle_id_full, const char *device_id, const char *device_name, const uint8_t *local_ip, const uint8_t *mac)
+                               uint8_t fw_version, const char *particle_id, const char *device_id, const char *name, const uint8_t *local_ip, const uint8_t *mac)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
     _mav_put_uint8_t(buf, 0, fw_version);
-    _mav_put_char_array(buf, 1, particle_id_full, 24);
+    _mav_put_char_array(buf, 1, particle_id, 24);
     _mav_put_char_array(buf, 25, device_id, 20);
-    _mav_put_char_array(buf, 45, device_name, 30);
+    _mav_put_char_array(buf, 45, name, 30);
     _mav_put_uint8_t_array(buf, 75, local_ip, 4);
     _mav_put_uint8_t_array(buf, 79, mac, 6);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_IDENTIFIER_LEN);
 #else
     mavlink_identifier_t packet;
     packet.fw_version = fw_version;
-    mav_array_memcpy(packet.particle_id_full, particle_id_full, sizeof(char)*24);
+    mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.device_id, device_id, sizeof(char)*20);
-    mav_array_memcpy(packet.device_name, device_name, sizeof(char)*30);
+    mav_array_memcpy(packet.name, name, sizeof(char)*30);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_IDENTIFIER_LEN);
@@ -103,31 +103,31 @@ static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t co
  * @param msg The MAVLink message to compress the data into
  *
  * @param fw_version  Particle FW version
- * @param particle_id_full   Particle ID of device. Read Only. 
+ * @param particle_id   Particle ID of device. Read Only. 
  * @param device_id  Device id of scanner matching manufacturing sticker. i.e. P2-ABC123. Read only
- * @param device_name   Friendly name of device. E.g. "57 Rock West". User settable
+ * @param name   Friendly name of device. E.g. "57 Rock West". User settable
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t fw_version, const char *particle_id_full, const char *device_id, const char *device_name, const uint8_t *local_ip, const uint8_t *mac)
+                               uint8_t fw_version, const char *particle_id, const char *device_id, const char *name, const uint8_t *local_ip, const uint8_t *mac)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
     _mav_put_uint8_t(buf, 0, fw_version);
-    _mav_put_char_array(buf, 1, particle_id_full, 24);
+    _mav_put_char_array(buf, 1, particle_id, 24);
     _mav_put_char_array(buf, 25, device_id, 20);
-    _mav_put_char_array(buf, 45, device_name, 30);
+    _mav_put_char_array(buf, 45, name, 30);
     _mav_put_uint8_t_array(buf, 75, local_ip, 4);
     _mav_put_uint8_t_array(buf, 79, mac, 6);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_IDENTIFIER_LEN);
 #else
     mavlink_identifier_t packet;
     packet.fw_version = fw_version;
-    mav_array_memcpy(packet.particle_id_full, particle_id_full, sizeof(char)*24);
+    mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.device_id, device_id, sizeof(char)*20);
-    mav_array_memcpy(packet.device_name, device_name, sizeof(char)*30);
+    mav_array_memcpy(packet.name, name, sizeof(char)*30);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_IDENTIFIER_LEN);
@@ -148,32 +148,32 @@ static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uin
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
  * @param fw_version  Particle FW version
- * @param particle_id_full   Particle ID of device. Read Only. 
+ * @param particle_id   Particle ID of device. Read Only. 
  * @param device_id  Device id of scanner matching manufacturing sticker. i.e. P2-ABC123. Read only
- * @param device_name   Friendly name of device. E.g. "57 Rock West". User settable
+ * @param name   Friendly name of device. E.g. "57 Rock West". User settable
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t fw_version,const char *particle_id_full,const char *device_id,const char *device_name,const uint8_t *local_ip,const uint8_t *mac)
+                                   uint8_t fw_version,const char *particle_id,const char *device_id,const char *name,const uint8_t *local_ip,const uint8_t *mac)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
     _mav_put_uint8_t(buf, 0, fw_version);
-    _mav_put_char_array(buf, 1, particle_id_full, 24);
+    _mav_put_char_array(buf, 1, particle_id, 24);
     _mav_put_char_array(buf, 25, device_id, 20);
-    _mav_put_char_array(buf, 45, device_name, 30);
+    _mav_put_char_array(buf, 45, name, 30);
     _mav_put_uint8_t_array(buf, 75, local_ip, 4);
     _mav_put_uint8_t_array(buf, 79, mac, 6);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_IDENTIFIER_LEN);
 #else
     mavlink_identifier_t packet;
     packet.fw_version = fw_version;
-    mav_array_memcpy(packet.particle_id_full, particle_id_full, sizeof(char)*24);
+    mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.device_id, device_id, sizeof(char)*20);
-    mav_array_memcpy(packet.device_name, device_name, sizeof(char)*30);
+    mav_array_memcpy(packet.name, name, sizeof(char)*30);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_IDENTIFIER_LEN);
@@ -193,7 +193,7 @@ static inline uint16_t mavlink_msg_identifier_pack_chan(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_identifier_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_identifier_t* identifier)
 {
-    return mavlink_msg_identifier_pack(system_id, component_id, msg, identifier->fw_version, identifier->particle_id_full, identifier->device_id, identifier->device_name, identifier->local_ip, identifier->mac);
+    return mavlink_msg_identifier_pack(system_id, component_id, msg, identifier->fw_version, identifier->particle_id, identifier->device_id, identifier->name, identifier->local_ip, identifier->mac);
 }
 
 /**
@@ -207,7 +207,7 @@ static inline uint16_t mavlink_msg_identifier_encode(uint8_t system_id, uint8_t 
  */
 static inline uint16_t mavlink_msg_identifier_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_identifier_t* identifier)
 {
-    return mavlink_msg_identifier_pack_chan(system_id, component_id, chan, msg, identifier->fw_version, identifier->particle_id_full, identifier->device_id, identifier->device_name, identifier->local_ip, identifier->mac);
+    return mavlink_msg_identifier_pack_chan(system_id, component_id, chan, msg, identifier->fw_version, identifier->particle_id, identifier->device_id, identifier->name, identifier->local_ip, identifier->mac);
 }
 
 /**
@@ -221,7 +221,7 @@ static inline uint16_t mavlink_msg_identifier_encode_chan(uint8_t system_id, uin
  */
 static inline uint16_t mavlink_msg_identifier_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_identifier_t* identifier)
 {
-    return mavlink_msg_identifier_pack_status(system_id, component_id, _status, msg,  identifier->fw_version, identifier->particle_id_full, identifier->device_id, identifier->device_name, identifier->local_ip, identifier->mac);
+    return mavlink_msg_identifier_pack_status(system_id, component_id, _status, msg,  identifier->fw_version, identifier->particle_id, identifier->device_id, identifier->name, identifier->local_ip, identifier->mac);
 }
 
 /**
@@ -229,31 +229,31 @@ static inline uint16_t mavlink_msg_identifier_encode_status(uint8_t system_id, u
  * @param chan MAVLink channel to send the message
  *
  * @param fw_version  Particle FW version
- * @param particle_id_full   Particle ID of device. Read Only. 
+ * @param particle_id   Particle ID of device. Read Only. 
  * @param device_id  Device id of scanner matching manufacturing sticker. i.e. P2-ABC123. Read only
- * @param device_name   Friendly name of device. E.g. "57 Rock West". User settable
+ * @param name   Friendly name of device. E.g. "57 Rock West". User settable
  * @param local_ip   local IPV4 Address of the device
  * @param mac   MAC address of the device
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_identifier_send(mavlink_channel_t chan, uint8_t fw_version, const char *particle_id_full, const char *device_id, const char *device_name, const uint8_t *local_ip, const uint8_t *mac)
+static inline void mavlink_msg_identifier_send(mavlink_channel_t chan, uint8_t fw_version, const char *particle_id, const char *device_id, const char *name, const uint8_t *local_ip, const uint8_t *mac)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_IDENTIFIER_LEN];
     _mav_put_uint8_t(buf, 0, fw_version);
-    _mav_put_char_array(buf, 1, particle_id_full, 24);
+    _mav_put_char_array(buf, 1, particle_id, 24);
     _mav_put_char_array(buf, 25, device_id, 20);
-    _mav_put_char_array(buf, 45, device_name, 30);
+    _mav_put_char_array(buf, 45, name, 30);
     _mav_put_uint8_t_array(buf, 75, local_ip, 4);
     _mav_put_uint8_t_array(buf, 79, mac, 6);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, buf, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
 #else
     mavlink_identifier_t packet;
     packet.fw_version = fw_version;
-    mav_array_memcpy(packet.particle_id_full, particle_id_full, sizeof(char)*24);
+    mav_array_memcpy(packet.particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet.device_id, device_id, sizeof(char)*20);
-    mav_array_memcpy(packet.device_name, device_name, sizeof(char)*30);
+    mav_array_memcpy(packet.name, name, sizeof(char)*30);
     mav_array_memcpy(packet.local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet.mac, mac, sizeof(uint8_t)*6);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, (const char *)&packet, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
@@ -268,7 +268,7 @@ static inline void mavlink_msg_identifier_send(mavlink_channel_t chan, uint8_t f
 static inline void mavlink_msg_identifier_send_struct(mavlink_channel_t chan, const mavlink_identifier_t* identifier)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_identifier_send(chan, identifier->fw_version, identifier->particle_id_full, identifier->device_id, identifier->device_name, identifier->local_ip, identifier->mac);
+    mavlink_msg_identifier_send(chan, identifier->fw_version, identifier->particle_id, identifier->device_id, identifier->name, identifier->local_ip, identifier->mac);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, (const char *)identifier, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
 #endif
@@ -282,23 +282,23 @@ static inline void mavlink_msg_identifier_send_struct(mavlink_channel_t chan, co
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_identifier_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t fw_version, const char *particle_id_full, const char *device_id, const char *device_name, const uint8_t *local_ip, const uint8_t *mac)
+static inline void mavlink_msg_identifier_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t fw_version, const char *particle_id, const char *device_id, const char *name, const uint8_t *local_ip, const uint8_t *mac)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_uint8_t(buf, 0, fw_version);
-    _mav_put_char_array(buf, 1, particle_id_full, 24);
+    _mav_put_char_array(buf, 1, particle_id, 24);
     _mav_put_char_array(buf, 25, device_id, 20);
-    _mav_put_char_array(buf, 45, device_name, 30);
+    _mav_put_char_array(buf, 45, name, 30);
     _mav_put_uint8_t_array(buf, 75, local_ip, 4);
     _mav_put_uint8_t_array(buf, 79, mac, 6);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, buf, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
 #else
     mavlink_identifier_t *packet = (mavlink_identifier_t *)msgbuf;
     packet->fw_version = fw_version;
-    mav_array_memcpy(packet->particle_id_full, particle_id_full, sizeof(char)*24);
+    mav_array_memcpy(packet->particle_id, particle_id, sizeof(char)*24);
     mav_array_memcpy(packet->device_id, device_id, sizeof(char)*20);
-    mav_array_memcpy(packet->device_name, device_name, sizeof(char)*30);
+    mav_array_memcpy(packet->name, name, sizeof(char)*30);
     mav_array_memcpy(packet->local_ip, local_ip, sizeof(uint8_t)*4);
     mav_array_memcpy(packet->mac, mac, sizeof(uint8_t)*6);
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_IDENTIFIER, (const char *)packet, MAVLINK_MSG_ID_IDENTIFIER_MIN_LEN, MAVLINK_MSG_ID_IDENTIFIER_LEN, MAVLINK_MSG_ID_IDENTIFIER_CRC);
@@ -322,13 +322,13 @@ static inline uint8_t mavlink_msg_identifier_get_fw_version(const mavlink_messag
 }
 
 /**
- * @brief Get field particle_id_full from identifier message
+ * @brief Get field particle_id from identifier message
  *
  * @return   Particle ID of device. Read Only. 
  */
-static inline uint16_t mavlink_msg_identifier_get_particle_id_full(const mavlink_message_t* msg, char *particle_id_full)
+static inline uint16_t mavlink_msg_identifier_get_particle_id(const mavlink_message_t* msg, char *particle_id)
 {
-    return _MAV_RETURN_char_array(msg, particle_id_full, 24,  1);
+    return _MAV_RETURN_char_array(msg, particle_id, 24,  1);
 }
 
 /**
@@ -342,13 +342,13 @@ static inline uint16_t mavlink_msg_identifier_get_device_id(const mavlink_messag
 }
 
 /**
- * @brief Get field device_name from identifier message
+ * @brief Get field name from identifier message
  *
  * @return   Friendly name of device. E.g. "57 Rock West". User settable
  */
-static inline uint16_t mavlink_msg_identifier_get_device_name(const mavlink_message_t* msg, char *device_name)
+static inline uint16_t mavlink_msg_identifier_get_name(const mavlink_message_t* msg, char *name)
 {
-    return _MAV_RETURN_char_array(msg, device_name, 30,  45);
+    return _MAV_RETURN_char_array(msg, name, 30,  45);
 }
 
 /**
@@ -381,9 +381,9 @@ static inline void mavlink_msg_identifier_decode(const mavlink_message_t* msg, m
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     identifier->fw_version = mavlink_msg_identifier_get_fw_version(msg);
-    mavlink_msg_identifier_get_particle_id_full(msg, identifier->particle_id_full);
+    mavlink_msg_identifier_get_particle_id(msg, identifier->particle_id);
     mavlink_msg_identifier_get_device_id(msg, identifier->device_id);
-    mavlink_msg_identifier_get_device_name(msg, identifier->device_name);
+    mavlink_msg_identifier_get_name(msg, identifier->name);
     mavlink_msg_identifier_get_local_ip(msg, identifier->local_ip);
     mavlink_msg_identifier_get_mac(msg, identifier->mac);
 #else
