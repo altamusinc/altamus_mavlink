@@ -1192,7 +1192,7 @@ static void mavlink_test_scan_transform(uint8_t system_id, uint8_t component_id,
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_scan_transform_t packet_in = {
-        17.0,45.0,73.0,101.0
+        17.0,45.0,73.0,101.0,129.0,18275
     };
     mavlink_scan_transform_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
@@ -1200,6 +1200,8 @@ static void mavlink_test_scan_transform(uint8_t system_id, uint8_t component_id,
         packet1.pitch_offset = packet_in.pitch_offset;
         packet1.pitch_scale = packet_in.pitch_scale;
         packet1.yaw_scale = packet_in.yaw_scale;
+        packet1.range_scale = packet_in.range_scale;
+        packet1.max_range = packet_in.max_range;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -1214,12 +1216,12 @@ static void mavlink_test_scan_transform(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_scan_transform_pack(system_id, component_id, &msg , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale );
+    mavlink_msg_scan_transform_pack(system_id, component_id, &msg , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale , packet1.range_scale , packet1.max_range );
     mavlink_msg_scan_transform_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_scan_transform_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale );
+    mavlink_msg_scan_transform_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale , packet1.range_scale , packet1.max_range );
     mavlink_msg_scan_transform_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -1232,7 +1234,7 @@ static void mavlink_test_scan_transform(uint8_t system_id, uint8_t component_id,
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_scan_transform_send(MAVLINK_COMM_1 , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale );
+    mavlink_msg_scan_transform_send(MAVLINK_COMM_1 , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale , packet1.range_scale , packet1.max_range );
     mavlink_msg_scan_transform_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 

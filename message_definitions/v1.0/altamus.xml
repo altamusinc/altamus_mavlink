@@ -301,10 +301,12 @@
         </message>
         <message name="SCAN_TRANSFORM" id="22">
             <description> Transformation to apply to raw points.</description>
-            <field type="float" name="roll_offset" units="degrees" default="0"></field>
-            <field type="float" name="pitch_offset" units="degrees" default="0"></field>
-            <field type="float" name="pitch_scale" units="%" default="1"></field>
-            <field type="float" name="yaw_scale" units="%" default="1"></field>
+            <field type="float" name="roll_offset" units="degrees" default="0">Offset for the mechanical roll error in the scanner </field>
+            <field type="float" name="pitch_offset" units="degrees" default="0">Offset for the pitch alignement error in the scanner</field>
+            <field type="float" name="pitch_scale" units="%" default="1">Scale to apply to pitch values</field>
+            <field type="float" name="yaw_scale" units="%" default="1">Scale to apply to the yaw values</field>
+            <field type="float" name="range_scale" units="%" default="1">Scale to apply to the range values</field>
+            <field type="uint16_t" name="max_range" units="cm" invalid="UINT16_MAX">Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed</field>
         </message>
     </messages>
 </mavlink>

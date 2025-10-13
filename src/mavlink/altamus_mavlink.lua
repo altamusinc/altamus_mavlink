@@ -649,6 +649,8 @@ f.SCAN_TRANSFORM_roll_offset = ProtoField.new("roll_offset (float) [degrees]", "
 f.SCAN_TRANSFORM_pitch_offset = ProtoField.new("pitch_offset (float) [degrees]", "mavlink_proto.SCAN_TRANSFORM_pitch_offset", ftypes.FLOAT, nil)
 f.SCAN_TRANSFORM_pitch_scale = ProtoField.new("pitch_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_pitch_scale", ftypes.FLOAT, nil)
 f.SCAN_TRANSFORM_yaw_scale = ProtoField.new("yaw_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_yaw_scale", ftypes.FLOAT, nil)
+f.SCAN_TRANSFORM_range_scale = ProtoField.new("range_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_range_scale", ftypes.FLOAT, nil)
+f.SCAN_TRANSFORM_max_range = ProtoField.new("max_range (uint16_t) [cm]", "mavlink_proto.SCAN_TRANSFORM_max_range", ftypes.UINT16, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -1652,9 +1654,9 @@ end
 -- dissect payload of message type SCAN_TRANSFORM
 function payload_fns.payload_22(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 16 > limit) then
+    if (offset + 22 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 16)
+        padded:set_size(offset + 22)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -1667,6 +1669,10 @@ function payload_fns.payload_22(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.SCAN_TRANSFORM_pitch_scale, tvbrange)
     tvbrange = padded(offset + 12, 4)
     subtree = tree:add_le(f.SCAN_TRANSFORM_yaw_scale, tvbrange)
+    tvbrange = padded(offset + 16, 4)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_range_scale, tvbrange)
+    tvbrange = padded(offset + 20, 2)
+    subtree = tree:add_le(f.SCAN_TRANSFORM_max_range, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)
