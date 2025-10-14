@@ -62,6 +62,7 @@ messageName = {
     [20] = 'LIDAR_SETTINGS',
     [21] = 'SCAN_RESULT_INFO',
     [22] = 'SCAN_TRANSFORM',
+    [23] = 'FACTORY_CALIBRATION',
     [0] = 'HEARTBEAT',
     [5] = 'CHANGE_OPERATOR_CONTROL',
     [6] = 'CHANGE_OPERATOR_CONTROL_ACK',
@@ -651,6 +652,19 @@ f.SCAN_TRANSFORM_pitch_scale = ProtoField.new("pitch_scale (float) [%]", "mavlin
 f.SCAN_TRANSFORM_yaw_scale = ProtoField.new("yaw_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_yaw_scale", ftypes.FLOAT, nil)
 f.SCAN_TRANSFORM_range_scale = ProtoField.new("range_scale (float) [%]", "mavlink_proto.SCAN_TRANSFORM_range_scale", ftypes.FLOAT, nil)
 f.SCAN_TRANSFORM_max_range = ProtoField.new("max_range (uint16_t) [cm]", "mavlink_proto.SCAN_TRANSFORM_max_range", ftypes.UINT16, nil)
+
+f.FACTORY_CALIBRATION_roll_offset = ProtoField.new("roll_offset (float) [degrees]", "mavlink_proto.FACTORY_CALIBRATION_roll_offset", ftypes.FLOAT, nil)
+f.FACTORY_CALIBRATION_pitch_offset = ProtoField.new("pitch_offset (float) [degrees]", "mavlink_proto.FACTORY_CALIBRATION_pitch_offset", ftypes.FLOAT, nil)
+f.FACTORY_CALIBRATION_pitch_scale = ProtoField.new("pitch_scale (float) [%]", "mavlink_proto.FACTORY_CALIBRATION_pitch_scale", ftypes.FLOAT, nil)
+f.FACTORY_CALIBRATION_yaw_scale = ProtoField.new("yaw_scale (float) [%]", "mavlink_proto.FACTORY_CALIBRATION_yaw_scale", ftypes.FLOAT, nil)
+f.FACTORY_CALIBRATION_range_scale = ProtoField.new("range_scale (float) [%]", "mavlink_proto.FACTORY_CALIBRATION_range_scale", ftypes.FLOAT, nil)
+f.FACTORY_CALIBRATION_max_range = ProtoField.new("max_range (uint16_t) [cm]", "mavlink_proto.FACTORY_CALIBRATION_max_range", ftypes.UINT16, nil)
+f.FACTORY_CALIBRATION_pitch_enforce_minimum_steps = ProtoField.new("pitch_enforce_minimum_steps (uint8_t)", "mavlink_proto.FACTORY_CALIBRATION_pitch_enforce_minimum_steps", ftypes.UINT8, nil)
+f.FACTORY_CALIBRATION_pitch_home_offset_steps = ProtoField.new("pitch_home_offset_steps (int16_t)", "mavlink_proto.FACTORY_CALIBRATION_pitch_home_offset_steps", ftypes.INT16, nil)
+f.FACTORY_CALIBRATION_pitch_current = ProtoField.new("pitch_current (uint16_t)", "mavlink_proto.FACTORY_CALIBRATION_pitch_current", ftypes.UINT16, nil)
+f.FACTORY_CALIBRATION_yaw_enforce_minimum_steps = ProtoField.new("yaw_enforce_minimum_steps (uint8_t)", "mavlink_proto.FACTORY_CALIBRATION_yaw_enforce_minimum_steps", ftypes.UINT8, nil)
+f.FACTORY_CALIBRATION_yaw_home_offset_steps = ProtoField.new("yaw_home_offset_steps (int16_t)", "mavlink_proto.FACTORY_CALIBRATION_yaw_home_offset_steps", ftypes.INT16, nil)
+f.FACTORY_CALIBRATION_yaw_current = ProtoField.new("yaw_current (uint16_t)", "mavlink_proto.FACTORY_CALIBRATION_yaw_current", ftypes.UINT16, nil)
 
 f.HEARTBEAT_type = ProtoField.new("type (MAV_TYPE)", "mavlink_proto.HEARTBEAT_type", ftypes.UINT8, enumEntryName.MAV_TYPE)
 f.HEARTBEAT_autopilot = ProtoField.new("autopilot (MAV_AUTOPILOT)", "mavlink_proto.HEARTBEAT_autopilot", ftypes.UINT8, enumEntryName.MAV_AUTOPILOT)
@@ -1673,6 +1687,41 @@ function payload_fns.payload_22(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.SCAN_TRANSFORM_range_scale, tvbrange)
     tvbrange = padded(offset + 20, 2)
     subtree = tree:add_le(f.SCAN_TRANSFORM_max_range, tvbrange)
+end
+-- dissect payload of message type FACTORY_CALIBRATION
+function payload_fns.payload_23(buffer, tree, msgid, offset, limit, pinfo)
+    local padded, field_offset, value, subtree, tvbrange
+    if (offset + 32 > limit) then
+        padded = buffer(0, limit):bytes()
+        padded:set_size(offset + 32)
+        padded = padded:tvb("Untruncated payload")
+    else
+        padded = buffer
+    end
+    tvbrange = padded(offset + 0, 4)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_roll_offset, tvbrange)
+    tvbrange = padded(offset + 4, 4)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_pitch_offset, tvbrange)
+    tvbrange = padded(offset + 8, 4)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_pitch_scale, tvbrange)
+    tvbrange = padded(offset + 12, 4)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_yaw_scale, tvbrange)
+    tvbrange = padded(offset + 16, 4)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_range_scale, tvbrange)
+    tvbrange = padded(offset + 20, 2)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_max_range, tvbrange)
+    tvbrange = padded(offset + 30, 1)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_pitch_enforce_minimum_steps, tvbrange)
+    tvbrange = padded(offset + 22, 2)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_pitch_home_offset_steps, tvbrange)
+    tvbrange = padded(offset + 24, 2)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_pitch_current, tvbrange)
+    tvbrange = padded(offset + 31, 1)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_yaw_enforce_minimum_steps, tvbrange)
+    tvbrange = padded(offset + 26, 2)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_yaw_home_offset_steps, tvbrange)
+    tvbrange = padded(offset + 28, 2)
+    subtree = tree:add_le(f.FACTORY_CALIBRATION_yaw_current, tvbrange)
 end
 -- dissect payload of message type HEARTBEAT
 function payload_fns.payload_0(buffer, tree, msgid, offset, limit, pinfo)

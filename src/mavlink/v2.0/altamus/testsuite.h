@@ -1244,6 +1244,76 @@ static void mavlink_test_scan_transform(uint8_t system_id, uint8_t component_id,
 #endif
 }
 
+static void mavlink_test_factory_calibration(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
+{
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+    mavlink_status_t *status = mavlink_get_channel_status(MAVLINK_COMM_0);
+        if ((status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) && MAVLINK_MSG_ID_FACTORY_CALIBRATION >= 256) {
+            return;
+        }
+#endif
+    mavlink_message_t msg;
+        uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
+        uint16_t i;
+    mavlink_factory_calibration_t packet_in = {
+        17.0,45.0,73.0,101.0,129.0,18275,18379,18483,18587,18691,223,34
+    };
+    mavlink_factory_calibration_t packet1, packet2;
+        memset(&packet1, 0, sizeof(packet1));
+        packet1.roll_offset = packet_in.roll_offset;
+        packet1.pitch_offset = packet_in.pitch_offset;
+        packet1.pitch_scale = packet_in.pitch_scale;
+        packet1.yaw_scale = packet_in.yaw_scale;
+        packet1.range_scale = packet_in.range_scale;
+        packet1.max_range = packet_in.max_range;
+        packet1.pitch_home_offset_steps = packet_in.pitch_home_offset_steps;
+        packet1.pitch_current = packet_in.pitch_current;
+        packet1.yaw_home_offset_steps = packet_in.yaw_home_offset_steps;
+        packet1.yaw_current = packet_in.yaw_current;
+        packet1.pitch_enforce_minimum_steps = packet_in.pitch_enforce_minimum_steps;
+        packet1.yaw_enforce_minimum_steps = packet_in.yaw_enforce_minimum_steps;
+        
+        
+#ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
+        if (status->flags & MAVLINK_STATUS_FLAG_OUT_MAVLINK1) {
+           // cope with extensions
+           memset(MAVLINK_MSG_ID_FACTORY_CALIBRATION_MIN_LEN + (char *)&packet1, 0, sizeof(packet1)-MAVLINK_MSG_ID_FACTORY_CALIBRATION_MIN_LEN);
+        }
+#endif
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_factory_calibration_encode(system_id, component_id, &msg, &packet1);
+    mavlink_msg_factory_calibration_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_factory_calibration_pack(system_id, component_id, &msg , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale , packet1.range_scale , packet1.max_range , packet1.pitch_enforce_minimum_steps , packet1.pitch_home_offset_steps , packet1.pitch_current , packet1.yaw_enforce_minimum_steps , packet1.yaw_home_offset_steps , packet1.yaw_current );
+    mavlink_msg_factory_calibration_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_factory_calibration_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale , packet1.range_scale , packet1.max_range , packet1.pitch_enforce_minimum_steps , packet1.pitch_home_offset_steps , packet1.pitch_current , packet1.yaw_enforce_minimum_steps , packet1.yaw_home_offset_steps , packet1.yaw_current );
+    mavlink_msg_factory_calibration_decode(&msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+        memset(&packet2, 0, sizeof(packet2));
+        mavlink_msg_to_send_buffer(buffer, &msg);
+        for (i=0; i<mavlink_msg_get_send_buffer_length(&msg); i++) {
+            comm_send_ch(MAVLINK_COMM_0, buffer[i]);
+        }
+    mavlink_msg_factory_calibration_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+        
+        memset(&packet2, 0, sizeof(packet2));
+    mavlink_msg_factory_calibration_send(MAVLINK_COMM_1 , packet1.roll_offset , packet1.pitch_offset , packet1.pitch_scale , packet1.yaw_scale , packet1.range_scale , packet1.max_range , packet1.pitch_enforce_minimum_steps , packet1.pitch_home_offset_steps , packet1.pitch_current , packet1.yaw_enforce_minimum_steps , packet1.yaw_home_offset_steps , packet1.yaw_current );
+    mavlink_msg_factory_calibration_decode(last_msg, &packet2);
+        MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
+
+#ifdef MAVLINK_HAVE_GET_MESSAGE_INFO
+    MAVLINK_ASSERT(mavlink_get_message_info_by_name("FACTORY_CALIBRATION") != NULL);
+    MAVLINK_ASSERT(mavlink_get_message_info_by_id(MAVLINK_MSG_ID_FACTORY_CALIBRATION) != NULL);
+#endif
+}
+
 static void mavlink_test_altamus(uint8_t system_id, uint8_t component_id, mavlink_message_t *last_msg)
 {
     mavlink_test_lidar_reading(system_id, component_id, last_msg);
@@ -1265,6 +1335,7 @@ static void mavlink_test_altamus(uint8_t system_id, uint8_t component_id, mavlin
     mavlink_test_lidar_settings(system_id, component_id, last_msg);
     mavlink_test_scan_result_info(system_id, component_id, last_msg);
     mavlink_test_scan_transform(system_id, component_id, last_msg);
+    mavlink_test_factory_calibration(system_id, component_id, last_msg);
 }
 
 #ifdef __cplusplus

@@ -308,5 +308,20 @@
             <field type="float" name="range_scale" units="%" default="1">Scale to apply to the range values</field>
             <field type="uint16_t" name="max_range" units="cm" invalid="UINT16_MAX">Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed</field>
         </message>
+        <message name="FACTORY_CALIBRATION" id="23">
+            <description> Collection of values set at the factory that will be used in their respective locations after a factory reset is applied.</description>
+            <field type="float" name="roll_offset" units="degrees" default="0">Offset for the mechanical roll error in the scanner </field>
+            <field type="float" name="pitch_offset" units="degrees" default="0">Offset for the pitch alignement error in the scanner</field>
+            <field type="float" name="pitch_scale" units="%" default="1">Scale to apply to pitch values</field>
+            <field type="float" name="yaw_scale" units="%" default="1">Scale to apply to the yaw values</field>
+            <field type="float" name="range_scale" units="%" default="1">Scale to apply to the range values</field>
+            <field type="uint16_t" name="max_range" units="cm" invalid="UINT16_MAX">Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed</field>
+            <field name="pitch_enforce_minimum_steps" type="uint8_t" invalid="0">Pitch Motor: Enforce a minimum number of steps to next index. 0 = disabled, 1 = enabled</field>
+            <field name="pitch_home_offset_steps" type="int16_t">Pitch Motor: Number of steps to move from home position after homing.</field>
+            <field name="pitch_current" type="uint16_t"> Motor current 0-2500 </field>
+            <field name="yaw_enforce_minimum_steps" type="uint8_t" invalid="0">Pitch Motor: Enforce a minimum number of steps to next index. 0 = disabled, 1 = enabled</field>
+            <field name="yaw_home_offset_steps" type="int16_t">Pitch Motor: Number of steps to move from home position after homing.</field>
+            <field name="yaw_current" type="uint16_t"> Motor current 0-2500 </field>
+        </message>
     </messages>
 </mavlink>
