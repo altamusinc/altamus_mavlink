@@ -23,7 +23,22 @@
               <description>Requests that device sends it's settings to the settings server configured in REMOTE_SERVER_SETTINGS. Takes no arguments</description>
             </entry>
             <entry value="5" name="MAV_CMD_CLEAR_EEPROM">
-              <description>Requests that device clears it's stored EEPROM. Takes no Arguments</description>
+                <description>Requests that device clears it's stored EEPROM. Clears all values including factory calibration and scan count. Takes no Arguments</description>
+            </entry>
+            <entry value="6" name="MAV_CMD_FACTORY_RESET">
+                <description> Requests that the device restores it's factory calibration settings.</description>
+            </entry>
+            <entry value="7" name="MAV_CMD_SAVE_CALIBRATION">
+                <description> Requests that the device stores it's current settings as factory calibration.</description>
+            </entry>
+            <entry value="8" name="MAV_CMD_UPLOAD_LATEST_SCAN">
+                <description> Requests that the device re-uploads the latest scan.</description>
+            </entry>
+            <entry value="9" name="MAV_CMD_STOP_UPLOAD">
+                <description> Requests that the device stops the current upload.</description>
+            </entry>
+            <entry value="10" name="MAV_CMD_DELETE_ALL_SCANS">
+                <description> Requests that the device deletes all stored scans.</description>
             </entry>
         </enum>
         <enum name="MAV_FTP_OPCODE">
