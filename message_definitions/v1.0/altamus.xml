@@ -46,6 +46,11 @@
                 <description> Upload file at given path to the remote server configured in REMOTE_SERVER_SETTINGS</description>
             </entry>
         </enum>
+        <enum name="GPS_FIX_TYPE">
+            <entry value="16" name="GPS_FIX_TYPE_LAST_POSITION">
+                <description> Last remembered position of the GPS module</description>
+            </entry>
+        </enum>
         <enum name="EOS_COMPONENT" bitmask="true">
             <description> Components within the EOS scanner </description>
             <entry value="1" name="EOS_COMPONENT_LIDAR"></entry>
@@ -293,6 +298,7 @@
             <description>Used to query/set the wifi credientials of the device</description>
             <field name="behavior" type="uint8_t" enum="WIFI_CREDIENTIALS_BEHAVIOR">What behavior to execute, eg, clear, add, list</field>
             <field name="auth_type" type="uint8_t" enum="WIFI_AUTH_TYPE">Auth type of the network; eg; WPA2</field>
+            <field name="hidden" type="uint8_t"> Is the SSID Hidden? 1: true - 0: false</field>
             <field name="ssid" type="char[50]">Name of the SSID</field>
             <field name="password" type="char[50]">Password of the SSID. leave blank for open networks. Will be left blank if reporting</field>
         </message>

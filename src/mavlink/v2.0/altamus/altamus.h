@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_ALTAMUS.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_ALTAMUS_XML_HASH -6554451399841681209
+#define MAVLINK_ALTAMUS_XML_HASH -1445995867808939099
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 #ifndef MAVLINK_MESSAGE_CRCS
-#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {1, 125, 248, 248, 0, 0, 0}, {2, 246, 3, 3, 0, 0, 0}, {3, 130, 9, 9, 0, 0, 0}, {5, 217, 28, 28, 1, 0, 0}, {6, 104, 3, 3, 0, 0, 0}, {7, 193, 85, 85, 0, 0, 0}, {8, 179, 4, 4, 0, 0, 0}, {9, 92, 30, 30, 0, 0, 0}, {10, 17, 7, 7, 0, 0, 0}, {11, 79, 230, 230, 0, 0, 0}, {12, 42, 11, 11, 0, 0, 0}, {13, 163, 51, 51, 0, 0, 0}, {14, 141, 17, 17, 0, 0, 0}, {15, 37, 18, 18, 0, 0, 0}, {16, 177, 24, 24, 0, 0, 0}, {17, 61, 23, 23, 0, 0, 0}, {18, 178, 42, 42, 0, 0, 0}, {19, 100, 102, 102, 0, 0, 0}, {20, 236, 14, 14, 0, 0, 0}, {21, 31, 33, 33, 0, 0, 0}, {22, 134, 22, 22, 0, 0, 0}, {23, 188, 32, 32, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {110, 84, 254, 254, 3, 1, 2}, {111, 34, 16, 18, 3, 16, 17}, {244, 95, 6, 6, 0, 0, 0}, {251, 170, 18, 18, 0, 0, 0}, {252, 44, 18, 18, 0, 0, 0}, {253, 83, 51, 54, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
+#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {1, 125, 248, 248, 0, 0, 0}, {2, 246, 3, 3, 0, 0, 0}, {3, 130, 9, 9, 0, 0, 0}, {5, 217, 28, 28, 1, 0, 0}, {6, 104, 3, 3, 0, 0, 0}, {7, 193, 85, 85, 0, 0, 0}, {8, 179, 4, 4, 0, 0, 0}, {9, 92, 30, 30, 0, 0, 0}, {10, 17, 7, 7, 0, 0, 0}, {11, 79, 230, 230, 0, 0, 0}, {12, 42, 11, 11, 0, 0, 0}, {13, 163, 51, 51, 0, 0, 0}, {14, 141, 17, 17, 0, 0, 0}, {15, 37, 18, 18, 0, 0, 0}, {16, 177, 24, 24, 0, 0, 0}, {17, 61, 23, 23, 0, 0, 0}, {18, 178, 42, 42, 0, 0, 0}, {19, 15, 103, 103, 0, 0, 0}, {20, 236, 14, 14, 0, 0, 0}, {21, 31, 33, 33, 0, 0, 0}, {22, 134, 22, 22, 0, 0, 0}, {23, 188, 32, 32, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {110, 84, 254, 254, 3, 1, 2}, {111, 34, 16, 18, 3, 16, 17}, {244, 95, 6, 6, 0, 0, 0}, {251, 170, 18, 18, 0, 0, 0}, {252, 44, 18, 18, 0, 0, 0}, {253, 83, 51, 54, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
 #endif
 
 #include "../protocol.h"
@@ -111,6 +111,25 @@ typedef enum MAV_FTP_OPCODE
    MAV_FTP_OPCODE_NAK=129, /* NAK: NAK response | */
    MAV_FTP_OPCODE_ENUM_END=130, /*  | */
 } MAV_FTP_OPCODE;
+#endif
+
+/** @brief Type of GPS fix */
+#ifndef HAVE_ENUM_GPS_FIX_TYPE
+#define HAVE_ENUM_GPS_FIX_TYPE
+typedef enum GPS_FIX_TYPE
+{
+   GPS_FIX_TYPE_NO_GPS=0, /* No GPS connected | */
+   GPS_FIX_TYPE_NO_FIX=1, /* No position information, GPS is connected | */
+   GPS_FIX_TYPE_2D_FIX=2, /* 2D position | */
+   GPS_FIX_TYPE_3D_FIX=3, /* 3D position | */
+   GPS_FIX_TYPE_DGPS=4, /* DGPS/SBAS aided 3D position | */
+   GPS_FIX_TYPE_RTK_FLOAT=5, /* RTK float, 3D position | */
+   GPS_FIX_TYPE_RTK_FIXED=6, /* RTK Fixed, 3D position | */
+   GPS_FIX_TYPE_STATIC=7, /* Static fixed, typically used for base stations | */
+   GPS_FIX_TYPE_PPP=8, /* PPP, 3D position. | */
+   GPS_FIX_TYPE_LAST_POSITION=16, /*  Last remembered position of the GPS module | */
+   GPS_FIX_TYPE_ENUM_END=17, /*  | */
+} GPS_FIX_TYPE;
 #endif
 
 /** @brief  Components within the EOS scanner  */

@@ -127,6 +127,18 @@ local enumEntryName = {
         [128] = "MAV_FTP_OPCODE_ACK",
         [129] = "MAV_FTP_OPCODE_NAK",
     },
+    ["GPS_FIX_TYPE"] = {
+        [0] = "GPS_FIX_TYPE_NO_GPS",
+        [1] = "GPS_FIX_TYPE_NO_FIX",
+        [2] = "GPS_FIX_TYPE_2D_FIX",
+        [3] = "GPS_FIX_TYPE_3D_FIX",
+        [4] = "GPS_FIX_TYPE_DGPS",
+        [5] = "GPS_FIX_TYPE_RTK_FLOAT",
+        [6] = "GPS_FIX_TYPE_RTK_FIXED",
+        [7] = "GPS_FIX_TYPE_STATIC",
+        [8] = "GPS_FIX_TYPE_PPP",
+        [16] = "GPS_FIX_TYPE_LAST_POSITION",
+    },
     ["EOS_COMPONENT"] = {
         [1] = "EOS_COMPONENT_LIDAR",
         [2] = "EOS_COMPONENT_YAW_MOTOR",
@@ -301,17 +313,6 @@ local enumEntryName = {
     ["MAV_FRAME"] = {
         [0] = "MAV_FRAME_GLOBAL",
         [1] = "MAV_FRAME_LOCAL_NED",
-    },
-    ["GPS_FIX_TYPE"] = {
-        [0] = "GPS_FIX_TYPE_NO_GPS",
-        [1] = "GPS_FIX_TYPE_NO_FIX",
-        [2] = "GPS_FIX_TYPE_2D_FIX",
-        [3] = "GPS_FIX_TYPE_3D_FIX",
-        [4] = "GPS_FIX_TYPE_DGPS",
-        [5] = "GPS_FIX_TYPE_RTK_FLOAT",
-        [6] = "GPS_FIX_TYPE_RTK_FIXED",
-        [7] = "GPS_FIX_TYPE_STATIC",
-        [8] = "GPS_FIX_TYPE_PPP",
     },
 }
 f.magic = ProtoField.uint8("mavlink_proto.magic", "Magic value / version", base.HEX, protocolVersions)
@@ -622,6 +623,7 @@ f.ORIENTATION_alt = ProtoField.new("alt (int32_t) [mm]", "mavlink_proto.ORIENTAT
 
 f.WIFI_CREDENTIALS_behavior = ProtoField.new("behavior (WIFI_CREDIENTIALS_BEHAVIOR)", "mavlink_proto.WIFI_CREDENTIALS_behavior", ftypes.UINT8, enumEntryName.WIFI_CREDIENTIALS_BEHAVIOR)
 f.WIFI_CREDENTIALS_auth_type = ProtoField.new("auth_type (WIFI_AUTH_TYPE)", "mavlink_proto.WIFI_CREDENTIALS_auth_type", ftypes.UINT8, enumEntryName.WIFI_AUTH_TYPE)
+f.WIFI_CREDENTIALS_hidden = ProtoField.new("hidden (uint8_t)", "mavlink_proto.WIFI_CREDENTIALS_hidden", ftypes.UINT8, nil)
 f.WIFI_CREDENTIALS_ssid = ProtoField.new("ssid (char)", "mavlink_proto.WIFI_CREDENTIALS_ssid", ftypes.STRING, nil)
 f.WIFI_CREDENTIALS_password = ProtoField.new("password (char)", "mavlink_proto.WIFI_CREDENTIALS_password", ftypes.STRING, nil)
 
@@ -1609,9 +1611,9 @@ end
 -- dissect payload of message type WIFI_CREDENTIALS
 function payload_fns.payload_19(buffer, tree, msgid, offset, limit, pinfo)
     local padded, field_offset, value, subtree, tvbrange
-    if (offset + 102 > limit) then
+    if (offset + 103 > limit) then
         padded = buffer(0, limit):bytes()
-        padded:set_size(offset + 102)
+        padded:set_size(offset + 103)
         padded = padded:tvb("Untruncated payload")
     else
         padded = buffer
@@ -1620,9 +1622,11 @@ function payload_fns.payload_19(buffer, tree, msgid, offset, limit, pinfo)
     subtree = tree:add_le(f.WIFI_CREDENTIALS_behavior, tvbrange)
     tvbrange = padded(offset + 1, 1)
     subtree = tree:add_le(f.WIFI_CREDENTIALS_auth_type, tvbrange)
-    tvbrange = padded(offset + 2, 50)
+    tvbrange = padded(offset + 2, 1)
+    subtree = tree:add_le(f.WIFI_CREDENTIALS_hidden, tvbrange)
+    tvbrange = padded(offset + 3, 50)
     subtree = tree:add_le(f.WIFI_CREDENTIALS_ssid, tvbrange)
-    tvbrange = padded(offset + 52, 50)
+    tvbrange = padded(offset + 53, 50)
     subtree = tree:add_le(f.WIFI_CREDENTIALS_password, tvbrange)
 end
 -- dissect payload of message type LIDAR_SETTINGS

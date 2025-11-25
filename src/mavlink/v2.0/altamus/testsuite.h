@@ -1002,12 +1002,13 @@ static void mavlink_test_wifi_credentials(uint8_t system_id, uint8_t component_i
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_wifi_credentials_t packet_in = {
-        5,72,"CDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXY","ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVW"
+        5,72,139,"DEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ","BCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWX"
     };
     mavlink_wifi_credentials_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.behavior = packet_in.behavior;
         packet1.auth_type = packet_in.auth_type;
+        packet1.hidden = packet_in.hidden;
         
         mav_array_memcpy(packet1.ssid, packet_in.ssid, sizeof(char)*50);
         mav_array_memcpy(packet1.password, packet_in.password, sizeof(char)*50);
@@ -1024,12 +1025,12 @@ static void mavlink_test_wifi_credentials(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_wifi_credentials_pack(system_id, component_id, &msg , packet1.behavior , packet1.auth_type , packet1.ssid , packet1.password );
+    mavlink_msg_wifi_credentials_pack(system_id, component_id, &msg , packet1.behavior , packet1.auth_type , packet1.hidden , packet1.ssid , packet1.password );
     mavlink_msg_wifi_credentials_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_wifi_credentials_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.behavior , packet1.auth_type , packet1.ssid , packet1.password );
+    mavlink_msg_wifi_credentials_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.behavior , packet1.auth_type , packet1.hidden , packet1.ssid , packet1.password );
     mavlink_msg_wifi_credentials_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -1042,7 +1043,7 @@ static void mavlink_test_wifi_credentials(uint8_t system_id, uint8_t component_i
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_wifi_credentials_send(MAVLINK_COMM_1 , packet1.behavior , packet1.auth_type , packet1.ssid , packet1.password );
+    mavlink_msg_wifi_credentials_send(MAVLINK_COMM_1 , packet1.behavior , packet1.auth_type , packet1.hidden , packet1.ssid , packet1.password );
     mavlink_msg_wifi_credentials_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
