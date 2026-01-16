@@ -1,8 +1,0 @@
-[submodule "pymavlink"]
-	path = pymavlink
-	url = git@github.com:altamusinc/altamus_pymavlink.git
-	branch = master
-[submodule "altamus_mavlink_dart"]
-	path = altamus_mavlink_dart
-	url = git@github.com:altamusinc/altamus_mavlink_dart.git
-	branch = main
