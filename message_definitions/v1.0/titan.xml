@@ -30,6 +30,13 @@
             <entry value="11" name="STATE_INPUT_UPLOAD_ABORT"></entry>
             <entry value="12" name="STATE_INPUT_FILL_LIMIT"></entry>
         </enum>
+        <enum name="BADGE_AUTH_STATE">
+            <description> Authorization state of a badge</description>
+            <entry value="1" name="BADGE_AUTH_STATE_UNKNOWN"></entry>
+            <entry value="2" name="BADGE_AUTH_STATE_VERIFYING"></entry>
+            <entry value="3" name="BADGE_AUTH_STATE_REJECTED"></entry>
+            <entry value="4" name="BADGE_AUTH_STATE_AUTHORIZED"></entry>
+        </enum>
     </enums>
     <messages>
         <message name="STATE_INPUT_EVENT" id="1">
@@ -84,6 +91,12 @@
             <field name="badge_id_int" type="uint64_t"> badge ID as int</field>
             <field name="truck_name" type="char[20]"> Truck name associated with badge ID</field>
             <field name="arrival_time" type="uint32_t" units="s"> unix start time of when the truck arrived</field>
+        </message>
+        <message name="VISIBLE_BADGES" id="9">
+            <description> Array of visible badge ids, along with authorization state and arrival times</description>
+            <field name="badge_id_int" type="uint64_t[15]">List of visible badge ids</field>
+            <field name="auth_state" type="uint8_t[15]" enum="BADGE_AUTH_STATE"></field>
+            <field name="arrival_time" type="uint32_t[15]" units="s"> unix start time of when the badge arrived</field>
         </message>
     </messages>
 </mavlink>
