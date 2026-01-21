@@ -10,8 +10,7 @@ typedef struct __mavlink_identifier_t {
  uint8_t mac[6]; /*<   MAC address of the device*/
  char name[20]; /*<  Friendly name of device i.e. P2-123456*/
  char site_friendly_name[30]; /*<   Friendly name for the site it's at, i.e. "57 Rock West"*/
- char site_name[30]; /*<   Name of the site where the scanner is located,
-                i.e. "Gainesville Plant"*/
+ char site_name[30]; /*<   Name of the site where the scanner is located,i.e. "Gainesville Plant"*/
 } mavlink_identifier_t;
 
 #define MAVLINK_MSG_ID_IDENTIFIER_LEN 114
@@ -67,8 +66,7 @@ typedef struct __mavlink_identifier_t {
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
  * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
- * @param site_name   Name of the site where the scanner is located,
-                i.e. "Gainesville Plant"
+ * @param site_name   Name of the site where the scanner is located,i.e. "Gainesville Plant"
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
@@ -112,8 +110,7 @@ static inline uint16_t mavlink_msg_identifier_pack(uint8_t system_id, uint8_t co
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
  * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
- * @param site_name   Name of the site where the scanner is located,
-                i.e. "Gainesville Plant"
+ * @param site_name   Name of the site where the scanner is located,i.e. "Gainesville Plant"
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
@@ -160,8 +157,7 @@ static inline uint16_t mavlink_msg_identifier_pack_status(uint8_t system_id, uin
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
  * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
- * @param site_name   Name of the site where the scanner is located,
-                i.e. "Gainesville Plant"
+ * @param site_name   Name of the site where the scanner is located,i.e. "Gainesville Plant"
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_identifier_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
@@ -244,8 +240,7 @@ static inline uint16_t mavlink_msg_identifier_encode_status(uint8_t system_id, u
  * @param mac   MAC address of the device
  * @param name  Friendly name of device i.e. P2-123456
  * @param site_friendly_name   Friendly name for the site it's at, i.e. "57 Rock West"
- * @param site_name   Name of the site where the scanner is located,
-                i.e. "Gainesville Plant"
+ * @param site_name   Name of the site where the scanner is located,i.e. "Gainesville Plant"
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
@@ -290,7 +285,7 @@ static inline void mavlink_msg_identifier_send_struct(mavlink_channel_t chan, co
 
 #if MAVLINK_MSG_ID_IDENTIFIER_LEN <= MAVLINK_MAX_PAYLOAD_LEN
 /*
-  This variant of _send() can be used to save stack space by re-using
+  This variant of _send() can be used to save stack space by reusing
   memory from the receive buffer.  The caller provides a
   mavlink_message_t which is the size of a full mavlink message. This
   is usually the receive buffer for the channel, and allows a reply to an
@@ -380,8 +375,7 @@ static inline uint16_t mavlink_msg_identifier_get_site_friendly_name(const mavli
 /**
  * @brief Get field site_name from identifier message
  *
- * @return   Name of the site where the scanner is located,
-                i.e. "Gainesville Plant"
+ * @return   Name of the site where the scanner is located,i.e. "Gainesville Plant"
  */
 static inline uint16_t mavlink_msg_identifier_get_site_name(const mavlink_message_t* msg, char *site_name)
 {
