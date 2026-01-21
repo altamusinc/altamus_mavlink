@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_COMMON_MINIMAL.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_COMMON_MINIMAL_XML_HASH 6325516212463867475
+#define MAVLINK_COMMON_MINIMAL_XML_HASH 7377572912813905245
 
 #ifdef __cplusplus
 extern "C" {
@@ -260,33 +260,15 @@ typedef enum MAV_FRAME
 } MAV_FRAME;
 #endif
 
-/** @brief Type of GPS fix */
-#ifndef HAVE_ENUM_GPS_FIX_TYPE
-#define HAVE_ENUM_GPS_FIX_TYPE
-typedef enum GPS_FIX_TYPE
-{
-   GPS_FIX_TYPE_NO_GPS=0, /* No GPS connected | */
-   GPS_FIX_TYPE_NO_FIX=1, /* No position information, GPS is connected | */
-   GPS_FIX_TYPE_2D_FIX=2, /* 2D position | */
-   GPS_FIX_TYPE_3D_FIX=3, /* 3D position | */
-   GPS_FIX_TYPE_DGPS=4, /* DGPS/SBAS aided 3D position | */
-   GPS_FIX_TYPE_RTK_FLOAT=5, /* RTK float, 3D position | */
-   GPS_FIX_TYPE_RTK_FIXED=6, /* RTK Fixed, 3D position | */
-   GPS_FIX_TYPE_STATIC=7, /* Static fixed, typically used for base stations | */
-   GPS_FIX_TYPE_PPP=8, /* PPP, 3D position. | */
-   GPS_FIX_TYPE_ENUM_END=9, /*  | */
-} GPS_FIX_TYPE;
-#endif
-
 // MAVLINK VERSION
 
 #ifndef MAVLINK_VERSION
-#define MAVLINK_VERSION 3
+#define MAVLINK_VERSION 2
 #endif
 
 #if (MAVLINK_VERSION == 0)
 #undef MAVLINK_VERSION
-#define MAVLINK_VERSION 3
+#define MAVLINK_VERSION 2
 #endif
 
 // MESSAGE DEFINITIONS

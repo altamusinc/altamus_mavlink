@@ -73,7 +73,7 @@ static inline uint16_t mavlink_msg_heartbeat_pack(uint8_t system_id, uint8_t com
     _mav_put_uint8_t(buf, 5, autopilot);
     _mav_put_uint8_t(buf, 6, base_mode);
     _mav_put_uint8_t(buf, 7, system_status);
-    _mav_put_uint8_t(buf, 8, 3);
+    _mav_put_uint8_t(buf, 8, 2);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HEARTBEAT_LEN);
 #else
@@ -83,7 +83,7 @@ static inline uint16_t mavlink_msg_heartbeat_pack(uint8_t system_id, uint8_t com
     packet.autopilot = autopilot;
     packet.base_mode = base_mode;
     packet.system_status = system_status;
-    packet.mavlink_version = 3;
+    packet.mavlink_version = 2;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HEARTBEAT_LEN);
 #endif
@@ -116,7 +116,7 @@ static inline uint16_t mavlink_msg_heartbeat_pack_status(uint8_t system_id, uint
     _mav_put_uint8_t(buf, 5, autopilot);
     _mav_put_uint8_t(buf, 6, base_mode);
     _mav_put_uint8_t(buf, 7, system_status);
-    _mav_put_uint8_t(buf, 8, 3);
+    _mav_put_uint8_t(buf, 8, 2);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HEARTBEAT_LEN);
 #else
@@ -126,7 +126,7 @@ static inline uint16_t mavlink_msg_heartbeat_pack_status(uint8_t system_id, uint
     packet.autopilot = autopilot;
     packet.base_mode = base_mode;
     packet.system_status = system_status;
-    packet.mavlink_version = 3;
+    packet.mavlink_version = 2;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HEARTBEAT_LEN);
 #endif
@@ -163,7 +163,7 @@ static inline uint16_t mavlink_msg_heartbeat_pack_chan(uint8_t system_id, uint8_
     _mav_put_uint8_t(buf, 5, autopilot);
     _mav_put_uint8_t(buf, 6, base_mode);
     _mav_put_uint8_t(buf, 7, system_status);
-    _mav_put_uint8_t(buf, 8, 3);
+    _mav_put_uint8_t(buf, 8, 2);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_HEARTBEAT_LEN);
 #else
@@ -173,7 +173,7 @@ static inline uint16_t mavlink_msg_heartbeat_pack_chan(uint8_t system_id, uint8_
     packet.autopilot = autopilot;
     packet.base_mode = base_mode;
     packet.system_status = system_status;
-    packet.mavlink_version = 3;
+    packet.mavlink_version = 2;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_HEARTBEAT_LEN);
 #endif
@@ -244,7 +244,7 @@ static inline void mavlink_msg_heartbeat_send(mavlink_channel_t chan, uint8_t ty
     _mav_put_uint8_t(buf, 5, autopilot);
     _mav_put_uint8_t(buf, 6, base_mode);
     _mav_put_uint8_t(buf, 7, system_status);
-    _mav_put_uint8_t(buf, 8, 3);
+    _mav_put_uint8_t(buf, 8, 2);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, buf, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
 #else
@@ -254,7 +254,7 @@ static inline void mavlink_msg_heartbeat_send(mavlink_channel_t chan, uint8_t ty
     packet.autopilot = autopilot;
     packet.base_mode = base_mode;
     packet.system_status = system_status;
-    packet.mavlink_version = 3;
+    packet.mavlink_version = 2;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, (const char *)&packet, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
 #endif
@@ -291,7 +291,7 @@ static inline void mavlink_msg_heartbeat_send_buf(mavlink_message_t *msgbuf, mav
     _mav_put_uint8_t(buf, 5, autopilot);
     _mav_put_uint8_t(buf, 6, base_mode);
     _mav_put_uint8_t(buf, 7, system_status);
-    _mav_put_uint8_t(buf, 8, 3);
+    _mav_put_uint8_t(buf, 8, 2);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, buf, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
 #else
@@ -301,7 +301,7 @@ static inline void mavlink_msg_heartbeat_send_buf(mavlink_message_t *msgbuf, mav
     packet->autopilot = autopilot;
     packet->base_mode = base_mode;
     packet->system_status = system_status;
-    packet->mavlink_version = 3;
+    packet->mavlink_version = 2;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_HEARTBEAT, (const char *)packet, MAVLINK_MSG_ID_HEARTBEAT_MIN_LEN, MAVLINK_MSG_ID_HEARTBEAT_LEN, MAVLINK_MSG_ID_HEARTBEAT_CRC);
 #endif

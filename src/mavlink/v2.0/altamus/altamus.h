@@ -10,7 +10,7 @@
     #error Wrong include order: MAVLINK_ALTAMUS.H MUST NOT BE DIRECTLY USED. Include mavlink.h from the same directory instead or set ALL AND EVERY defines from MAVLINK.H manually accordingly, including the #define MAVLINK_H call.
 #endif
 
-#define MAVLINK_ALTAMUS_XML_HASH -4454082403777423202
+#define MAVLINK_ALTAMUS_XML_HASH -1445995867808939099
 
 #ifdef __cplusplus
 extern "C" {
@@ -23,7 +23,7 @@ extern "C" {
 #endif
 
 #ifndef MAVLINK_MESSAGE_CRCS
-#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {1, 125, 248, 248, 0, 0, 0}, {2, 246, 3, 3, 0, 0, 0}, {3, 212, 7, 7, 0, 0, 0}, {5, 217, 28, 28, 1, 0, 0}, {6, 104, 3, 3, 0, 0, 0}, {7, 88, 114, 114, 0, 0, 0}, {8, 179, 4, 4, 0, 0, 0}, {9, 92, 30, 30, 0, 0, 0}, {10, 17, 7, 7, 0, 0, 0}, {11, 79, 230, 230, 0, 0, 0}, {12, 42, 11, 11, 0, 0, 0}, {13, 121, 42, 42, 0, 0, 0}, {14, 141, 17, 17, 0, 0, 0}, {15, 37, 18, 18, 0, 0, 0}, {16, 42, 24, 24, 0, 0, 0}, {17, 61, 23, 23, 0, 0, 0}, {18, 78, 34, 34, 0, 0, 0}, {19, 100, 102, 102, 0, 0, 0}, {20, 236, 14, 14, 0, 0, 0}, {21, 31, 33, 33, 0, 0, 0}, {22, 140, 16, 16, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {110, 84, 254, 254, 3, 1, 2}, {111, 34, 16, 18, 3, 16, 17}, {244, 95, 6, 6, 0, 0, 0}, {251, 170, 18, 18, 0, 0, 0}, {252, 44, 18, 18, 0, 0, 0}, {253, 83, 51, 54, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
+#define MAVLINK_MESSAGE_CRCS {{0, 50, 9, 9, 0, 0, 0}, {1, 125, 248, 248, 0, 0, 0}, {2, 246, 3, 3, 0, 0, 0}, {3, 130, 9, 9, 0, 0, 0}, {5, 217, 28, 28, 1, 0, 0}, {6, 104, 3, 3, 0, 0, 0}, {7, 193, 85, 85, 0, 0, 0}, {8, 179, 4, 4, 0, 0, 0}, {9, 92, 30, 30, 0, 0, 0}, {10, 17, 7, 7, 0, 0, 0}, {11, 79, 230, 230, 0, 0, 0}, {12, 42, 11, 11, 0, 0, 0}, {13, 163, 51, 51, 0, 0, 0}, {14, 141, 17, 17, 0, 0, 0}, {15, 37, 18, 18, 0, 0, 0}, {16, 177, 24, 24, 0, 0, 0}, {17, 61, 23, 23, 0, 0, 0}, {18, 178, 42, 42, 0, 0, 0}, {19, 15, 103, 103, 0, 0, 0}, {20, 236, 14, 14, 0, 0, 0}, {21, 31, 33, 33, 0, 0, 0}, {22, 134, 22, 22, 0, 0, 0}, {23, 188, 32, 32, 0, 0, 0}, {24, 24, 30, 52, 0, 0, 0}, {39, 254, 37, 38, 3, 32, 33}, {75, 158, 35, 35, 3, 30, 31}, {76, 152, 33, 33, 3, 30, 31}, {77, 143, 3, 10, 3, 8, 9}, {80, 14, 4, 4, 3, 2, 3}, {110, 84, 254, 254, 3, 1, 2}, {111, 34, 16, 18, 3, 16, 17}, {244, 95, 6, 6, 0, 0, 0}, {251, 170, 18, 18, 0, 0, 0}, {252, 44, 18, 18, 0, 0, 0}, {253, 83, 51, 54, 0, 0, 0}, {300, 217, 22, 22, 0, 0, 0}}
 #endif
 
 #include "../protocol.h"
@@ -73,7 +73,12 @@ typedef enum MAV_CMD
    MAV_CMD_STOP_EOS_SCAN=2, /* Stops a scan on the targeted scanner. Takes no arguments |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
    MAV_CMD_IDENTIFY=3, /* Requests that device identify itself by flashing it's LED. Takes no arguments |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
    MAV_CMD_SEND_SETTINGS_TO_SERVER=4, /* Requests that device sends it's settings to the settings server configured in REMOTE_SERVER_SETTINGS. Takes no arguments |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
-   MAV_CMD_CLEAR_EEPROM=5, /* Requests that device clears it's stored EEPROM. Takes no Arguments |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
+   MAV_CMD_CLEAR_EEPROM=5, /* Requests that device clears it's stored EEPROM. Clears all values including factory calibration and scan count. Takes no Arguments |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
+   MAV_CMD_FACTORY_RESET=6, /*  Requests that the device restores it's factory calibration settings. |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
+   MAV_CMD_SAVE_CALIBRATION=7, /*  Requests that the device stores it's current settings as factory calibration. |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
+   MAV_CMD_UPLOAD_LATEST_SCAN=8, /*  Requests that the device re-uploads the latest scan. |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
+   MAV_CMD_STOP_UPLOAD=9, /*  Requests that the device stops the current upload. |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
+   MAV_CMD_DELETE_ALL_SCANS=10, /*  Requests that the device deletes all stored scans. |Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)|  */
    MAV_CMD_SET_MESSAGE_INTERVAL=511, /* Set the interval between messages for a particular MAVLink message ID. This interface replaces REQUEST_DATA_STREAM. |The MAVLink message ID| The interval between two messages. -1: disable. 0: request default rate (which may be zero).| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Reserved (default:0)| Target address of message stream (if message has target address fields). 0: Flight-stack default (recommended), 1: address of requestor, 2: broadcast.|  */
    MAV_CMD_REQUEST_MESSAGE=512, /* Request the target system(s) emit a single instance of a specified message (i.e. a "one-shot" version of MAV_CMD_SET_MESSAGE_INTERVAL). |The MAVLink message ID of the requested message.| Use for index ID, if required. Otherwise, the use of this parameter (if any) must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| The use of this parameter (if any), must be defined in the requested message. By default assumed not used (0).| Target address for requested message (if message has target address fields). 0: Flight-stack default, 1: address of requestor, 2: broadcast.|  */
    MAV_CMD_ENUM_END=513, /*  | */
@@ -106,6 +111,25 @@ typedef enum MAV_FTP_OPCODE
    MAV_FTP_OPCODE_NAK=129, /* NAK: NAK response | */
    MAV_FTP_OPCODE_ENUM_END=130, /*  | */
 } MAV_FTP_OPCODE;
+#endif
+
+/** @brief Type of GPS fix */
+#ifndef HAVE_ENUM_GPS_FIX_TYPE
+#define HAVE_ENUM_GPS_FIX_TYPE
+typedef enum GPS_FIX_TYPE
+{
+   GPS_FIX_TYPE_NO_GPS=0, /* No GPS connected | */
+   GPS_FIX_TYPE_NO_FIX=1, /* No position information, GPS is connected | */
+   GPS_FIX_TYPE_2D_FIX=2, /* 2D position | */
+   GPS_FIX_TYPE_3D_FIX=3, /* 3D position | */
+   GPS_FIX_TYPE_DGPS=4, /* DGPS/SBAS aided 3D position | */
+   GPS_FIX_TYPE_RTK_FLOAT=5, /* RTK float, 3D position | */
+   GPS_FIX_TYPE_RTK_FIXED=6, /* RTK Fixed, 3D position | */
+   GPS_FIX_TYPE_STATIC=7, /* Static fixed, typically used for base stations | */
+   GPS_FIX_TYPE_PPP=8, /* PPP, 3D position. | */
+   GPS_FIX_TYPE_LAST_POSITION=16, /*  Last remembered position of the GPS module | */
+   GPS_FIX_TYPE_ENUM_END=17, /*  | */
+} GPS_FIX_TYPE;
 #endif
 
 /** @brief  Components within the EOS scanner  */
@@ -145,6 +169,22 @@ typedef enum EOS_STATE
    EOS_STATE_STOPPING_SCAN=8, /*  | */
    EOS_STATE_ENUM_END=9, /*  | */
 } EOS_STATE;
+#endif
+
+/** @brief  Additional flags for system state flags  */
+#ifndef HAVE_ENUM_EOS_STATE_FLAGS
+#define HAVE_ENUM_EOS_STATE_FLAGS
+typedef enum EOS_STATE_FLAGS
+{
+   EOS_STATE_FLAG_LOCAL_CONTROL=1, /*  | */
+   EOS_STATE_FLAG_HYPERION_AUTHORIZED=2, /*  | */
+   EOS_STATE_FLAG_INTERNET_CONNECTED=4, /*  | */
+   EOS_STATE_FLAG_LAST_SCAN_HEALTHY=8, /*  | */
+   EOS_STATE_FLAG_BLE_CONNECTED=16, /*  | */
+   EOS_STATE_FLAG_WIFI_CONNECTED=32, /*  | */
+   EOS_STATE_FLAG_IDENTIFYING=64, /*  | */
+   EOS_STATE_FLAGS_ENUM_END=65, /*  | */
+} EOS_STATE_FLAGS;
 #endif
 
 /** @brief  Behaviors a motor can execute  */
@@ -264,12 +304,12 @@ typedef enum POWER_INFORMATION_TYPE
 // MAVLINK VERSION
 
 #ifndef MAVLINK_VERSION
-#define MAVLINK_VERSION 1
+#define MAVLINK_VERSION 4
 #endif
 
 #if (MAVLINK_VERSION == 0)
 #undef MAVLINK_VERSION
-#define MAVLINK_VERSION 1
+#define MAVLINK_VERSION 4
 #endif
 
 // MESSAGE DEFINITIONS
@@ -292,14 +332,15 @@ typedef enum POWER_INFORMATION_TYPE
 #include "./mavlink_msg_lidar_settings.h"
 #include "./mavlink_msg_scan_result_info.h"
 #include "./mavlink_msg_scan_transform.h"
+#include "./mavlink_msg_factory_calibration.h"
 
 // base include
 #include "../common_minimal/common_minimal.h"
 
 
 #if MAVLINK_ALTAMUS_XML_HASH == MAVLINK_PRIMARY_XML_HASH
-# define MAVLINK_MESSAGE_INFO {MAVLINK_MESSAGE_INFO_HEARTBEAT, MAVLINK_MESSAGE_INFO_LIDAR_READING, MAVLINK_MESSAGE_INFO_COMPONENT_POWER_CONTROL, MAVLINK_MESSAGE_INFO_SYSTEM_STATUS, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL_ACK, MAVLINK_MESSAGE_INFO_IDENTIFIER, MAVLINK_MESSAGE_INFO_COMPONENT_HEALTH_TEST, MAVLINK_MESSAGE_INFO_SCAN_SETTINGS, MAVLINK_MESSAGE_INFO_SCAN_STATUS, MAVLINK_MESSAGE_INFO_REMOTE_SERVER_SETTINGS, MAVLINK_MESSAGE_INFO_POWER_INFORMATION, MAVLINK_MESSAGE_INFO_WIFI_INFORMATION, MAVLINK_MESSAGE_INFO_UPLOAD_STATUS, MAVLINK_MESSAGE_INFO_MOTOR_CONTROL, MAVLINK_MESSAGE_INFO_MOTOR_SETTINGS, MAVLINK_MESSAGE_INFO_MOTOR_STATUS, MAVLINK_MESSAGE_INFO_ORIENTATION, MAVLINK_MESSAGE_INFO_WIFI_CREDENTIALS, MAVLINK_MESSAGE_INFO_LIDAR_SETTINGS, MAVLINK_MESSAGE_INFO_SCAN_RESULT_INFO, MAVLINK_MESSAGE_INFO_SCAN_TRANSFORM, MAVLINK_MESSAGE_INFO_GPS_RAW_INT, MAVLINK_MESSAGE_INFO_MISSION_ITEM, MAVLINK_MESSAGE_INFO_COMMAND_INT, MAVLINK_MESSAGE_INFO_COMMAND_LONG, MAVLINK_MESSAGE_INFO_COMMAND_ACK, MAVLINK_MESSAGE_INFO_COMMAND_CANCEL, MAVLINK_MESSAGE_INFO_FILE_TRANSFER_PROTOCOL, MAVLINK_MESSAGE_INFO_TIMESYNC, MAVLINK_MESSAGE_INFO_MESSAGE_INTERVAL, MAVLINK_MESSAGE_INFO_NAMED_VALUE_FLOAT, MAVLINK_MESSAGE_INFO_NAMED_VALUE_INT, MAVLINK_MESSAGE_INFO_STATUSTEXT, MAVLINK_MESSAGE_INFO_PROTOCOL_VERSION}
-# define MAVLINK_MESSAGE_NAMES {{ "CHANGE_OPERATOR_CONTROL", 5 }, { "CHANGE_OPERATOR_CONTROL_ACK", 6 }, { "COMMAND_ACK", 77 }, { "COMMAND_CANCEL", 80 }, { "COMMAND_INT", 75 }, { "COMMAND_LONG", 76 }, { "COMPONENT_HEALTH_TEST", 8 }, { "COMPONENT_POWER_CONTROL", 2 }, { "FILE_TRANSFER_PROTOCOL", 110 }, { "GPS_RAW_INT", 24 }, { "HEARTBEAT", 0 }, { "IDENTIFIER", 7 }, { "LIDAR_READING", 1 }, { "LIDAR_SETTINGS", 20 }, { "MESSAGE_INTERVAL", 244 }, { "MISSION_ITEM", 39 }, { "MOTOR_CONTROL", 15 }, { "MOTOR_SETTINGS", 16 }, { "MOTOR_STATUS", 17 }, { "NAMED_VALUE_FLOAT", 251 }, { "NAMED_VALUE_INT", 252 }, { "ORIENTATION", 18 }, { "POWER_INFORMATION", 12 }, { "PROTOCOL_VERSION", 300 }, { "REMOTE_SERVER_SETTINGS", 11 }, { "SCAN_RESULT_INFO", 21 }, { "SCAN_SETTINGS", 9 }, { "SCAN_STATUS", 10 }, { "SCAN_TRANSFORM", 22 }, { "STATUSTEXT", 253 }, { "SYSTEM_STATUS", 3 }, { "TIMESYNC", 111 }, { "UPLOAD_STATUS", 14 }, { "WIFI_CREDENTIALS", 19 }, { "WIFI_INFORMATION", 13 }}
+# define MAVLINK_MESSAGE_INFO {MAVLINK_MESSAGE_INFO_HEARTBEAT, MAVLINK_MESSAGE_INFO_LIDAR_READING, MAVLINK_MESSAGE_INFO_COMPONENT_POWER_CONTROL, MAVLINK_MESSAGE_INFO_SYSTEM_STATUS, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL, MAVLINK_MESSAGE_INFO_CHANGE_OPERATOR_CONTROL_ACK, MAVLINK_MESSAGE_INFO_IDENTIFIER, MAVLINK_MESSAGE_INFO_COMPONENT_HEALTH_TEST, MAVLINK_MESSAGE_INFO_SCAN_SETTINGS, MAVLINK_MESSAGE_INFO_SCAN_STATUS, MAVLINK_MESSAGE_INFO_REMOTE_SERVER_SETTINGS, MAVLINK_MESSAGE_INFO_POWER_INFORMATION, MAVLINK_MESSAGE_INFO_WIFI_INFORMATION, MAVLINK_MESSAGE_INFO_UPLOAD_STATUS, MAVLINK_MESSAGE_INFO_MOTOR_CONTROL, MAVLINK_MESSAGE_INFO_MOTOR_SETTINGS, MAVLINK_MESSAGE_INFO_MOTOR_STATUS, MAVLINK_MESSAGE_INFO_ORIENTATION, MAVLINK_MESSAGE_INFO_WIFI_CREDENTIALS, MAVLINK_MESSAGE_INFO_LIDAR_SETTINGS, MAVLINK_MESSAGE_INFO_SCAN_RESULT_INFO, MAVLINK_MESSAGE_INFO_SCAN_TRANSFORM, MAVLINK_MESSAGE_INFO_FACTORY_CALIBRATION, MAVLINK_MESSAGE_INFO_GPS_RAW_INT, MAVLINK_MESSAGE_INFO_MISSION_ITEM, MAVLINK_MESSAGE_INFO_COMMAND_INT, MAVLINK_MESSAGE_INFO_COMMAND_LONG, MAVLINK_MESSAGE_INFO_COMMAND_ACK, MAVLINK_MESSAGE_INFO_COMMAND_CANCEL, MAVLINK_MESSAGE_INFO_FILE_TRANSFER_PROTOCOL, MAVLINK_MESSAGE_INFO_TIMESYNC, MAVLINK_MESSAGE_INFO_MESSAGE_INTERVAL, MAVLINK_MESSAGE_INFO_NAMED_VALUE_FLOAT, MAVLINK_MESSAGE_INFO_NAMED_VALUE_INT, MAVLINK_MESSAGE_INFO_STATUSTEXT, MAVLINK_MESSAGE_INFO_PROTOCOL_VERSION}
+# define MAVLINK_MESSAGE_NAMES {{ "CHANGE_OPERATOR_CONTROL", 5 }, { "CHANGE_OPERATOR_CONTROL_ACK", 6 }, { "COMMAND_ACK", 77 }, { "COMMAND_CANCEL", 80 }, { "COMMAND_INT", 75 }, { "COMMAND_LONG", 76 }, { "COMPONENT_HEALTH_TEST", 8 }, { "COMPONENT_POWER_CONTROL", 2 }, { "FACTORY_CALIBRATION", 23 }, { "FILE_TRANSFER_PROTOCOL", 110 }, { "GPS_RAW_INT", 24 }, { "HEARTBEAT", 0 }, { "IDENTIFIER", 7 }, { "LIDAR_READING", 1 }, { "LIDAR_SETTINGS", 20 }, { "MESSAGE_INTERVAL", 244 }, { "MISSION_ITEM", 39 }, { "MOTOR_CONTROL", 15 }, { "MOTOR_SETTINGS", 16 }, { "MOTOR_STATUS", 17 }, { "NAMED_VALUE_FLOAT", 251 }, { "NAMED_VALUE_INT", 252 }, { "ORIENTATION", 18 }, { "POWER_INFORMATION", 12 }, { "PROTOCOL_VERSION", 300 }, { "REMOTE_SERVER_SETTINGS", 11 }, { "SCAN_RESULT_INFO", 21 }, { "SCAN_SETTINGS", 9 }, { "SCAN_STATUS", 10 }, { "SCAN_TRANSFORM", 22 }, { "STATUSTEXT", 253 }, { "SYSTEM_STATUS", 3 }, { "TIMESYNC", 111 }, { "UPLOAD_STATUS", 14 }, { "WIFI_CREDENTIALS", 19 }, { "WIFI_INFORMATION", 13 }}
 # if MAVLINK_COMMAND_24BIT
 #  include "../mavlink_get_info.h"
 # endif

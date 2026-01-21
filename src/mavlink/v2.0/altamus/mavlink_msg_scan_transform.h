@@ -5,19 +5,21 @@
 
 
 typedef struct __mavlink_scan_transform_t {
- float roll_offset; /*< [degrees] */
- float pitch_offset; /*< [degrees] */
- float pitch_scale; /*< [%] */
- float yaw_scale; /*< [%] */
+ float roll_offset; /*< [degrees] Offset for the mechanical roll error in the scanner */
+ float pitch_offset; /*< [degrees] Offset for the pitch alignement error in the scanner*/
+ float pitch_scale; /*< [%] Scale to apply to pitch values*/
+ float yaw_scale; /*< [%] Scale to apply to the yaw values*/
+ float range_scale; /*< [%] Scale to apply to the range values*/
+ uint16_t max_range; /*< [cm] Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed*/
 } mavlink_scan_transform_t;
 
-#define MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN 16
-#define MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN 16
-#define MAVLINK_MSG_ID_22_LEN 16
-#define MAVLINK_MSG_ID_22_MIN_LEN 16
+#define MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN 22
+#define MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN 22
+#define MAVLINK_MSG_ID_22_LEN 22
+#define MAVLINK_MSG_ID_22_MIN_LEN 22
 
-#define MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC 140
-#define MAVLINK_MSG_ID_22_CRC 140
+#define MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC 134
+#define MAVLINK_MSG_ID_22_CRC 134
 
 
 
@@ -25,21 +27,25 @@ typedef struct __mavlink_scan_transform_t {
 #define MAVLINK_MESSAGE_INFO_SCAN_TRANSFORM { \
     22, \
     "SCAN_TRANSFORM", \
-    4, \
+    6, \
     {  { "roll_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_scan_transform_t, roll_offset) }, \
          { "pitch_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_scan_transform_t, pitch_offset) }, \
          { "pitch_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_scan_transform_t, pitch_scale) }, \
          { "yaw_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_scan_transform_t, yaw_scale) }, \
+         { "range_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_scan_transform_t, range_scale) }, \
+         { "max_range", NULL, MAVLINK_TYPE_UINT16_T, 0, 20, offsetof(mavlink_scan_transform_t, max_range) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_SCAN_TRANSFORM { \
     "SCAN_TRANSFORM", \
-    4, \
+    6, \
     {  { "roll_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_scan_transform_t, roll_offset) }, \
          { "pitch_offset", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_scan_transform_t, pitch_offset) }, \
          { "pitch_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_scan_transform_t, pitch_scale) }, \
          { "yaw_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 12, offsetof(mavlink_scan_transform_t, yaw_scale) }, \
+         { "range_scale", NULL, MAVLINK_TYPE_FLOAT, 0, 16, offsetof(mavlink_scan_transform_t, range_scale) }, \
+         { "max_range", NULL, MAVLINK_TYPE_UINT16_T, 0, 20, offsetof(mavlink_scan_transform_t, max_range) }, \
          } \
 }
 #endif
@@ -50,14 +56,16 @@ typedef struct __mavlink_scan_transform_t {
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param roll_offset [degrees] 
- * @param pitch_offset [degrees] 
- * @param pitch_scale [%] 
- * @param yaw_scale [%] 
+ * @param roll_offset [degrees] Offset for the mechanical roll error in the scanner 
+ * @param pitch_offset [degrees] Offset for the pitch alignement error in the scanner
+ * @param pitch_scale [%] Scale to apply to pitch values
+ * @param yaw_scale [%] Scale to apply to the yaw values
+ * @param range_scale [%] Scale to apply to the range values
+ * @param max_range [cm] Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_transform_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
+                               float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale, float range_scale, uint16_t max_range)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
@@ -65,6 +73,8 @@ static inline uint16_t mavlink_msg_scan_transform_pack(uint8_t system_id, uint8_
     _mav_put_float(buf, 4, pitch_offset);
     _mav_put_float(buf, 8, pitch_scale);
     _mav_put_float(buf, 12, yaw_scale);
+    _mav_put_float(buf, 16, range_scale);
+    _mav_put_uint16_t(buf, 20, max_range);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #else
@@ -73,6 +83,8 @@ static inline uint16_t mavlink_msg_scan_transform_pack(uint8_t system_id, uint8_
     packet.pitch_offset = pitch_offset;
     packet.pitch_scale = pitch_scale;
     packet.yaw_scale = yaw_scale;
+    packet.range_scale = range_scale;
+    packet.max_range = max_range;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #endif
@@ -88,14 +100,16 @@ static inline uint16_t mavlink_msg_scan_transform_pack(uint8_t system_id, uint8_
  * @param status MAVLink status structure
  * @param msg The MAVLink message to compress the data into
  *
- * @param roll_offset [degrees] 
- * @param pitch_offset [degrees] 
- * @param pitch_scale [%] 
- * @param yaw_scale [%] 
+ * @param roll_offset [degrees] Offset for the mechanical roll error in the scanner 
+ * @param pitch_offset [degrees] Offset for the pitch alignement error in the scanner
+ * @param pitch_scale [%] Scale to apply to pitch values
+ * @param yaw_scale [%] Scale to apply to the yaw values
+ * @param range_scale [%] Scale to apply to the range values
+ * @param max_range [cm] Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_transform_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
+                               float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale, float range_scale, uint16_t max_range)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
@@ -103,6 +117,8 @@ static inline uint16_t mavlink_msg_scan_transform_pack_status(uint8_t system_id,
     _mav_put_float(buf, 4, pitch_offset);
     _mav_put_float(buf, 8, pitch_scale);
     _mav_put_float(buf, 12, yaw_scale);
+    _mav_put_float(buf, 16, range_scale);
+    _mav_put_uint16_t(buf, 20, max_range);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #else
@@ -111,6 +127,8 @@ static inline uint16_t mavlink_msg_scan_transform_pack_status(uint8_t system_id,
     packet.pitch_offset = pitch_offset;
     packet.pitch_scale = pitch_scale;
     packet.yaw_scale = yaw_scale;
+    packet.range_scale = range_scale;
+    packet.max_range = max_range;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #endif
@@ -129,15 +147,17 @@ static inline uint16_t mavlink_msg_scan_transform_pack_status(uint8_t system_id,
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message will be sent over
  * @param msg The MAVLink message to compress the data into
- * @param roll_offset [degrees] 
- * @param pitch_offset [degrees] 
- * @param pitch_scale [%] 
- * @param yaw_scale [%] 
+ * @param roll_offset [degrees] Offset for the mechanical roll error in the scanner 
+ * @param pitch_offset [degrees] Offset for the pitch alignement error in the scanner
+ * @param pitch_scale [%] Scale to apply to pitch values
+ * @param yaw_scale [%] Scale to apply to the yaw values
+ * @param range_scale [%] Scale to apply to the range values
+ * @param max_range [cm] Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_scan_transform_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float roll_offset,float pitch_offset,float pitch_scale,float yaw_scale)
+                                   float roll_offset,float pitch_offset,float pitch_scale,float yaw_scale,float range_scale,uint16_t max_range)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
@@ -145,6 +165,8 @@ static inline uint16_t mavlink_msg_scan_transform_pack_chan(uint8_t system_id, u
     _mav_put_float(buf, 4, pitch_offset);
     _mav_put_float(buf, 8, pitch_scale);
     _mav_put_float(buf, 12, yaw_scale);
+    _mav_put_float(buf, 16, range_scale);
+    _mav_put_uint16_t(buf, 20, max_range);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #else
@@ -153,6 +175,8 @@ static inline uint16_t mavlink_msg_scan_transform_pack_chan(uint8_t system_id, u
     packet.pitch_offset = pitch_offset;
     packet.pitch_scale = pitch_scale;
     packet.yaw_scale = yaw_scale;
+    packet.range_scale = range_scale;
+    packet.max_range = max_range;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);
 #endif
@@ -171,7 +195,7 @@ static inline uint16_t mavlink_msg_scan_transform_pack_chan(uint8_t system_id, u
  */
 static inline uint16_t mavlink_msg_scan_transform_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_scan_transform_t* scan_transform)
 {
-    return mavlink_msg_scan_transform_pack(system_id, component_id, msg, scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale);
+    return mavlink_msg_scan_transform_pack(system_id, component_id, msg, scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale, scan_transform->range_scale, scan_transform->max_range);
 }
 
 /**
@@ -185,7 +209,7 @@ static inline uint16_t mavlink_msg_scan_transform_encode(uint8_t system_id, uint
  */
 static inline uint16_t mavlink_msg_scan_transform_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_scan_transform_t* scan_transform)
 {
-    return mavlink_msg_scan_transform_pack_chan(system_id, component_id, chan, msg, scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale);
+    return mavlink_msg_scan_transform_pack_chan(system_id, component_id, chan, msg, scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale, scan_transform->range_scale, scan_transform->max_range);
 }
 
 /**
@@ -199,21 +223,23 @@ static inline uint16_t mavlink_msg_scan_transform_encode_chan(uint8_t system_id,
  */
 static inline uint16_t mavlink_msg_scan_transform_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_scan_transform_t* scan_transform)
 {
-    return mavlink_msg_scan_transform_pack_status(system_id, component_id, _status, msg,  scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale);
+    return mavlink_msg_scan_transform_pack_status(system_id, component_id, _status, msg,  scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale, scan_transform->range_scale, scan_transform->max_range);
 }
 
 /**
  * @brief Send a scan_transform message
  * @param chan MAVLink channel to send the message
  *
- * @param roll_offset [degrees] 
- * @param pitch_offset [degrees] 
- * @param pitch_scale [%] 
- * @param yaw_scale [%] 
+ * @param roll_offset [degrees] Offset for the mechanical roll error in the scanner 
+ * @param pitch_offset [degrees] Offset for the pitch alignement error in the scanner
+ * @param pitch_scale [%] Scale to apply to pitch values
+ * @param yaw_scale [%] Scale to apply to the yaw values
+ * @param range_scale [%] Scale to apply to the range values
+ * @param max_range [cm] Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_scan_transform_send(mavlink_channel_t chan, float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
+static inline void mavlink_msg_scan_transform_send(mavlink_channel_t chan, float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale, float range_scale, uint16_t max_range)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN];
@@ -221,6 +247,8 @@ static inline void mavlink_msg_scan_transform_send(mavlink_channel_t chan, float
     _mav_put_float(buf, 4, pitch_offset);
     _mav_put_float(buf, 8, pitch_scale);
     _mav_put_float(buf, 12, yaw_scale);
+    _mav_put_float(buf, 16, range_scale);
+    _mav_put_uint16_t(buf, 20, max_range);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #else
@@ -229,6 +257,8 @@ static inline void mavlink_msg_scan_transform_send(mavlink_channel_t chan, float
     packet.pitch_offset = pitch_offset;
     packet.pitch_scale = pitch_scale;
     packet.yaw_scale = yaw_scale;
+    packet.range_scale = range_scale;
+    packet.max_range = max_range;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, (const char *)&packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #endif
@@ -242,7 +272,7 @@ static inline void mavlink_msg_scan_transform_send(mavlink_channel_t chan, float
 static inline void mavlink_msg_scan_transform_send_struct(mavlink_channel_t chan, const mavlink_scan_transform_t* scan_transform)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_scan_transform_send(chan, scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale);
+    mavlink_msg_scan_transform_send(chan, scan_transform->roll_offset, scan_transform->pitch_offset, scan_transform->pitch_scale, scan_transform->yaw_scale, scan_transform->range_scale, scan_transform->max_range);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, (const char *)scan_transform, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #endif
@@ -256,7 +286,7 @@ static inline void mavlink_msg_scan_transform_send_struct(mavlink_channel_t chan
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale)
+static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float roll_offset, float pitch_offset, float pitch_scale, float yaw_scale, float range_scale, uint16_t max_range)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
@@ -264,6 +294,8 @@ static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf
     _mav_put_float(buf, 4, pitch_offset);
     _mav_put_float(buf, 8, pitch_scale);
     _mav_put_float(buf, 12, yaw_scale);
+    _mav_put_float(buf, 16, range_scale);
+    _mav_put_uint16_t(buf, 20, max_range);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, buf, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #else
@@ -272,6 +304,8 @@ static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf
     packet->pitch_offset = pitch_offset;
     packet->pitch_scale = pitch_scale;
     packet->yaw_scale = yaw_scale;
+    packet->range_scale = range_scale;
+    packet->max_range = max_range;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SCAN_TRANSFORM, (const char *)packet, MAVLINK_MSG_ID_SCAN_TRANSFORM_MIN_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN, MAVLINK_MSG_ID_SCAN_TRANSFORM_CRC);
 #endif
@@ -286,7 +320,7 @@ static inline void mavlink_msg_scan_transform_send_buf(mavlink_message_t *msgbuf
 /**
  * @brief Get field roll_offset from scan_transform message
  *
- * @return [degrees] 
+ * @return [degrees] Offset for the mechanical roll error in the scanner 
  */
 static inline float mavlink_msg_scan_transform_get_roll_offset(const mavlink_message_t* msg)
 {
@@ -296,7 +330,7 @@ static inline float mavlink_msg_scan_transform_get_roll_offset(const mavlink_mes
 /**
  * @brief Get field pitch_offset from scan_transform message
  *
- * @return [degrees] 
+ * @return [degrees] Offset for the pitch alignement error in the scanner
  */
 static inline float mavlink_msg_scan_transform_get_pitch_offset(const mavlink_message_t* msg)
 {
@@ -306,7 +340,7 @@ static inline float mavlink_msg_scan_transform_get_pitch_offset(const mavlink_me
 /**
  * @brief Get field pitch_scale from scan_transform message
  *
- * @return [%] 
+ * @return [%] Scale to apply to pitch values
  */
 static inline float mavlink_msg_scan_transform_get_pitch_scale(const mavlink_message_t* msg)
 {
@@ -316,11 +350,31 @@ static inline float mavlink_msg_scan_transform_get_pitch_scale(const mavlink_mes
 /**
  * @brief Get field yaw_scale from scan_transform message
  *
- * @return [%] 
+ * @return [%] Scale to apply to the yaw values
  */
 static inline float mavlink_msg_scan_transform_get_yaw_scale(const mavlink_message_t* msg)
 {
     return _MAV_RETURN_float(msg,  12);
+}
+
+/**
+ * @brief Get field range_scale from scan_transform message
+ *
+ * @return [%] Scale to apply to the range values
+ */
+static inline float mavlink_msg_scan_transform_get_range_scale(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  16);
+}
+
+/**
+ * @brief Get field max_range from scan_transform message
+ *
+ * @return [cm] Maximum range to use. Points with distances beyond this range will not be converted to viewable points. If set to UINT16_MAX field is ignored and all values are passed
+ */
+static inline uint16_t mavlink_msg_scan_transform_get_max_range(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  20);
 }
 
 /**
@@ -336,6 +390,8 @@ static inline void mavlink_msg_scan_transform_decode(const mavlink_message_t* ms
     scan_transform->pitch_offset = mavlink_msg_scan_transform_get_pitch_offset(msg);
     scan_transform->pitch_scale = mavlink_msg_scan_transform_get_pitch_scale(msg);
     scan_transform->yaw_scale = mavlink_msg_scan_transform_get_yaw_scale(msg);
+    scan_transform->range_scale = mavlink_msg_scan_transform_get_range_scale(msg);
+    scan_transform->max_range = mavlink_msg_scan_transform_get_max_range(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN? msg->len : MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN;
         memset(scan_transform, 0, MAVLINK_MSG_ID_SCAN_TRANSFORM_LEN);

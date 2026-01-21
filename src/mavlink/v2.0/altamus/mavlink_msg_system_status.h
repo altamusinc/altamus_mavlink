@@ -8,16 +8,17 @@ typedef struct __mavlink_system_status_t {
  uint16_t power_status_bitmask; /*<   Bitmask of devices and their power status: 1 = on 0 = off */
  uint16_t health_status_bitmask; /*<   Bitmask of health of devices: 1 = healthy 0 = unhealthy */
  uint16_t uptime; /*< [seconds]  Device uptime in seconds */
+ uint16_t flags; /*<   system state flags */
  uint8_t state; /*<   Current State of the Device */
 } mavlink_system_status_t;
 
-#define MAVLINK_MSG_ID_SYSTEM_STATUS_LEN 7
-#define MAVLINK_MSG_ID_SYSTEM_STATUS_MIN_LEN 7
-#define MAVLINK_MSG_ID_3_LEN 7
-#define MAVLINK_MSG_ID_3_MIN_LEN 7
+#define MAVLINK_MSG_ID_SYSTEM_STATUS_LEN 9
+#define MAVLINK_MSG_ID_SYSTEM_STATUS_MIN_LEN 9
+#define MAVLINK_MSG_ID_3_LEN 9
+#define MAVLINK_MSG_ID_3_MIN_LEN 9
 
-#define MAVLINK_MSG_ID_SYSTEM_STATUS_CRC 212
-#define MAVLINK_MSG_ID_3_CRC 212
+#define MAVLINK_MSG_ID_SYSTEM_STATUS_CRC 130
+#define MAVLINK_MSG_ID_3_CRC 130
 
 
 
@@ -25,21 +26,23 @@ typedef struct __mavlink_system_status_t {
 #define MAVLINK_MESSAGE_INFO_SYSTEM_STATUS { \
     3, \
     "SYSTEM_STATUS", \
-    4, \
-    {  { "state", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_system_status_t, state) }, \
+    5, \
+    {  { "state", NULL, MAVLINK_TYPE_UINT8_T, 0, 8, offsetof(mavlink_system_status_t, state) }, \
          { "power_status_bitmask", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_system_status_t, power_status_bitmask) }, \
          { "health_status_bitmask", NULL, MAVLINK_TYPE_UINT16_T, 0, 2, offsetof(mavlink_system_status_t, health_status_bitmask) }, \
          { "uptime", NULL, MAVLINK_TYPE_UINT16_T, 0, 4, offsetof(mavlink_system_status_t, uptime) }, \
+         { "flags", NULL, MAVLINK_TYPE_UINT16_T, 0, 6, offsetof(mavlink_system_status_t, flags) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_SYSTEM_STATUS { \
     "SYSTEM_STATUS", \
-    4, \
-    {  { "state", NULL, MAVLINK_TYPE_UINT8_T, 0, 6, offsetof(mavlink_system_status_t, state) }, \
+    5, \
+    {  { "state", NULL, MAVLINK_TYPE_UINT8_T, 0, 8, offsetof(mavlink_system_status_t, state) }, \
          { "power_status_bitmask", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_system_status_t, power_status_bitmask) }, \
          { "health_status_bitmask", NULL, MAVLINK_TYPE_UINT16_T, 0, 2, offsetof(mavlink_system_status_t, health_status_bitmask) }, \
          { "uptime", NULL, MAVLINK_TYPE_UINT16_T, 0, 4, offsetof(mavlink_system_status_t, uptime) }, \
+         { "flags", NULL, MAVLINK_TYPE_UINT16_T, 0, 6, offsetof(mavlink_system_status_t, flags) }, \
          } \
 }
 #endif
@@ -54,17 +57,19 @@ typedef struct __mavlink_system_status_t {
  * @param power_status_bitmask   Bitmask of devices and their power status: 1 = on 0 = off 
  * @param health_status_bitmask   Bitmask of health of devices: 1 = healthy 0 = unhealthy 
  * @param uptime [seconds]  Device uptime in seconds 
+ * @param flags   system state flags 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_status_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime)
+                               uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime, uint16_t flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SYSTEM_STATUS_LEN];
     _mav_put_uint16_t(buf, 0, power_status_bitmask);
     _mav_put_uint16_t(buf, 2, health_status_bitmask);
     _mav_put_uint16_t(buf, 4, uptime);
-    _mav_put_uint8_t(buf, 6, state);
+    _mav_put_uint16_t(buf, 6, flags);
+    _mav_put_uint8_t(buf, 8, state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN);
 #else
@@ -72,6 +77,7 @@ static inline uint16_t mavlink_msg_system_status_pack(uint8_t system_id, uint8_t
     packet.power_status_bitmask = power_status_bitmask;
     packet.health_status_bitmask = health_status_bitmask;
     packet.uptime = uptime;
+    packet.flags = flags;
     packet.state = state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN);
@@ -92,17 +98,19 @@ static inline uint16_t mavlink_msg_system_status_pack(uint8_t system_id, uint8_t
  * @param power_status_bitmask   Bitmask of devices and their power status: 1 = on 0 = off 
  * @param health_status_bitmask   Bitmask of health of devices: 1 = healthy 0 = unhealthy 
  * @param uptime [seconds]  Device uptime in seconds 
+ * @param flags   system state flags 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_status_pack_status(uint8_t system_id, uint8_t component_id, mavlink_status_t *_status, mavlink_message_t* msg,
-                               uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime)
+                               uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime, uint16_t flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SYSTEM_STATUS_LEN];
     _mav_put_uint16_t(buf, 0, power_status_bitmask);
     _mav_put_uint16_t(buf, 2, health_status_bitmask);
     _mav_put_uint16_t(buf, 4, uptime);
-    _mav_put_uint8_t(buf, 6, state);
+    _mav_put_uint16_t(buf, 6, flags);
+    _mav_put_uint8_t(buf, 8, state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN);
 #else
@@ -110,6 +118,7 @@ static inline uint16_t mavlink_msg_system_status_pack_status(uint8_t system_id, 
     packet.power_status_bitmask = power_status_bitmask;
     packet.health_status_bitmask = health_status_bitmask;
     packet.uptime = uptime;
+    packet.flags = flags;
     packet.state = state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN);
@@ -133,18 +142,20 @@ static inline uint16_t mavlink_msg_system_status_pack_status(uint8_t system_id, 
  * @param power_status_bitmask   Bitmask of devices and their power status: 1 = on 0 = off 
  * @param health_status_bitmask   Bitmask of health of devices: 1 = healthy 0 = unhealthy 
  * @param uptime [seconds]  Device uptime in seconds 
+ * @param flags   system state flags 
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_system_status_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   uint8_t state,uint16_t power_status_bitmask,uint16_t health_status_bitmask,uint16_t uptime)
+                                   uint8_t state,uint16_t power_status_bitmask,uint16_t health_status_bitmask,uint16_t uptime,uint16_t flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SYSTEM_STATUS_LEN];
     _mav_put_uint16_t(buf, 0, power_status_bitmask);
     _mav_put_uint16_t(buf, 2, health_status_bitmask);
     _mav_put_uint16_t(buf, 4, uptime);
-    _mav_put_uint8_t(buf, 6, state);
+    _mav_put_uint16_t(buf, 6, flags);
+    _mav_put_uint8_t(buf, 8, state);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN);
 #else
@@ -152,6 +163,7 @@ static inline uint16_t mavlink_msg_system_status_pack_chan(uint8_t system_id, ui
     packet.power_status_bitmask = power_status_bitmask;
     packet.health_status_bitmask = health_status_bitmask;
     packet.uptime = uptime;
+    packet.flags = flags;
     packet.state = state;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN);
@@ -171,7 +183,7 @@ static inline uint16_t mavlink_msg_system_status_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_system_status_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_system_status_t* system_status)
 {
-    return mavlink_msg_system_status_pack(system_id, component_id, msg, system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime);
+    return mavlink_msg_system_status_pack(system_id, component_id, msg, system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime, system_status->flags);
 }
 
 /**
@@ -185,7 +197,7 @@ static inline uint16_t mavlink_msg_system_status_encode(uint8_t system_id, uint8
  */
 static inline uint16_t mavlink_msg_system_status_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_system_status_t* system_status)
 {
-    return mavlink_msg_system_status_pack_chan(system_id, component_id, chan, msg, system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime);
+    return mavlink_msg_system_status_pack_chan(system_id, component_id, chan, msg, system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime, system_status->flags);
 }
 
 /**
@@ -199,7 +211,7 @@ static inline uint16_t mavlink_msg_system_status_encode_chan(uint8_t system_id, 
  */
 static inline uint16_t mavlink_msg_system_status_encode_status(uint8_t system_id, uint8_t component_id, mavlink_status_t* _status, mavlink_message_t* msg, const mavlink_system_status_t* system_status)
 {
-    return mavlink_msg_system_status_pack_status(system_id, component_id, _status, msg,  system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime);
+    return mavlink_msg_system_status_pack_status(system_id, component_id, _status, msg,  system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime, system_status->flags);
 }
 
 /**
@@ -210,17 +222,19 @@ static inline uint16_t mavlink_msg_system_status_encode_status(uint8_t system_id
  * @param power_status_bitmask   Bitmask of devices and their power status: 1 = on 0 = off 
  * @param health_status_bitmask   Bitmask of health of devices: 1 = healthy 0 = unhealthy 
  * @param uptime [seconds]  Device uptime in seconds 
+ * @param flags   system state flags 
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_system_status_send(mavlink_channel_t chan, uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime)
+static inline void mavlink_msg_system_status_send(mavlink_channel_t chan, uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime, uint16_t flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_SYSTEM_STATUS_LEN];
     _mav_put_uint16_t(buf, 0, power_status_bitmask);
     _mav_put_uint16_t(buf, 2, health_status_bitmask);
     _mav_put_uint16_t(buf, 4, uptime);
-    _mav_put_uint8_t(buf, 6, state);
+    _mav_put_uint16_t(buf, 6, flags);
+    _mav_put_uint8_t(buf, 8, state);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, buf, MAVLINK_MSG_ID_SYSTEM_STATUS_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_CRC);
 #else
@@ -228,6 +242,7 @@ static inline void mavlink_msg_system_status_send(mavlink_channel_t chan, uint8_
     packet.power_status_bitmask = power_status_bitmask;
     packet.health_status_bitmask = health_status_bitmask;
     packet.uptime = uptime;
+    packet.flags = flags;
     packet.state = state;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, (const char *)&packet, MAVLINK_MSG_ID_SYSTEM_STATUS_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_CRC);
@@ -242,7 +257,7 @@ static inline void mavlink_msg_system_status_send(mavlink_channel_t chan, uint8_
 static inline void mavlink_msg_system_status_send_struct(mavlink_channel_t chan, const mavlink_system_status_t* system_status)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_system_status_send(chan, system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime);
+    mavlink_msg_system_status_send(chan, system_status->state, system_status->power_status_bitmask, system_status->health_status_bitmask, system_status->uptime, system_status->flags);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, (const char *)system_status, MAVLINK_MSG_ID_SYSTEM_STATUS_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_CRC);
 #endif
@@ -256,14 +271,15 @@ static inline void mavlink_msg_system_status_send_struct(mavlink_channel_t chan,
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_system_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime)
+static inline void mavlink_msg_system_status_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  uint8_t state, uint16_t power_status_bitmask, uint16_t health_status_bitmask, uint16_t uptime, uint16_t flags)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_uint16_t(buf, 0, power_status_bitmask);
     _mav_put_uint16_t(buf, 2, health_status_bitmask);
     _mav_put_uint16_t(buf, 4, uptime);
-    _mav_put_uint8_t(buf, 6, state);
+    _mav_put_uint16_t(buf, 6, flags);
+    _mav_put_uint8_t(buf, 8, state);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, buf, MAVLINK_MSG_ID_SYSTEM_STATUS_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_CRC);
 #else
@@ -271,6 +287,7 @@ static inline void mavlink_msg_system_status_send_buf(mavlink_message_t *msgbuf,
     packet->power_status_bitmask = power_status_bitmask;
     packet->health_status_bitmask = health_status_bitmask;
     packet->uptime = uptime;
+    packet->flags = flags;
     packet->state = state;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_SYSTEM_STATUS, (const char *)packet, MAVLINK_MSG_ID_SYSTEM_STATUS_MIN_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_LEN, MAVLINK_MSG_ID_SYSTEM_STATUS_CRC);
@@ -290,7 +307,7 @@ static inline void mavlink_msg_system_status_send_buf(mavlink_message_t *msgbuf,
  */
 static inline uint8_t mavlink_msg_system_status_get_state(const mavlink_message_t* msg)
 {
-    return _MAV_RETURN_uint8_t(msg,  6);
+    return _MAV_RETURN_uint8_t(msg,  8);
 }
 
 /**
@@ -324,6 +341,16 @@ static inline uint16_t mavlink_msg_system_status_get_uptime(const mavlink_messag
 }
 
 /**
+ * @brief Get field flags from system_status message
+ *
+ * @return   system state flags 
+ */
+static inline uint16_t mavlink_msg_system_status_get_flags(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_uint16_t(msg,  6);
+}
+
+/**
  * @brief Decode a system_status message into a struct
  *
  * @param msg The message to decode
@@ -335,6 +362,7 @@ static inline void mavlink_msg_system_status_decode(const mavlink_message_t* msg
     system_status->power_status_bitmask = mavlink_msg_system_status_get_power_status_bitmask(msg);
     system_status->health_status_bitmask = mavlink_msg_system_status_get_health_status_bitmask(msg);
     system_status->uptime = mavlink_msg_system_status_get_uptime(msg);
+    system_status->flags = mavlink_msg_system_status_get_flags(msg);
     system_status->state = mavlink_msg_system_status_get_state(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_SYSTEM_STATUS_LEN? msg->len : MAVLINK_MSG_ID_SYSTEM_STATUS_LEN;
