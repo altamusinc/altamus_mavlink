@@ -43,8 +43,7 @@
             <field name="mac" type="uint8_t[6]"> MAC address of the device</field>
             <field name="name" type="char[20]">Friendly name of device i.e. P2-123456</field>
             <field name="site_friendly_name" type="char[30]"> Friendly name for the site it's at, i.e. "57 Rock West"</field>
-            <field name="site_name" type="char[30]"> Name of the site where the scanner is located,
-                i.e. "Gainesville Plant"</field>
+            <field name="site_name" type="char[30]"> Name of the site where the scanner is located,i.e. "Gainesville Plant"</field>
         </message>
         <message name="WATER_TRANSACTION" id="3">
             <description>Water transaction information</description>
@@ -67,6 +66,7 @@
             <field name="detected_badges_count" type="uint8_t"> number of badges current registered by the RFID reader</field>
             <field name="internet_connectivity" type="uint8_t"> if the station is connected to the internet, 0 false, 1 true</field>
             <field name="stored_transactions_count" type="uint16_t"> number of transactions stored in memory, will be uploaded when internet returns</field>
+            <field name="indicator_state" type="uint8_t">State of the light tower indicator</field>
         </message>
         <message name="STATION_SETTINGS" id="7">
             <description> Station Settings </description>
@@ -78,6 +78,12 @@
             <field name="ml_per_pulse" type="uint32_t" units="mL"> How many mL are registered per pulse of the measuring device</field>
             <field name="station_timezone" type="int8_t"> Timezone of the station </field>
             <field name="rssi_threshold" type="int8_t"> min rssi from card reader for a badge to considered for activation, set to 0 is no threshold is desired</field>
+        </message>
+        <message name="TRUCK_INFO" id="8">
+            <description> Information about the present truck</description>
+            <field name="badge_id_int" type="uint64_t"> badge ID as int</field>
+            <field name="truck_name" type="char[20]"> Truck name associated with badge ID</field>
+            <field name="arrival_time" type="uint32_t" units="s"> unix start time of when the truck arrived</field>
         </message>
     </messages>
 </mavlink>
